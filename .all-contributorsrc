@@ -59,6 +59,15 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "lhehnke",
+      "name": "Lisa Hehnke",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/18530815?v=4",
+      "profile": "https://dataplanes.org",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
