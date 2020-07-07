@@ -11,6 +11,7 @@ This project is made possible by the community surrounding it and especially the
   - [James Lomas](https://github.com/jameslibscie)
   - [Gabriel Basilio Brito](https://github.com/GabrielBB)
   - [Chris Hartgerink](https://github.com/chartgerink)
+  - [Lisa Hehnke](https://github.com/lhehnke)
 
 ## Testers
 
