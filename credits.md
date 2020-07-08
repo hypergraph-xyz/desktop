@@ -336,6 +336,37 @@ This project is made possible by the community surrounding it and especially the
 
 </details>
 
+### [@babel/helper-validator-identifier](https://ghub.io/@babel/helper-validator-identifier)
+
+<details>
+  <summary>MIT</summary>
+
+    MIT License
+    
+    Copyright (c) 2014-present Sebastian McKenzie and other contributors
+    
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    
+
+</details>
+
 ### [@babel/highlight](https://ghub.io/@babel/highlight)
 
 <details>
@@ -521,15 +552,93 @@ This project is made possible by the community surrounding it and especially the
 
 ### [@emotion/is-prop-valid](https://ghub.io/@emotion/is-prop-valid)
 
-MIT
+<details>
+  <summary>MIT</summary>
+
+    MIT License
+    
+    Copyright (c) Emotion team and other contributors
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+    
+
+</details>
 
 ### [@emotion/memoize](https://ghub.io/@emotion/memoize)
 
-MIT
+<details>
+  <summary>MIT</summary>
+
+    MIT License
+    
+    Copyright (c) Emotion team and other contributors
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+    
+
+</details>
 
 ### [@emotion/unitless](https://ghub.io/@emotion/unitless)
 
-MIT
+<details>
+  <summary>MIT</summary>
+
+    MIT License
+    
+    Copyright (c) Emotion team and other contributors
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+    
+
+</details>
 
 ### [@geut/hyperdrive-promise](https://ghub.io/@geut/hyperdrive-promise)
 
@@ -820,7 +929,7 @@ MIT
 
     MIT License
     
-    Copyright (c) 2019 Liberate Science
+    Copyright (c) 2020 Liberate Science GmbH
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -998,62 +1107,32 @@ MIT
 
 </details>
 
-### [@types/events](https://ghub.io/@types/events)
-
-<details>
-  <summary>MIT</summary>
-
-        MIT License    
-        
-        Copyright (c) Microsoft Corporation. All rights reserved.    
-        
-        Permission is hereby granted, free of charge, to any person obtaining a copy    
-        of this software and associated documentation files (the "Software"), to deal    
-        in the Software without restriction, including without limitation the rights    
-        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell    
-        copies of the Software, and to permit persons to whom the Software is    
-        furnished to do so, subject to the following conditions:    
-        
-        The above copyright notice and this permission notice shall be included in all    
-        copies or substantial portions of the Software.    
-        
-        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR    
-        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,    
-        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    
-        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER    
-        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,    
-        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE    
-        SOFTWARE    
-    
-
-</details>
-
 ### [@types/glob](https://ghub.io/@types/glob)
 
 <details>
   <summary>MIT</summary>
 
-        MIT License    
-        
-        Copyright (c) Microsoft Corporation. All rights reserved.    
-        
-        Permission is hereby granted, free of charge, to any person obtaining a copy    
-        of this software and associated documentation files (the "Software"), to deal    
-        in the Software without restriction, including without limitation the rights    
-        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell    
-        copies of the Software, and to permit persons to whom the Software is    
-        furnished to do so, subject to the following conditions:    
-        
-        The above copyright notice and this permission notice shall be included in all    
-        copies or substantial portions of the Software.    
-        
-        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR    
-        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,    
-        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    
-        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER    
-        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,    
-        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE    
-        SOFTWARE    
+        MIT License
+    
+        Copyright (c) Microsoft Corporation.
+    
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+    
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+    
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE
     
 
 </details>
@@ -1093,27 +1172,27 @@ MIT
 <details>
   <summary>MIT</summary>
 
-        MIT License    
-        
-        Copyright (c) Microsoft Corporation. All rights reserved.    
-        
-        Permission is hereby granted, free of charge, to any person obtaining a copy    
-        of this software and associated documentation files (the "Software"), to deal    
-        in the Software without restriction, including without limitation the rights    
-        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell    
-        copies of the Software, and to permit persons to whom the Software is    
-        furnished to do so, subject to the following conditions:    
-        
-        The above copyright notice and this permission notice shall be included in all    
-        copies or substantial portions of the Software.    
-        
-        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR    
-        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,    
-        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    
-        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER    
-        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,    
-        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE    
-        SOFTWARE    
+        MIT License
+    
+        Copyright (c) Microsoft Corporation.
+    
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+    
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+    
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE
     
 
 </details>
@@ -1210,7 +1289,33 @@ MIT
 
 ### [adm-zip](https://ghub.io/adm-zip)
 
-MIT
+<details>
+  <summary>MIT</summary>
+
+    Copyright (c) 2012 Another-D-Mention Software and other contributors,     
+    http://www.another-d-mention.ro/    
+        
+    Permission is hereby granted, free of charge, to any person obtaining    
+    a copy of this software and associated documentation files (the    
+    "Software"), to deal in the Software without restriction, including    
+    without limitation the rights to use, copy, modify, merge, publish,    
+    distribute, sublicense, and/or sell copies of the Software, and to    
+    permit persons to whom the Software is furnished to do so, subject to    
+    the following conditions:    
+        
+    The above copyright notice and this permission notice shall be    
+    included in all copies or substantial portions of the Software.    
+        
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,    
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF    
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND    
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE    
+    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION    
+    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION    
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.    
+    
+
+</details>
 
 ### [aggregate-error](https://ghub.io/aggregate-error)
 
@@ -2230,32 +2335,7 @@ MIT
 
 ### [byte-stream](https://ghub.io/byte-stream)
 
-<details>
-  <summary>BSD-2-Clause</summary>
-
-    Copyright Joyent, Inc. and other Node contributors.
-    
-    Permission is hereby granted, free of charge, to any person obtaining a
-    copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to permit
-    persons to whom the Software is furnished to do so, subject to the
-    following conditions:
-    
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-    
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-    NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-    OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-    USE OR OTHER DEALINGS IN THE SOFTWARE.
-    
-
-</details>
+BSD-2-Clause
 
 ### [cache-base](https://ghub.io/cache-base)
 
@@ -3379,32 +3459,7 @@ MIT
 
 ### [dht-rpc](https://ghub.io/dht-rpc)
 
-<details>
-  <summary>MIT</summary>
-
-    Copyright 2013 Mathias Buus
-    
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-    
-    The above copyright notice and this permission notice shall be
-    included in all copies or substantial portions of the Software.
-    
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-    
-
-</details>
+MIT
 
 ### [dir-glob](https://ghub.io/dir-glob)
 
@@ -3617,7 +3672,7 @@ MIT
 
     MIT License
     
-    Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+    Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
     
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
     
@@ -3951,34 +4006,6 @@ MIT
 
 </details>
 
-### [esutils](https://ghub.io/esutils)
-
-<details>
-  <summary>BSD-2-Clause</summary>
-
-    Redistribution and use in source and binary forms, with or without
-    modification, are permitted provided that the following conditions are met:
-    
-      * Redistributions of source code must retain the above copyright
-        notice, this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright
-        notice, this list of conditions and the following disclaimer in the
-        documentation and/or other materials provided with the distribution.
-    
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-    ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
-    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-    THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-
-</details>
-
 ### [events.once](https://ghub.io/events.once)
 
 <details>
@@ -4269,6 +4296,9 @@ MIT
   <summary>MIT</summary>
 
     This software is released under the MIT license:
+    
+    Copyright (c) 2017 Evgeny Poberezkin
+    Copyright (c) 2013 James Halliday
     
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in
@@ -4881,10 +4911,6 @@ MIT
     
 
 </details>
-
-### [gud](https://ghub.io/gud)
-
-MIT
 
 ### [has](https://ghub.io/has)
 
@@ -7616,27 +7642,27 @@ MIT
 <details>
   <summary>MIT</summary>
 
-    The MIT License (MIT)    
-        
-    Copyright (c) 2014-2019 Teambition    
-        
-    Permission is hereby granted, free of charge, to any person obtaining a copy    
-    of this software and associated documentation files (the "Software"), to deal    
-    in the Software without restriction, including without limitation the rights    
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell    
-    copies of the Software, and to permit persons to whom the Software is    
-    furnished to do so, subject to the following conditions:    
-        
-    The above copyright notice and this permission notice shall be included in all    
-    copies or substantial portions of the Software.    
-        
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR    
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,    
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER    
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,    
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE    
-    SOFTWARE.    
+    The MIT License (MIT)
+    
+    Copyright (c) 2014-2020 Teambition
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
     
 
 </details>
@@ -9326,7 +9352,7 @@ MIT
 
     MIT License
     
-    Copyright (c) 2016 - 2019 Brian Hough and Maximilian Stoiber
+    Copyright (c) 2016 - 2020 Brian Hough and Maximilian Stoiber
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -11347,7 +11373,8 @@ MIT
 
     The MIT License (MIT)
     
-    Copyright (c) 2014, 2015, 2016, 2017 Simon Lydell
+    Copyright (c) 2014, 2015, 2016, 2017, 2018, 2019 Simon Lydell
+    Copyright (c) 2019 ZHAO Jinxiang
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -11609,14 +11636,14 @@ MIT
 
 </details>
 
-### [string.prototype.trimleft](https://ghub.io/string.prototype.trimleft)
+### [string.prototype.trimend](https://ghub.io/string.prototype.trimend)
 
 <details>
   <summary>MIT</summary>
 
-    The MIT License (MIT)
+    MIT License
     
-    Copyright (c) 2015 Jordan Harband
+    Copyright (c) 2017 Khaled Al-Ansari
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -11635,19 +11662,18 @@ MIT
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
-    
     
 
 </details>
 
-### [string.prototype.trimright](https://ghub.io/string.prototype.trimright)
+### [string.prototype.trimstart](https://ghub.io/string.prototype.trimstart)
 
 <details>
   <summary>MIT</summary>
 
-    The MIT License (MIT)
+    MIT License
     
-    Copyright (c) 2015 Jordan Harband
+    Copyright (c) 2017 Khaled Al-Ansari
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -11666,7 +11692,6 @@ MIT
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
-    
     
 
 </details>
