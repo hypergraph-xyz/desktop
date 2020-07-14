@@ -10,6 +10,8 @@ const del = require('del')
 const { once } = require('events')
 
 debug({ isEnabled: true, showDevTools: false })
+app.allowRendererProcessReuse = false
+
 let mainWindow
 let restarting = false
 

@@ -52,7 +52,7 @@ module.exports = (_, { mode }) => {
 
     externals: [
       nodeExternals({
-        whitelist: [/^@babel/]
+        allowlist: [/^@babel/]
       })
     ],
 

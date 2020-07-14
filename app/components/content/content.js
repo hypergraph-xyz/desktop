@@ -82,7 +82,7 @@ const modDirectory = mod =>
   `${remote.app.getPath('home')}/.p2pcommons/${encode(mod.rawJSON.url)}`
 
 const OpenFolder = ({ mod }) => (
-  <Button onClick={() => remote.shell.openItem(modDirectory(mod))}>
+  <Button onClick={() => remote.shell.openPath(modDirectory(mod))}>
     Open folder
   </Button>
 )
@@ -199,7 +199,7 @@ const Content = ({ p2p, content, profile, setProfile, renderRow }) => {
                 files.map(path => (
                   <File
                     key={path}
-                    onClick={() => remote.shell.openItem(`${dir}/${path}`)}
+                    onClick={() => remote.shell.openPath(`${dir}/${path}`)}
                   >
                     {path}
                   </File>
