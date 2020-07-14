@@ -11,17 +11,19 @@ import P2P from '@p2pcommons/sdk-js'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import { remote } from 'electron'
 
-const showError = message =>
+const showError = err => {
+  if (err instanceof P2P.errors.EBUSYError) return
   window.alert(
     'An unknown error has happened.\n\n' +
       'Please send a screenshot of this window alongside a description of what ' +
       'you were doing to feedback@libscie.org.\n\n' +
-      message
+      err.stack
   )
+}
 
 if (remote.app.isPackaged) {
-  window.onerror = (_, __, ___, ____, err) => showError(err.stack)
-  window.onunhandledrejection = ev => showError(ev.reason.stack)
+  window.onerror = (_, __, ___, ____, err) => showError(err)
+  window.onunhandledrejection = ev => showError(ev.reason)
 }
 
 const p2p = new P2P()
