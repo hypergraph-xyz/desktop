@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { purple, black, green } from '../../lib/colors'
+import { purple, green } from '../../lib/colors'
 import { rgba } from 'polished'
 import { Button } from '../layout/grid'
 import Arrow from '../arrow.svg'
@@ -11,29 +11,8 @@ import IllustrationAsYouGo from './illustrations/as-you-go.svg'
 import IllustrationAsYouGo2 from './illustrations/as-you-go-2.svg'
 import IllustrationProfileCreation from './illustrations/profile-creation.svg'
 import IllustrationVault from './illustrations/vault.svg'
+import Modal from '../modal'
 
-const Overlay = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-color: ${rgba(purple, 0.8)};
-  z-index: 2;
-`
-const dialogSize = 700
-const Dialog = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-top: -${dialogSize / 2}px;
-  margin-left: -${dialogSize / 2}px;
-  width: ${dialogSize}px;
-  height: ${dialogSize}px;
-  background-color: ${black};
-  padding: 2rem;
-  box-sizing: border-box;
-`
 const Illustration = styled.div`
   margin-top: 22px;
   margin-bottom: 32px;
@@ -77,7 +56,7 @@ const toInitials = name => {
 
 const dialogs = [
   ({ page, next }) => (
-    <Dialog>
+    <>
       <Back page={page} />
       <Illustration>
         <IllustrationWelcome />
@@ -97,10 +76,10 @@ const dialogs = [
           Next
         </Button>
       </Form>
-    </Dialog>
+    </>
   ),
   ({ page, next, previous }) => (
-    <Dialog>
+    <>
       <Back page={page} onClick={previous} />
       <Illustration>
         <IllustrationAsYouGo />
@@ -121,10 +100,10 @@ const dialogs = [
           Next
         </Button>
       </Form>
-    </Dialog>
+    </>
   ),
   ({ page, next, previous }) => (
-    <Dialog>
+    <>
       <Back page={page} onClick={previous} />
       <Illustration>
         <IllustrationAsYouGo2 />
@@ -145,13 +124,13 @@ const dialogs = [
           Create Profile
         </Button>
       </Form>
-    </Dialog>
+    </>
   ),
   ({ page, next, previous, name, setName }) => {
     const [isValid, setIsValid] = useState(Boolean(name))
     const [initials, setInitials] = useState(toInitials(name))
     return (
-      <Dialog>
+      <>
         <Back page={page} onClick={previous} />
         <Illustration>
           <IllustrationProfileCreation />
@@ -182,14 +161,14 @@ const dialogs = [
             Next
           </Button>
         </Form>
-      </Dialog>
+      </>
     )
   },
   ({ page, p2p, name, setProfile, previous }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     return (
-      <Dialog>
+      <>
         <Back page={page} onClick={() => !isLoading && previous()} />
         <Illustration>
           <IllustrationVault />
@@ -212,7 +191,7 @@ const dialogs = [
             Get started!
           </Button>
         </Form>
-      </Dialog>
+      </>
     )
   }
 ]
@@ -230,7 +209,7 @@ const Welcome = ({ p2p, setProfile }) => {
   if (!dialogs[page]) return null
 
   return (
-    <Overlay>
+    <Modal overlay={rgba(purple, 0.8)}>
       {React.createElement(dialogs[page], {
         next,
         previous,
@@ -240,7 +219,7 @@ const Welcome = ({ p2p, setProfile }) => {
         p2p,
         setProfile
       })}
-    </Overlay>
+    </Modal>
   )
 }
 

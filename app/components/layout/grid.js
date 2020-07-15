@@ -15,7 +15,7 @@ export const Row = styled.div`
 `
 export const Cell = styled.div`
   border-right: 2px solid ${purple};
-  padding: 0 2rem;
+  padding: 0 ${props => (props.content === 'icon' ? '1rem' : '2rem')};
   display: inline-block;
   overflow: hidden;
   height: 100%;
@@ -45,7 +45,7 @@ const StyledButton = styled(Cell).attrs({
   border-color: ${props => (props.disabled ? gray : props.color || purple)};
   color: ${props => (props.isLoading ? gray : white)};
   margin-right: 1rem;
-  min-width: 8rem;
+  min-width: ${props => (props.content === 'icon' ? 0 : '8rem')};
   position: relative;
   text-align: center;
 
@@ -94,6 +94,10 @@ const StyledButton = styled(Cell).attrs({
               color: ${props => props.color || white};
             }
           `}
+  }
+
+  svg {
+    vertical-align: middle;
   }
 `
 const Loading = styled(LoadingAnimation)`

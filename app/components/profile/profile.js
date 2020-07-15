@@ -6,7 +6,10 @@ import Footer from '../footer/footer'
 import { encode } from 'dat-encoding'
 import { Title, StickyRow, TopRow, Button } from '../layout/grid'
 import { green, red, yellow, gray } from '../../lib/colors'
-import { Textarea, Input } from '../forms/forms'
+import { Textarea, Input, Label } from '../forms/forms'
+import Share from './share.svg'
+import Modal, { Close } from '../modal'
+import { Heading2, Paragraph } from '../typography'
 
 const Header = styled.div`
   position: relative;
@@ -116,6 +119,7 @@ const Profile = ({ p2p, profile, setProfile }) => {
   const [isSaving, setIsSaving] = useState()
   const [isSaved, setIsSaved] = useState()
   const [isTitleInvalid, setIsTitleInvalid] = useState()
+  const [isSharing, setIsSharing] = useState()
   const titleRef = useRef()
   const descriptionRef = useRef()
 
@@ -166,6 +170,25 @@ const Profile = ({ p2p, profile, setProfile }) => {
 
   return (
     <>
+      {isSharing && (
+        <Modal height={329} border onClose={() => setIsSharing(false)}>
+          <>
+            <Close onClick={() => setIsSharing(false)} />
+            <Heading2>Share your profile 🎉 </Heading2>
+            <Paragraph>
+              Want other Hypergraph users to see your work? Copy the link below
+              and send it any way you want to. Disclaimer: Once information is
+              shared, you cannot delete it from their computers.
+            </Paragraph>
+            <Label>Your profile URL</Label>
+            <Input
+              value={profile.rawJSON.url}
+              readOnly
+              onClick={ev => ev.target.select()}
+            />
+          </>
+        </Modal>
+      )}
       <TopRow>
         <Form onSubmit={onSubmit}>
           <Title>
@@ -189,6 +212,13 @@ const Profile = ({ p2p, profile, setProfile }) => {
               profile.rawJSON.title
             )}
           </Title>
+          <Button
+            content='icon'
+            type='button'
+            onClick={() => setIsSharing(true)}
+          >
+            <Share />
+          </Button>
           {isEditing ? (
             <>
               <Button color={green} disabled={isTitleInvalid}>
@@ -205,7 +235,11 @@ const Profile = ({ p2p, profile, setProfile }) => {
               </Button>
             </>
           ) : (
-            <Button color={green} onClick={() => setIsEditing(true)}>
+            <Button
+              type='button'
+              color={green}
+              onClick={() => setIsEditing(true)}
+            >
               Edit profile
             </Button>
           )}
