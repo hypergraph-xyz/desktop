@@ -7,7 +7,7 @@ import { Button } from './grid'
 import ArrowRight from '../icons/arrow-right-2rem.svg'
 import X from '../icons/x-2rem.svg'
 import Loading from '../loading/loading'
-import { gray, red } from '../../lib/colors'
+import { gray, red, yellow } from '../../lib/colors'
 import { useHistory } from 'react-router-dom'
 import { encode } from 'dat-encoding'
 
@@ -33,10 +33,20 @@ const LoadingContainer = styled.div`
   height: 4rem;
   position: relative;
 `
+const Warning = styled.span`
+  color: ${yellow};
+  font-style: italic;
+  font-weight: normal;
+  margin-left: 1rem;
+`
+const WarningEmoji = styled.span`
+  font-style: normal;
+`
 
 const FindModal = ({ onClose, p2p }) => {
   const [isLoading, setIsLoading] = useState()
   const [url, setUrl] = useState()
+  const [isUnavailable, setIsUnavailable] = useState(true)
   const inputEl = useRef()
   const clonePromise = useRef()
   const history = useHistory()
@@ -57,7 +67,7 @@ const FindModal = ({ onClose, p2p }) => {
   return (
     <Modal height={329} onClose={onCloseWithCleanup}>
       <Close onClick={onCloseWithCleanup} />
-      <Heading2>View someone's profile 👀</Heading2>
+      <Heading2>Got a link?</Heading2>
       <Paragraph>
         Did someone send you a link for Hypergraph? Copy-paste it below and
         we'll download their information for you to see 😊 All their files are
@@ -71,6 +81,7 @@ const FindModal = ({ onClose, p2p }) => {
             clonePromise.current.cancel()
             setIsLoading(false)
           } else {
+            setIsUnavailable(false)
             const key = inputEl.current.value
             clonePromise.current = p2p.clone(key, null, false /* download */)
             setIsLoading(true)
@@ -80,6 +91,7 @@ const FindModal = ({ onClose, p2p }) => {
             } catch (err) {
               if (clonePromise.current.isCanceled) return
               console.error(err)
+              setIsUnavailable(true)
               setIsLoading(false)
               return
             }
@@ -90,7 +102,16 @@ const FindModal = ({ onClose, p2p }) => {
           }
         }}
       >
-        <Label>Profile URL</Label>
+        <Label>
+          URL
+          {isUnavailable && (
+            <Warning>
+              <WarningEmoji>⚠️</WarningEmoji>
+              Hmm, couldn’t find this...
+            </Warning>
+          )}
+        </Label>
+
         {isLoading ? (
           <LoadingContainer>
             <Loading />
