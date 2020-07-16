@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { TopRow, Title } from '../layout/grid'
-import Module from '../module/module'
+import ContentRow from '../content/row'
 import { encode } from 'dat-encoding'
 import Footer from '../footer/footer'
 import AddContent from '../icons/add-content.svg'
 import styled from 'styled-components'
-import isModuleRegistered from '../../lib/is-module-registered'
+import isContentRegistered from '../../lib/is-content-registered'
+import { ProfileContext } from '../../lib/context'
 
 const StyledAddContent = styled(AddContent)`
   vertical-align: middle;
@@ -14,14 +15,21 @@ const StyledAddContent = styled(AddContent)`
   top: -2px;
 `
 
-export default ({ p2p, profile }) => {
+export default ({ p2p }) => {
   const [drafts, setDrafts] = useState()
-  const hasRegisteredContent = profile.rawJSON.contents.length > 0
+  const [hasRegisteredContent, setHasRegisteredContent] = useState()
+  const { url: profileUrl } = useContext(ProfileContext)
 
   useEffect(() => {
     ;(async () => {
-      const modules = await p2p.listContent()
-      const drafts = modules.filter(mod => !isModuleRegistered(mod, profile))
+      const [profile, contents] = await Promise.all([
+        p2p.get(profileUrl),
+        p2p.listContent()
+      ])
+      setHasRegisteredContent(profile.rawJSON.contents.length)
+      const drafts = contents.filter(
+        content => !isContentRegistered(content, profile)
+      )
       setDrafts(drafts)
     })()
   }, [])
@@ -33,13 +41,13 @@ export default ({ p2p, profile }) => {
       </TopRow>
       {drafts && (
         <>
-          {drafts.map(mod => {
+          {drafts.map(draft => {
             return (
-              <Module
-                key={mod.rawJSON.url}
+              <ContentRow
+                key={draft.rawJSON.url}
                 p2p={p2p}
-                mod={mod}
-                to={`/content/${encode(mod.rawJSON.url)}`}
+                content={draft}
+                to={`/draft/${encode(draft.rawJSON.url)}`}
               />
             )
           })}

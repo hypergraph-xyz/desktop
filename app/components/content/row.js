@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { purple, black, white, gray } from '../../lib/colors'
-import isModuleRegistered from '../../lib/is-module-registered'
+import isContentRegistered from '../../lib/is-content-registered'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
-import HexIndicatorIsRegistered from './hex-indicator-is-registered.svg'
-import HexIndicatorIsUnregistered from './hex-indicator-is-unregistered.svg'
 import { useHistory, Link } from 'react-router-dom'
 import Plus from './plus.svg'
 import { encode } from 'dat-encoding'
@@ -54,9 +52,6 @@ const Attributes = styled.div`
   display: inline-block;
 `
 const Attribute = styled.div``
-const AttributeIcon = styled.div`
-  margin-top: 1rem;
-`
 const Content = styled.div`
   position: absolute;
   left: calc(8rem + ${props => props.pad || 2}rem);
@@ -69,13 +64,13 @@ const Title = styled.div`
   font-size: 1.5rem;
   line-height: 1.75rem;
 `
-const AuthorOfRegisteredContent = styled(Anchor).attrs({
+const AuthorWithContentRegistration = styled(Anchor).attrs({
   as: Link
 })`
   margin: 1rem 0;
   display: inline-block;
 `
-const AuthorOfUnregisteredContent = styled.span`
+const AuthorWithoutContentRegistration = styled.span`
   color: ${gray};
   margin: 1rem 0;
   display: inline-block;
@@ -111,36 +106,29 @@ const ToggleParentArrow = styled.span`
   display: inline-block;
 `
 
-const Module = ({ p2p, mod, pad, to, isParent }) => {
+const Row = ({ p2p, content, pad, to, isParent }) => {
   const history = useHistory()
-  const [isRegistered, setIsRegistered] = useState(false)
   const [authors, setAuthors] = useState([])
   const [showParent, setShowParent] = useState(false)
   const [parent, setParent] = useState()
 
   useEffect(() => {
     ;(async () => {
-      const profiles = await p2p.listProfiles()
-
-      setIsRegistered(
-        Boolean(profiles.find(profile => isModuleRegistered(mod, profile)))
+      const authors = await Promise.all(
+        content.rawJSON.authors.map(key =>
+          p2p.clone(key, null, /* download */ false)
+        )
       )
-
-      const authors = []
-      for (const url of mod.rawJSON.authors) {
-        const [key] = url.split('+')
-        authors.push(profiles.find(p => encode(p.rawJSON.url) === encode(key)))
-      }
       setAuthors(authors)
     })()
-  }, [mod])
+  }, [content])
 
-  if (mod.rawJSON.parents[0]) {
+  if (content.rawJSON.parents[0]) {
     useEffect(() => {
       ;(async () => {
-        setParent(await p2p.get(mod.rawJSON.parents[0]))
+        setParent(await p2p.get(content.rawJSON.parents[0]))
       })()
-    }, [mod])
+    }, [content])
   }
 
   return (
@@ -153,32 +141,32 @@ const Module = ({ p2p, mod, pad, to, isParent }) => {
         isParent={isParent}
       >
         <Attributes>
-          <Attribute>{subtypes[mod.rawJSON.subtype] || 'Unknown'}</Attribute>
-          <AttributeIcon>
-            {isRegistered ? (
-              <HexIndicatorIsRegistered />
-            ) : (
-              <HexIndicatorIsUnregistered />
-            )}
-          </AttributeIcon>
+          <Attribute>
+            {subtypes[content.rawJSON.subtype] || 'Unknown'}
+          </Attribute>
         </Attributes>
         <Content pad={pad}>
-          <Title>{mod.rawJSON.title}</Title>
+          <Title>{content.rawJSON.title}</Title>
           {authors.map(author =>
-            isRegistered ? (
-              <AuthorOfRegisteredContent key={author.rawJSON.url} to='/profile'>
+            isContentRegistered(content, author) ? (
+              <AuthorWithContentRegistration
+                key={author.rawJSON.url}
+                to={`/profile/${encode(author.rawJSON.url)}`}
+              >
                 {author.rawJSON.title}
-              </AuthorOfRegisteredContent>
+              </AuthorWithContentRegistration>
             ) : (
-              <AuthorOfUnregisteredContent key={author.rawJSON.url}>
+              <AuthorWithoutContentRegistration key={author.rawJSON.url}>
                 {author.rawJSON.title}
-              </AuthorOfUnregisteredContent>
+              </AuthorWithoutContentRegistration>
             )
           )}
           {!isParent && (
-            <Description>{newlinesToBr(mod.rawJSON.description)}</Description>
+            <Description>
+              {newlinesToBr(content.rawJSON.description)}
+            </Description>
           )}
-          {!isParent && mod.rawJSON.parents[0] && (
+          {!isParent && content.rawJSON.parents[0] && (
             <ToggleParent
               onClick={e => {
                 e.stopPropagation()
@@ -194,16 +182,20 @@ const Module = ({ p2p, mod, pad, to, isParent }) => {
           onClick={e => {
             e.stopPropagation()
             history.push(
-              `/create/${encode(mod.rawJSON.url)}+${mod.metadata.version}`
+              `/create/${encode(content.rawJSON.url)}+${
+                content.metadata.version
+              }`
             )
           }}
         />
       </Container>
       {(showParent || isParent) && parent && (
-        <Module
+        <Row
           p2p={p2p}
-          mod={parent}
-          to={`/content/${encode(parent.rawJSON.url)}`}
+          content={parent}
+          to={`/profile/${encode(parent.rawJSON.authors[0])}/${encode(
+            parent.rawJSON.url
+          )}`}
           pad={isParent ? pad : 4}
           isParent
         />
@@ -212,4 +204,4 @@ const Module = ({ p2p, mod, pad, to, isParent }) => {
   )
 }
 
-export default Module
+export default Row

@@ -5,11 +5,12 @@ import Profile from './components/profile/profile'
 import ProfileContent from './components/profile/content'
 import Welcome from './components/welcome/welcome'
 import Drafts from './components/drafts/drafts'
-import DraftContent from './components/drafts/content'
-import Create from './components/create/create'
+import ShowDraft from './components/drafts/show'
+import CreateDraft from './components/drafts/create'
 import P2P from '@p2pcommons/sdk-js'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import { remote } from 'electron'
+import { ProfileContext } from './lib/context'
 
 const showError = err => {
   if (err instanceof P2P.errors.EBUSYError) return
@@ -30,58 +31,59 @@ const p2p = new P2P()
 
 const Container = ({ children }) => (
   <Router>
-    <Layout>{children}</Layout>
+    <Layout p2p={p2p}>{children}</Layout>
   </Router>
 )
 
 const App = () => {
-  const [profile, setProfile] = useState()
+  const [profileUrl, setProfileUrl] = useState()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     ;(async () => {
       const profiles = await p2p.listProfiles()
       const profile = profiles.find(profile => profile.metadata.isWritable)
-      if (profile) setProfile(profile)
+      if (profile) {
+        setProfileUrl(profile.rawJSON.url)
+        window.Chatra('updateIntegrationData', {
+          name: profile.rawJSON.title
+        })
+      }
       setLoading(false)
     })()
   }, [])
 
-  useEffect(() => {
-    window.Chatra('updateIntegrationData', {
-      name: profile ? profile.rawJSON.title : null
-    })
-  }, [profile])
-
   if (loading) return <Container />
-  if (!profile) {
+  if (!profileUrl) {
     return (
       <Container>
-        <Welcome p2p={p2p} setProfile={setProfile} />
+        <Welcome p2p={p2p} setProfileUrl={setProfileUrl} />
       </Container>
     )
   }
 
   return (
-    <Container>
-      <Switch>
-        <Route path='/' exact>
-          <Drafts p2p={p2p} profile={profile} />
-        </Route>
-        <Route path='/content/:key'>
-          <DraftContent p2p={p2p} profile={profile} setProfile={setProfile} />
-        </Route>
-        <Route path='/create/:parentUrl?'>
-          <Create p2p={p2p} profile={profile} />
-        </Route>
-        <Route path='/profile' exact>
-          <Profile p2p={p2p} profile={profile} setProfile={setProfile} />
-        </Route>
-        <Route path='/profile/:key'>
-          <ProfileContent p2p={p2p} profile={profile} setProfile={setProfile} />
-        </Route>
-      </Switch>
-    </Container>
+    <ProfileContext.Provider value={{ url: profileUrl }}>
+      <Container>
+        <Switch>
+          <Route path='/' exact>
+            <Drafts p2p={p2p} />
+          </Route>
+          <Route path='/draft/:key'>
+            <ShowDraft p2p={p2p} />
+          </Route>
+          <Route path='/create/:parentUrl?'>
+            <CreateDraft p2p={p2p} />
+          </Route>
+          <Route path='/profile/:profileKey/:contentKey'>
+            <ProfileContent p2p={p2p} />
+          </Route>
+          <Route path='/profile/:key'>
+            <Profile p2p={p2p} />
+          </Route>
+        </Switch>
+      </Container>
+    </ProfileContext.Provider>
   )
 }
 

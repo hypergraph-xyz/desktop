@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { TopRow, Title, Button } from '../layout/grid'
-import Arrow from '../arrow.svg'
+import Arrow from '../icons/arrow.svg'
 import { Label, Select, Textarea } from '../forms/forms'
 import TitleInput from '../forms/title-input'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
@@ -14,6 +14,7 @@ import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
 import { useHistory, useParams } from 'react-router-dom'
 import Store from 'electron-store'
+import { ProfileContext } from '../../lib/context'
 
 const Container = styled.div`
   margin: 2rem 4rem;
@@ -56,13 +57,14 @@ const Info = styled.p`
 
 const store = new Store()
 
-const Create = ({ p2p, profile }) => {
+const Create = ({ p2p }) => {
   const [files, setFiles] = useState([])
   const [isCreating, setIsCreating] = useState(false)
   const [parent, setParent] = useState()
   const [isValid, setIsValid] = useState(false)
   const history = useHistory()
   const { parentUrl } = useParams()
+  const { url: profileUrl } = useContext(ProfileContext)
 
   if (parentUrl) {
     useEffect(() => {
@@ -101,7 +103,7 @@ const Create = ({ p2p, profile }) => {
               subtype,
               title,
               description,
-              authors: [profile.rawJSON.url],
+              authors: [profileUrl],
               ...(parentUrl && { parents: [`dat://${parentUrl}`] })
             })
             const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(

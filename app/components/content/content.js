@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { purple, white, green, yellow, red, gray } from '../../lib/colors'
 import { encode } from 'dat-encoding'
 import { Button, Title } from '../layout/grid'
 import { useHistory, Link } from 'react-router-dom'
-import Arrow from '../arrow.svg'
+import Arrow from '../icons/arrow.svg'
 import { remote } from 'electron'
 import { promises as fs } from 'fs'
 import AdmZip from 'adm-zip'
@@ -12,6 +12,8 @@ import { Label } from '../forms/forms'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import Anchor from '../anchor'
 import newlinesToBr from '../../lib/newlines-to-br'
+import { ProfileContext } from '../../lib/context'
+import isContentRegistered from '../../lib/is-content-registered'
 
 const Container = styled.div`
   margin: 2rem;
@@ -34,18 +36,18 @@ const Parent = styled(Link)`
     cursor: pointer;
   }
 `
-const ModuleTitle = styled.div`
+const ContentTitle = styled.div`
   font-size: 2rem;
   line-height: 1.25;
   margin-bottom: 2rem;
 `
-const AuthorOfRegisteredContent = styled(Anchor).attrs({
+const AuthorWithContentRegistration = styled(Anchor).attrs({
   as: Link
 })`
   display: inline-block;
   font-size: 1.5rem;
 `
-const AuthorOfUnregisteredContent = styled.span`
+const AuthorWithoutContentRegistration = styled.span`
   color: ${gray};
   display: inline-block;
   font-size: 1.5rem;
@@ -78,28 +80,18 @@ const File = styled.div`
   }
 `
 
-const modDirectory = mod =>
-  `${remote.app.getPath('home')}/.p2pcommons/${encode(mod.rawJSON.url)}`
-
-const OpenFolder = ({ mod }) => (
-  <Button onClick={() => remote.shell.openPath(modDirectory(mod))}>
-    Open folder
-  </Button>
-)
-
-const ExportZip = ({ mod }) => (
+const ExportZip = directory => (
   <Button
     onClick={async () => {
       const zip = new AdmZip()
-      const dir = modDirectory(mod)
-      const files = await fs.readdir(dir)
+      const files = await fs.readdir(directory)
       for (const path of files) {
-        zip.addLocalFile(`${dir}/${path}`)
+        zip.addLocalFile(`${directory}/${path}`)
       }
       const { filePath } = await remote.dialog.showSaveDialog(
         remote.getCurrentWindow(),
         {
-          defaultPath: 'module.zip'
+          defaultPath: 'content.zip'
         }
       )
       if (filePath) zip.writeZip(filePath)
@@ -109,63 +101,93 @@ const ExportZip = ({ mod }) => (
   </Button>
 )
 
-const Content = ({ p2p, content, profile, setProfile, renderRow }) => {
+const getContentDirectory = async content => {
+  const directory = `${remote.app.getPath('home')}/.p2pcommons/${encode(
+    content.rawJSON.url
+  )}`
+  try {
+    const directoryWithVersion = `${directory}+${content.metadata.version}`
+    await fs.stat(directoryWithVersion)
+    return directoryWithVersion
+  } catch (_) {
+    return directory
+  }
+}
+
+const Content = ({ p2p, content, renderRow }) => {
+  const [directory, setDirectory] = useState()
   const [authors, setAuthors] = useState()
   const [parents, setParents] = useState()
   const [files, setFiles] = useState()
-  const [isRegistered, setIsRegistered] = useState()
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState()
+  const [isUpdatingRegistration, setIsUpdatingRegistration] = useState()
+  const [canRegisterContent, setCanRegisterContent] = useState()
+  const [canDeregisterContent, setCanDeregisterContent] = useState()
   const history = useHistory()
-
-  const dir = modDirectory(content)
+  const { url: profileUrl } = useContext(ProfileContext)
 
   useEffect(() => {
     ;(async () => {
-      const profiles = await p2p.listProfiles()
-      const authors = content.rawJSON.authors.map(url => {
-        const [key] = url.split('+')
-        const author = profiles.find(p => encode(p.rawJSON.url) === encode(key))
-        return author.rawJSON.title
-      })
-      setAuthors(authors)
+      const directory = await getContentDirectory(content)
+      setDirectory(directory)
+      await fetchFiles(directory)
     })()
   }, [content.rawJSON.url])
 
-  useEffect(() => {
-    ;(async () => {
-      const parents = await Promise.all(
-        content.rawJSON.parents.map(async url => p2p.clone(...url.split('+')))
+  const fetchAuthors = async () => {
+    const authors = await Promise.all(
+      content.rawJSON.authors.map(key =>
+        p2p.clone(key, null, /* download */ false)
       )
-      setParents(parents)
-    })()
-  }, [content.rawJSON.url])
+    )
+    setAuthors(authors)
+  }
 
-  useEffect(() => {
-    ;(async () => {
-      const isRegistered = Boolean(
-        profile.rawJSON.contents.find(url => {
-          const [otherKey] = url.split('+')
-          return encode(content.rawJSON.url) === encode(otherKey)
-        })
+  const fetchParents = async () => {
+    const parents = await Promise.all(
+      content.rawJSON.parents.map(url =>
+        p2p.clone(url.split('+')[0], null, /* download */ false)
       )
-      setIsRegistered(isRegistered)
-    })()
-  }, [content.rawJSON.url, profile])
+    )
+    setParents(parents)
+  }
+
+  const fetchFiles = async directory => {
+    const files = await fs.readdir(directory)
+    setFiles(files.filter(path => path !== 'index.json'))
+  }
+
+  const fetchCanRegisterOrDeregisterContent = async () => {
+    const profile = authors.find(
+      author => encode(author.rawJSON.url) === encode(profileUrl)
+    )
+    if (profile) {
+      setCanRegisterContent(!isContentRegistered(content, profile))
+      setCanDeregisterContent(isContentRegistered(content, profile))
+    } else {
+      setCanRegisterContent(false)
+      setCanDeregisterContent(false)
+    }
+  }
 
   useEffect(() => {
-    ;(async () => {
-      const files = await fs.readdir(dir)
-      setFiles(files.filter(path => path !== 'index.json'))
-    })()
+    fetchAuthors()
+    fetchParents()
   }, [content.rawJSON.url])
+
+  useEffect(() => {
+    if (authors) fetchCanRegisterOrDeregisterContent()
+  }, [authors])
 
   return authors && parents ? (
     <>
       {renderRow(
         <>
           <Title>{subtypes[content.rawJSON.subtype] || 'Content'}</Title>
-          <OpenFolder mod={content} />
-          <ExportZip mod={content} />
+          <Button onClick={() => remote.shell.openPath(directory)}>
+            Open folder
+          </Button>
+          <ExportZip directory={directory} />
         </>
       )}
       <Container>
@@ -173,23 +195,28 @@ const Content = ({ p2p, content, profile, setProfile, renderRow }) => {
         {parents.map(parent => (
           <Parent
             key={`${parent.rawJSON.url}+${parent.rawJSON.version}`}
-            to={`/content/${encode(parent.rawJSON.url)}`}
+            to={`/profile/${encode(parent.rawJSON.authors[0])}/${encode(
+              parent.rawJSON.url
+            )}`}
           >
             {parent.rawJSON.title}
           </Parent>
         ))}
-        <ModuleTitle>{content.rawJSON.title}</ModuleTitle>
-        {authors.map(author =>
-          isRegistered ? (
-            <AuthorOfRegisteredContent key={author} to='/profile'>
-              {author}
-            </AuthorOfRegisteredContent>
+        <ContentTitle>{content.rawJSON.title}</ContentTitle>
+        {authors.map(author => {
+          return isContentRegistered(content, author) ? (
+            <AuthorWithContentRegistration
+              key={author.rawJSON.url}
+              to={`/profile/${encode(author.rawJSON.url)}`}
+            >
+              {author.rawJSON.title}
+            </AuthorWithContentRegistration>
           ) : (
-            <AuthorOfUnregisteredContent key={author}>
-              {author}
-            </AuthorOfUnregisteredContent>
+            <AuthorWithoutContentRegistration key={author.rawJSON.url}>
+              {author.rawJSON.title}
+            </AuthorWithoutContentRegistration>
           )
-        )}
+        })}
         <Description>{newlinesToBr(content.rawJSON.description)}</Description>
         {files && files.length > 0 && (
           <>
@@ -199,7 +226,9 @@ const Content = ({ p2p, content, profile, setProfile, renderRow }) => {
                 files.map(path => (
                   <File
                     key={path}
-                    onClick={() => remote.shell.openPath(`${dir}/${path}`)}
+                    onClick={() => {
+                      remote.shell.openPath(`${directory}/${path}`)
+                    }}
                   >
                     {path}
                   </File>
@@ -207,50 +236,62 @@ const Content = ({ p2p, content, profile, setProfile, renderRow }) => {
             </Files>
           </>
         )}
-        {isRegistered ? (
-          <Button
-            color={yellow}
-            onClick={async () => {
-              await p2p.deregister(
-                `dat://${encode(content.rawJSON.url)}+${
-                  content.metadata.version
-                }`,
-                profile.rawJSON.url
-              )
-              setProfile(await p2p.get(profile.rawJSON.url))
-              history.replace(`/content/${encode(content.rawJSON.url)}`)
-            }}
-          >
-            Remove from profile
-          </Button>
-        ) : (
+        {canRegisterContent ? (
           <Button
             color={green}
+            isLoading={isUpdatingRegistration}
             onClick={async () => {
-              await p2p.register(
-                `dat://${encode(content.rawJSON.url)}+${
-                  content.metadata.version
-                }`,
-                profile.rawJSON.url
-              )
-              setProfile(await p2p.get(profile.rawJSON.url))
+              setIsUpdatingRegistration(true)
+              try {
+                await p2p.register(
+                  `dat://${encode(content.rawJSON.url)}+${
+                    content.metadata.version
+                  }`,
+                  profileUrl
+                )
+              } finally {
+                setIsUpdatingRegistration(false)
+              }
+              await fetchAuthors()
             }}
           >
             Add to profile
           </Button>
+        ) : canDeregisterContent ? (
+          <Button
+            color={yellow}
+            isLoading={isUpdatingRegistration}
+            onClick={async () => {
+              setIsUpdatingRegistration(true)
+              try {
+                await p2p.deregister(
+                  `dat://${encode(content.rawJSON.url)}+${
+                    content.metadata.version
+                  }`,
+                  profileUrl
+                )
+              } finally {
+                setIsUpdatingRegistration(false)
+              }
+              await fetchAuthors()
+            }}
+          >
+            Remove from profile
+          </Button>
+        ) : null}
+        {content.metadata.isWritable && (
+          <Button
+            color={red}
+            isLoading={isDeleting}
+            onClick={async () => {
+              setIsDeleting(true)
+              await p2p.delete(content.rawJSON.url)
+              history.push('/')
+            }}
+          >
+            Delete content
+          </Button>
         )}
-        <Button
-          color={red}
-          isLoading={isDeleting}
-          onClick={async () => {
-            setIsDeleting(true)
-            await p2p.delete(content.rawJSON.url)
-            setProfile(await p2p.get(profile.rawJSON.url))
-            history.push('/')
-          }}
-        >
-          Delete content
-        </Button>
       </Container>
     </>
   ) : null

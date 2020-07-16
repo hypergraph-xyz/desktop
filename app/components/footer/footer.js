@@ -1,7 +1,7 @@
 import { shell } from 'electron'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Arrow from '../arrow.svg'
+import Arrow from '../icons/arrow.svg'
 import { useScrollPosition } from '@n8tb1t/use-scroll-position'
 import Anchor from '../anchor'
 

@@ -31,7 +31,6 @@ export const Input = styled.input`
     outline: 0;
   }
 `
-
 const SelectContainer = styled.div`
   position: relative;
 `

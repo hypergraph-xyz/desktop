@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { black, purple, white, gray } from '../../lib/colors'
-import LoadingAnimation from './loading.svg'
+import Loading from '../loading/loading'
 
 const rowHeight = 64
 
@@ -30,7 +30,7 @@ const StyledButton = styled(Cell).attrs({
   as: 'button'
 })`
   background-color: ${props =>
-    props.disabled
+    props.emphasis === 'top' && props.disabled
       ? gray
       : props.emphasis === 'top'
       ? props.color || purple
@@ -42,7 +42,8 @@ const StyledButton = styled(Cell).attrs({
   font-size: 1rem;
   height: 4rem;
   border: 2px solid ${purple};
-  border-color: ${props => (props.disabled ? gray : props.color || purple)};
+  border-color: ${props =>
+    props.content !== 'icon' && props.disabled ? gray : props.color || purple};
   color: ${props => (props.isLoading ? gray : white)};
   margin-right: 1rem;
   min-width: ${props => (props.content === 'icon' ? 0 : '8rem')};
@@ -50,27 +51,31 @@ const StyledButton = styled(Cell).attrs({
   text-align: center;
 
   ${props =>
-      props.disabled
-        ? css`
-            cursor: not-allowed;
-          `
-        : css`
-            :hover {
-              color: ${props => (props.isLoading ? gray : white)};
-              background-color: ${props =>
-                props.emphasis === 'top' ? black : props.color || purple};
-              path {
-                fill: ${white};
-              }
-            }
+    props.disabled
+      ? css`
+          cursor: not-allowed;
+        `
+      : css`
+          :hover {
+            color: ${props => (props.isLoading ? gray : white)};
+            background-color: ${props =>
+              props.emphasis === 'top' ? black : props.color || purple};
+            ${props =>
+              props.content !== 'icon' &&
+              css`
+                path {
+                  fill: ${white};
+                }
+              `}
+          }
 
-            :active {
-              background-color: ${props =>
-                props.emphasis === 'top' ? props.color || purple : black};
-              outline: none;
-            }
-          `}
-    :focus {
+          :active {
+            background-color: ${props =>
+              props.emphasis === 'top' ? props.color || purple : black};
+            outline: none;
+          }
+        `}
+  :focus {
     outline: none;
   }
 
@@ -98,13 +103,14 @@ const StyledButton = styled(Cell).attrs({
 
   svg {
     vertical-align: middle;
+    path {
+      ${props =>
+        props.disabled &&
+        css`
+          fill: ${gray};
+        `}
+    }
   }
-`
-const Loading = styled(LoadingAnimation)`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  margin-left: -30px !important;
 `
 export const Button = ({ isLoading, children, ...props }) => (
   <StyledButton
@@ -113,7 +119,7 @@ export const Button = ({ isLoading, children, ...props }) => (
     disabled={props.disabled || isLoading}
   >
     {children}
-    {isLoading && <Loading height='100%' width='60px' />}
+    {isLoading && <Loading />}
   </StyledButton>
 )
 export const StickyRow = styled(Row)`

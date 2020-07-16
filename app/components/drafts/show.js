@@ -3,7 +3,7 @@ import { TopRow } from '../layout/grid'
 import { useParams } from 'react-router-dom'
 import Content from '../content/content'
 
-const DraftContent = ({ p2p, profile, setProfile }) => {
+const ShowDraft = ({ p2p }) => {
   const { key } = useParams()
   const [content, setContent] = useState()
 
@@ -17,11 +17,9 @@ const DraftContent = ({ p2p, profile, setProfile }) => {
     <Content
       p2p={p2p}
       content={content}
-      profile={profile}
-      setProfile={setProfile}
       renderRow={children => <TopRow>{children}</TopRow>}
     />
   ) : null
 }
 
-export default DraftContent
+export default ShowDraft

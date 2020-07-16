@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import AvatarPlaceholder from './avatar-placeholder.svg'
-import Module from '../module/module'
+import ContentRow from '../content/row'
 import Footer from '../footer/footer'
 import { encode } from 'dat-encoding'
 import { Title, StickyRow, TopRow, Button } from '../layout/grid'
 import { green, red, yellow, gray } from '../../lib/colors'
-import { Textarea, Input, Label } from '../forms/forms'
+import { Textarea, Input } from '../forms/forms'
 import Share from './share.svg'
-import Modal, { Close } from '../modal'
-import { Heading2, Paragraph } from '../typography'
+import { useParams } from 'react-router-dom'
+import ShareModal from './share-modal'
 
 const Header = styled.div`
   position: relative;
@@ -112,8 +112,10 @@ const Form = styled.form`
   width: 100%;
 `
 
-const Profile = ({ p2p, profile, setProfile }) => {
-  const [modules, setModules] = useState()
+const Profile = ({ p2p }) => {
+  const { key } = useParams()
+  const [profile, setProfile] = useState()
+  const [contents, setContents] = useState()
   const [isEditing, setIsEditing] = useState()
   const [isPopulatingDescription, setIsPopulatingDescription] = useState()
   const [isSaving, setIsSaving] = useState()
@@ -123,15 +125,17 @@ const Profile = ({ p2p, profile, setProfile }) => {
   const titleRef = useRef()
   const descriptionRef = useRef()
 
-  const fetchModules = async () => {
-    const modules = await Promise.all(
+  const fetchContents = async profile => {
+    console.time('fetch contents')
+    const contents = await Promise.all(
       profile.rawJSON.contents.map(url => {
         const [key, version] = url.split('+')
-        const download = false
+        const download = true
         return p2p.clone(key, version, download)
       })
     )
-    setModules(modules)
+    setContents(contents)
+    console.timeEnd('fetch contents')
   }
 
   const onSubmit = async e => {
@@ -155,39 +159,33 @@ const Profile = ({ p2p, profile, setProfile }) => {
     setIsEditing(false)
     setIsSaved(true)
     setTimeout(() => setIsSaved(false), 2000)
-    await fetchModules()
+    await fetchContents(profile)
   }
 
   useEffect(() => {
-    fetchModules()
-  }, [])
+    ;(async () => {
+      setContents(null)
+      const profile = await p2p.clone(key, null, false /* download */)
+      setProfile(profile)
+      await fetchContents(profile)
+    })()
+  }, [key])
 
   useEffect(() => {
     if (!descriptionRef.current) return
     descriptionRef.current.focus()
     setIsPopulatingDescription(false)
-  }, [isPopulatingDescription])
+  }, [key, isPopulatingDescription])
+
+  if (!profile) return null
 
   return (
     <>
       {isSharing && (
-        <Modal height={329} border onClose={() => setIsSharing(false)}>
-          <>
-            <Close onClick={() => setIsSharing(false)} />
-            <Heading2>Share your profile 🎉 </Heading2>
-            <Paragraph>
-              Want other Hypergraph users to see your work? Copy the link below
-              and send it any way you want to. Disclaimer: Once information is
-              shared, you cannot delete it from their computers.
-            </Paragraph>
-            <Label>Your profile URL</Label>
-            <Input
-              value={profile.rawJSON.url}
-              readOnly
-              onClick={ev => ev.target.select()}
-            />
-          </>
-        </Modal>
+        <ShareModal
+          url={profile.rawJSON.url}
+          onClose={() => setIsSharing(false)}
+        />
       )}
       <TopRow>
         <Form onSubmit={onSubmit}>
@@ -234,7 +232,7 @@ const Profile = ({ p2p, profile, setProfile }) => {
                 Cancel
               </Button>
             </>
-          ) : (
+          ) : profile.metadata.isWritable ? (
             <Button
               type='button'
               color={green}
@@ -242,7 +240,7 @@ const Profile = ({ p2p, profile, setProfile }) => {
             >
               Edit profile
             </Button>
-          )}
+          ) : null}
         </Form>
       </TopRow>
       <Header>
@@ -253,7 +251,11 @@ const Profile = ({ p2p, profile, setProfile }) => {
           isSaved={isSaved}
           isEmpty={profile.rawJSON.description.length === 0}
           onClick={() => {
-            if (profile.rawJSON.description.length === 0 && !isEditing) {
+            if (
+              profile.metadata.isWritable &&
+              profile.rawJSON.description.length === 0 &&
+              !isEditing
+            ) {
               setIsEditing(true)
               setIsPopulatingDescription(true)
             }
@@ -271,29 +273,31 @@ const Profile = ({ p2p, profile, setProfile }) => {
                 <br />
               </Fragment>
             ))
-          ) : (
+          ) : profile.metadata.isWritable ? (
             'Add a description…'
-          )}
+          ) : null}
         </Description>
       </Header>
       <StickyRow top='114px'>
         <Title>Content</Title>
       </StickyRow>
-      {modules && (
+      {contents && (
         <>
-          {modules.map(mod => {
+          {contents.map(content => {
             return (
-              <Module
-                key={mod.rawJSON.url}
+              <ContentRow
+                key={content.rawJSON.url}
                 p2p={p2p}
-                mod={mod}
-                to={`/profile/${encode(mod.rawJSON.url)}`}
+                content={content}
+                to={`/profile/${encode(profile.rawJSON.url)}/${encode(
+                  content.rawJSON.url
+                )}`}
               />
             )
           })}
           <Footer
             title={
-              modules.length
+              contents.length
                 ? 'You’ve reached the end! ✌️'
                 : 'No content yet... 🤔'
             }

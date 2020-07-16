@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import Logo from './logo.svg'
 import { white, purple, black } from '../../lib/colors'
 import { Row, Button } from '../layout/grid'
 import { NavLink, useHistory, Link } from 'react-router-dom'
 import AddContent from '../icons/add-content.svg'
+import Search from './search-icon-1rem.svg'
+import { encode } from 'dat-encoding'
+import { ProfileContext } from '../../lib/context'
 
 const Container = styled.div`
   width: 8rem;
@@ -72,10 +75,21 @@ const AddContentLink = styled(Link)`
     background-color: inherit;
   }
 `
+const FindButton = styled(StyledButton)`
+  position: absolute;
+  bottom: 8rem;
+  left: 0;
+  height: 2rem;
+  border-top-width: 2px;
+`
+const StyledSearch = styled(Search)`
+  margin-right: 0.5rem;
+`
 const isDrafts = location => /^\/$|^\/content\//.test(location.pathname)
 
-const Menu = () => {
+const Menu = ({ onFind }) => {
   const history = useHistory()
+  const { url: profileUrl } = useContext(ProfileContext)
 
   return (
     <Container>
@@ -84,10 +98,14 @@ const Menu = () => {
         <StyledNavLink to='/' isActive={(_, location) => isDrafts(location)}>
           <StyledButton>Drafts</StyledButton>
         </StyledNavLink>
-        <StyledNavLink to='/profile'>
+        <StyledNavLink to={profileUrl ? `/profile/${encode(profileUrl)}` : '#'}>
           <StyledButton>Profile</StyledButton>
         </StyledNavLink>
       </StyledRow>
+      <FindButton onClick={onFind}>
+        <StyledSearch />
+        Find
+      </FindButton>
       <AddContentLink to='/create'>
         <AddContent />
       </AddContentLink>

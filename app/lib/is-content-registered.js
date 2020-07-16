@@ -1,12 +1,12 @@
 import { encode } from 'dat-encoding'
 
-export default function isModuleRegistered (mod, profile) {
+export default function isContentRegistered (content, profile) {
   return Boolean(
     profile.rawJSON.contents.find(contentUrl => {
       const [key, version] = contentUrl.split('+')
       return (
-        encode(mod.rawJSON.url) === encode(key) &&
-        mod.metadata.version === Number(version)
+        encode(content.rawJSON.url) === encode(key) &&
+        content.metadata.version === Number(version)
       )
     })
   )

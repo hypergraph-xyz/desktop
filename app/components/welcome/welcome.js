@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { purple, green } from '../../lib/colors'
 import { rgba } from 'polished'
 import { Button } from '../layout/grid'
-import Arrow from '../arrow.svg'
+import Arrow from '../icons/arrow.svg'
 import { Label } from '../forms/forms'
 import TitleInput from '../forms/title-input'
 import IllustrationWelcome from './illustrations/welcome.svg'
@@ -164,7 +164,7 @@ const dialogs = [
       </>
     )
   },
-  ({ page, p2p, name, setProfile, previous }) => {
+  ({ page, p2p, name, setProfileUrl, previous }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     return (
@@ -184,7 +184,7 @@ const dialogs = [
             e.preventDefault()
             setIsLoading(true)
             const profile = await p2p.init({ type: 'profile', title: name })
-            setProfile(profile)
+            setProfileUrl(profile.rawJSON.url)
           }}
         >
           <Button emphasis='top' autoFocus isLoading={isLoading}>
@@ -196,7 +196,7 @@ const dialogs = [
   }
 ]
 
-const Welcome = ({ p2p, setProfile }) => {
+const Welcome = ({ p2p, setProfileUrl }) => {
   const [page, setPage] = useState(0)
   const [name, setName] = useState()
 
@@ -209,7 +209,7 @@ const Welcome = ({ p2p, setProfile }) => {
   if (!dialogs[page]) return null
 
   return (
-    <Modal overlay={rgba(purple, 0.8)}>
+    <Modal overlay={rgba(purple, 0.8)} border={false}>
       {React.createElement(dialogs[page], {
         next,
         previous,
@@ -217,7 +217,7 @@ const Welcome = ({ p2p, setProfile }) => {
         name,
         setName,
         p2p,
-        setProfile
+        setProfileUrl
       })}
     </Modal>
   )

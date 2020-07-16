@@ -3,17 +3,24 @@ import { Title, StickyRow, TopRow } from '../layout/grid'
 import { useParams } from 'react-router-dom'
 import Content from '../content/content'
 
-const ProfileContent = ({ p2p, profile, setProfile }) => {
-  const { key } = useParams()
+const ProfileContent = ({ p2p }) => {
+  const { profileKey, contentKey } = useParams()
+  const [profile, setProfile] = useState()
   const [content, setContent] = useState()
 
   useEffect(() => {
     ;(async () => {
-      setContent(await p2p.get(key))
+      setProfile(await p2p.get(profileKey))
     })()
-  }, [key])
+  }, [profileKey])
 
-  return (
+  useEffect(() => {
+    ;(async () => {
+      setContent(await p2p.get(contentKey))
+    })()
+  }, [contentKey])
+
+  return profile && content ? (
     <>
       <TopRow>
         <Title>{profile.rawJSON.title}</Title>
@@ -23,7 +30,6 @@ const ProfileContent = ({ p2p, profile, setProfile }) => {
           p2p={p2p}
           content={content}
           profile={profile}
-          setProfile={setProfile}
           renderRow={children => (
             <StickyRow top='116px' noBorderTop>
               {children}
@@ -32,7 +38,7 @@ const ProfileContent = ({ p2p, profile, setProfile }) => {
         />
       )}
     </>
-  )
+  ) : null
 }
 
 export default ProfileContent

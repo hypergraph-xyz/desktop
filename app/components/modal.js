@@ -38,7 +38,8 @@ const Modal = ({ height, width, overlay, border, onClose, children }) => (
 Modal.defaultProps = {
   height: 700,
   width: 700,
-  overlay: rgba(black, 0.7)
+  overlay: rgba(black, 0.7),
+  border: true
 }
 export const Close = styled(X)`
   position: absolute;
