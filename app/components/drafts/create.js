@@ -8,7 +8,7 @@ import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import AddFile from './add-file.svg'
 import { remote } from 'electron'
 import { purple, red } from '../../lib/colors'
-import { basename } from 'path'
+import { basename, extname } from 'path'
 import X from '../icons/x-1rem.svg'
 import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
@@ -57,8 +57,16 @@ const Info = styled.p`
 
 const store = new Store()
 
+const allIndexesOf = (arr, el) => {
+  const indexes = []
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === el) indexes.push(i)
+  }
+  return indexes
+}
+
 const Create = ({ p2p }) => {
-  const [files, setFiles] = useState([])
+  const [files, setFiles] = useState({})
   const [isCreating, setIsCreating] = useState(false)
   const [parent, setParent] = useState()
   const [isValid, setIsValid] = useState(false)
@@ -78,6 +86,24 @@ const Create = ({ p2p }) => {
   useEffect(() => {
     document.documentElement.scrollTop = 0
   }, [])
+
+  const setFilesUnique = files => {
+    const sources = Object.keys(files)
+    const destinations = sources.map(source => basename(source))
+    for (let i = 0; i < sources.length; i++) {
+      const [source, destination] = [sources[i], destinations[i]]
+      const indexes = allIndexesOf(destinations, destination)
+      const indexInIndexes = indexes.indexOf(i)
+      if (indexInIndexes > 0) {
+        const ext = extname(destination)
+        const base = basename(destination, ext)
+        files[source] = `${base} (${indexInIndexes + 1})${ext}`
+      } else {
+        files[source] = destination
+      }
+    }
+    setFiles(files)
+  }
 
   return (
     <>
@@ -109,10 +135,10 @@ const Create = ({ p2p }) => {
             const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(
               url
             )}`
-            for (const file of files) {
-              await fs.copyFile(file, `${dir}/${basename(file)}`)
+            for (const [source, destination] of Object.entries(files)) {
+              await fs.copyFile(source, `${dir}/${destination}`)
             }
-            if (main) await p2p.set({ url, main: basename(main) })
+            if (main) await p2p.set({ url, main })
             history.push('/')
           }}
         >
@@ -149,24 +175,33 @@ const Create = ({ p2p }) => {
                 opts.defaultPath = remote.app.getPath('documents')
                 store.set('create open dialog displayed', true)
               }
-              const { filePaths } = await remote.dialog.showOpenDialog(
+              const {
+                filePaths: newSources
+              } = await remote.dialog.showOpenDialog(
                 remote.getCurrentWindow(),
                 opts
               )
-              setFiles([...files, ...filePaths])
+
+              const newFiles = { ...files }
+              for (const source of newSources) {
+                const destination = basename(source)
+                newFiles[source] = destination
+              }
+
+              setFilesUnique(newFiles)
             }}
           >
             <AddFile />
           </Button>
           <Files>
-            {files.map(file => (
-              <File key={file}>
-                {basename(file)}
+            {Object.entries(files).map(([source, destination]) => (
+              <File key={source}>
+                {destination}
                 <RemoveFile
                   onClick={() => {
-                    const newFiles = [...files]
-                    newFiles.splice(newFiles.indexOf(file), 1)
-                    setFiles(newFiles)
+                    const newFiles = { ...files }
+                    delete newFiles[source]
+                    setFilesUnique(newFiles)
                   }}
                 />
               </File>
@@ -175,11 +210,11 @@ const Create = ({ p2p }) => {
           <Label htmlFor='main'>Main file</Label>
           <Select name='main'>
             <option value=''>No main</option>
-            {files
-              .filter(file => basename(file).charAt(0) !== '.')
-              .map(file => (
-                <option value={file} key={file}>
-                  {basename(file)}
+            {Object.values(files)
+              .filter(destination => destination.charAt(0) !== '.')
+              .map(destination => (
+                <option value={destination} key={destination}>
+                  {destination}
                 </option>
               ))}
           </Select>
