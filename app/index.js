@@ -28,6 +28,7 @@ if (remote.app.isPackaged) {
 }
 
 const p2p = new P2P()
+window.addEventListener('beforeunload', () => p2p.destroy())
 
 const Container = ({ children }) => (
   <Router>

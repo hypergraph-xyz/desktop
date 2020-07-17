@@ -8,12 +8,22 @@ const {
 const debug = require('electron-debug')
 const del = require('del')
 const { once } = require('events')
+const AdmZip = require('adm-zip')
 
 debug({ isEnabled: true, showDevTools: false })
 app.allowRendererProcessReuse = false
 
 let mainWindow
 let restarting = false
+
+const withRestart = async cb => {
+  restarting = true
+  mainWindow.close()
+  await once(mainWindow, 'closed')
+  await cb()
+  mainWindow = await createMainWindow()
+  restarting = false
+}
 
 const createMainWindow = async () => {
   const win = new BrowserWindow({
@@ -48,12 +58,69 @@ const createMainWindow = async () => {
                   'Are you sure you want to reset your p2pcommons database? This will delete your profile and content from your computer and cannot be undone.'
               })
               if (response === 1) return
-              restarting = true
-              mainWindow.close()
-              await once(mainWindow, 'closed')
-              await del(`${app.getPath('home')}/.p2pcommons`, { force: true })
-              mainWindow = await createMainWindow()
-              restarting = false
+
+              await withRestart(() =>
+                del(`${app.getPath('home')}/.p2pcommons`, { force: true })
+              )
+            }
+          },
+          {
+            label: 'Back up database',
+            click: async () => {
+              const { filePath } = await dialog.showSaveDialog(win, {
+                defaultPath: 'p2pcommons.zip'
+              })
+              if (!filePath) return
+
+              await withRestart(async () => {
+                const zip = new AdmZip()
+                zip.addLocalFolder(`${app.getPath('home')}/.p2pcommons`)
+                zip.writeZip(filePath)
+              })
+            }
+          },
+          {
+            label: 'Restore database backup',
+            click: async () => {
+              const { filePaths } = await dialog.showOpenDialog(win, {
+                defaultPath: 'p2pcommons.zip',
+                filters: [{ name: 'ZIP', extensions: ['zip'] }]
+              })
+              const filePath = filePaths && filePaths[0]
+              if (!filePath) return
+
+              let zip
+
+              try {
+                zip = new AdmZip(filePath)
+                if (!zip.getEntry('db/LOG')) throw new Error('no db')
+              } catch (err) {
+                dialog.showErrorBox(
+                  'Invalid database backup',
+                  "The database couldn't be restored from the backup file provided"
+                )
+                console.error(err)
+                return
+              }
+
+              const { response } = await dialog.showMessageBox(win, {
+                type: 'warning',
+                buttons: ['Restore database backup', 'Cancel'],
+                message:
+                  'Are you sure you want to restore your p2pcommons database from a backup? This will delete your current profile and content from your computer and cannot be undone.'
+              })
+              if (response === 1) return
+
+              await withRestart(async () => {
+                try {
+                  await del(`${app.getPath('home')}/.p2pcommons`, {
+                    force: true
+                  })
+                  zip.extractAllTo(`${app.getPath('home')}/.p2pcommons`)
+                } catch (err) {
+                  console.error(err)
+                }
+              })
             }
           }
         ]
