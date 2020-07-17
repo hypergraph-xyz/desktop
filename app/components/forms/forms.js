@@ -7,7 +7,6 @@ import { Title } from '../layout/grid'
 
 export const Label = styled.label`
   font-weight: bold;
-  margin-bottom: 0.5rem;
   display: block;
 `
 export const Input = styled.input`

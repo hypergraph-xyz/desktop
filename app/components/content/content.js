@@ -36,10 +36,10 @@ const Parent = styled(Link)`
     cursor: pointer;
   }
 `
-const ContentTitle = styled.div`
-  font-size: 2rem;
-  line-height: 1.25;
-  margin-bottom: 2rem;
+const ContentTitle = styled.h2`
+  font-weight: normal;
+  margin-block-start: 0;
+  margin-block-end: 0;
 `
 const AuthorWithContentRegistration = styled(Anchor).attrs({
   as: Link
@@ -55,22 +55,25 @@ const AuthorWithoutContentRegistration = styled.span`
 `
 const Description = styled.div`
   margin-top: 2rem;
-  margin-bottom: 4rem;
+  margin-bottom: 1.5rem;
 `
-const Files = styled.div`
-  margin-bottom: 4rem;
+const NoMain = styled.div`
+  margin-bottom: 1rem;
 `
 const File = styled.div`
   width: 100%;
   border: 2px solid ${green};
   line-height: 2;
-  padding-left: 1rem;
+  padding-left: 0.5rem;
   padding-right: 1rem;
-  margin-top: 1rem;
   max-width: 40rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  :not(:last-of-type) {
+    margin-bottom: 0.5rem;
+  }
 
   :hover {
     background-color: ${green};
@@ -78,6 +81,9 @@ const File = styled.div`
   :active {
     background-color: inherit;
   }
+`
+const Actions = styled.div`
+  margin-top: 2rem;
 `
 
 const ExportZip = directory => (
@@ -179,6 +185,10 @@ const Content = ({ p2p, content, renderRow }) => {
     if (authors) fetchCanRegisterOrDeregisterContent()
   }, [authors])
 
+  const supportingFiles = files
+    ? files.filter(file => file !== content.rawJSON.main)
+    : []
+
   return authors && parents ? (
     <>
       {renderRow(
@@ -218,80 +228,94 @@ const Content = ({ p2p, content, renderRow }) => {
           )
         })}
         <Description>{newlinesToBr(content.rawJSON.description)}</Description>
-        {files && files.length > 0 && (
+        <Label>Main file</Label>
+        {content.rawJSON.main ? (
+          <File
+            onClick={() => {
+              remote.shell.openPath(`${directory}/${content.rawJSON.main}`)
+            }}
+          >
+            {content.rawJSON.main}
+          </File>
+        ) : (
+          <NoMain>Required for adding to profile and sharing</NoMain>
+        )}
+        {supportingFiles.length > 0 && (
           <>
-            <Label>Files</Label>
-            <Files>
-              {files &&
-                files.map(path => (
-                  <File
-                    key={path}
-                    onClick={() => {
-                      remote.shell.openPath(`${directory}/${path}`)
-                    }}
-                  >
-                    {path}
-                  </File>
-                ))}
-            </Files>
+            <Label>Supporting Files</Label>
+            <div>
+              {supportingFiles.map(path => (
+                <File
+                  key={path}
+                  onClick={() => {
+                    remote.shell.openPath(`${directory}/${path}`)
+                  }}
+                >
+                  {path}
+                </File>
+              ))}
+            </div>
           </>
         )}
-        {canRegisterContent ? (
-          <Button
-            color={green}
-            isLoading={isUpdatingRegistration}
-            onClick={async () => {
-              setIsUpdatingRegistration(true)
-              try {
-                await p2p.register(
-                  `dat://${encode(content.rawJSON.url)}+${
-                    content.metadata.version
-                  }`,
-                  profileUrl
-                )
-              } finally {
-                setIsUpdatingRegistration(false)
-              }
-              await fetchAuthors()
-            }}
-          >
-            Add to profile
-          </Button>
-        ) : canDeregisterContent ? (
-          <Button
-            color={yellow}
-            isLoading={isUpdatingRegistration}
-            onClick={async () => {
-              setIsUpdatingRegistration(true)
-              try {
-                await p2p.deregister(
-                  `dat://${encode(content.rawJSON.url)}+${
-                    content.metadata.version
-                  }`,
-                  profileUrl
-                )
-              } finally {
-                setIsUpdatingRegistration(false)
-              }
-              await fetchAuthors()
-            }}
-          >
-            Remove from profile
-          </Button>
-        ) : null}
-        {content.metadata.isWritable && (
-          <Button
-            color={red}
-            isLoading={isDeleting}
-            onClick={async () => {
-              setIsDeleting(true)
-              await p2p.delete(content.rawJSON.url)
-              history.push('/')
-            }}
-          >
-            Delete content
-          </Button>
-        )}
+        <Actions>
+          {canRegisterContent ? (
+            <Button
+              color={green}
+              isLoading={isUpdatingRegistration}
+              disabled={!content.rawJSON.main}
+              onClick={async () => {
+                setIsUpdatingRegistration(true)
+                try {
+                  await p2p.register(
+                    `dat://${encode(content.rawJSON.url)}+${
+                      content.metadata.version
+                    }`,
+                    profileUrl
+                  )
+                } finally {
+                  setIsUpdatingRegistration(false)
+                }
+                await fetchAuthors()
+              }}
+            >
+              Add to profile
+            </Button>
+          ) : canDeregisterContent ? (
+            <Button
+              color={yellow}
+              isLoading={isUpdatingRegistration}
+              onClick={async () => {
+                setIsUpdatingRegistration(true)
+                try {
+                  await p2p.deregister(
+                    `dat://${encode(content.rawJSON.url)}+${
+                      content.metadata.version
+                    }`,
+                    profileUrl
+                  )
+                } finally {
+                  setIsUpdatingRegistration(false)
+                }
+                await fetchAuthors()
+              }}
+            >
+              Remove from profile
+            </Button>
+          ) : null}
+          {content.metadata.isWritable && (
+            <Button
+              color={red}
+              isLoading={isDeleting}
+              onClick={async () => {
+                setIsDeleting(true)
+                await p2p.delete(content.rawJSON.url)
+                history.push('/')
+              }}
+            >
+              Delete content
+            </Button>
+          )}
+        </Actions>
       </Container>
     </>
   ) : null
