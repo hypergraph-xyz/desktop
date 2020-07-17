@@ -46,7 +46,7 @@ const WarningEmoji = styled.span`
 const FindModal = ({ onClose, p2p }) => {
   const [isLoading, setIsLoading] = useState()
   const [url, setUrl] = useState()
-  const [isUnavailable, setIsUnavailable] = useState(true)
+  const [isUnavailable, setIsUnavailable] = useState()
   const inputEl = useRef()
   const clonePromise = useRef()
   const history = useHistory()
