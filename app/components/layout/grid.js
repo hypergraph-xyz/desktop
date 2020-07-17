@@ -44,7 +44,12 @@ const StyledButton = styled(Cell).attrs({
   border: 2px solid ${purple};
   border-color: ${props =>
     props.content !== 'icon' && props.disabled ? gray : props.color || purple};
-  color: ${props => (props.isLoading ? gray : white)};
+  color: ${props =>
+    props.isLoading && props.emphasis === 'top'
+      ? gray
+      : props.isLoading
+      ? black
+      : white};
   margin-right: 1rem;
   min-width: ${props => (props.content === 'icon' ? 0 : '8rem')};
   position: relative;
