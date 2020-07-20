@@ -266,12 +266,14 @@ const Content = ({ p2p, content, renderRow }) => {
               onClick={async () => {
                 setIsUpdatingRegistration(true)
                 try {
+                  console.time('register')
                   await p2p.register(
-                    `dat://${encode(content.rawJSON.url)}+${
+                    `hyper://${encode(content.rawJSON.url)}+${
                       content.metadata.version
                     }`,
                     profileUrl
                   )
+                  console.timeEnd('register')
                 } finally {
                   setIsUpdatingRegistration(false)
                 }
@@ -288,7 +290,7 @@ const Content = ({ p2p, content, renderRow }) => {
                 setIsUpdatingRegistration(true)
                 try {
                   await p2p.deregister(
-                    `dat://${encode(content.rawJSON.url)}+${
+                    `hyper://${encode(content.rawJSON.url)}+${
                       content.metadata.version
                     }`,
                     profileUrl

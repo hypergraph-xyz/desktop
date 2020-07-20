@@ -122,6 +122,7 @@ const Create = ({ p2p }) => {
             const description = e.target.description.value
             const main = e.target.main.value
 
+            console.time('init')
             const {
               rawJSON: { url }
             } = await p2p.init({
@@ -130,8 +131,10 @@ const Create = ({ p2p }) => {
               title,
               description,
               authors: [profileUrl],
-              ...(parentUrl && { parents: [`dat://${parentUrl}`] })
+              ...(parentUrl && { parents: [`hyper://${parentUrl}`] })
             })
+            console.timeEnd('init')
+
             const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(
               url
             )}`

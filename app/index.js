@@ -13,7 +13,6 @@ import { remote } from 'electron'
 import { ProfileContext } from './lib/context'
 
 const showError = err => {
-  if (err instanceof P2P.errors.EBUSYError) return
   window.alert(
     'An unknown error has happened.\n\n' +
       'Please send a screenshot of this window alongside a description of what ' +
