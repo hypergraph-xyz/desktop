@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react'
 import styled, { css, keyframes } from 'styled-components'
-import AvatarPlaceholder from './avatar-placeholder.svg'
+import Avatar from '../avatar/avatar'
 import ContentRow from '../content/row'
 import Footer from '../footer/footer'
 import { encode } from 'dat-encoding'
@@ -14,7 +14,7 @@ import ShareModal from './share-modal'
 const Header = styled.div`
   position: relative;
 `
-const Avatar = styled(AvatarPlaceholder)`
+const StyledAvatar = styled(Avatar)`
   margin-left: 2rem;
   margin-top: 2rem;
   margin-bottom: 23px;
@@ -64,7 +64,7 @@ const Indicator = styled.div`
 const Description = styled.div`
   position: absolute;
   left: 11rem;
-  top: calc(4rem - 4px);
+  top: calc(2rem - 4px);
   right: 146px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -122,6 +122,7 @@ const Profile = ({ p2p }) => {
   const [isSaved, setIsSaved] = useState()
   const [isTitleInvalid, setIsTitleInvalid] = useState()
   const [isSharing, setIsSharing] = useState()
+  const [nameForAvatar, setNameForAvatar] = useState()
   const titleRef = useRef()
   const descriptionRef = useRef()
 
@@ -167,6 +168,7 @@ const Profile = ({ p2p }) => {
       setContents(null)
       const profile = await p2p.clone(key, null, false /* download */)
       setProfile(profile)
+      setNameForAvatar(profile.rawJSON.title)
       await fetchContents(profile)
     })()
   }, [key])
@@ -204,6 +206,7 @@ const Profile = ({ p2p }) => {
                   setIsTitleInvalid(
                     e.target.value.length === 0 || e.target.value.length > 300
                   )
+                  setNameForAvatar(e.target.value)
                 }}
               />
             ) : (
@@ -244,7 +247,7 @@ const Profile = ({ p2p }) => {
         </Form>
       </TopRow>
       <Header>
-        <Avatar />
+        <StyledAvatar name={nameForAvatar} />
         <Description
           isEditing={isEditing}
           isSaving={isSaving}

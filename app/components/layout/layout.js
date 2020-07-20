@@ -4,8 +4,9 @@ import { black, white } from '../../lib/colors'
 import Menu from '../menu/menu'
 import FindModal from './find-modal'
 
-import RobotoRegular from './fonts/Roboto-Regular.ttf'
-import RobotoLight from './fonts/Roboto-Light.ttf'
+import RobotoRegular from './fonts/Roboto/Roboto-Regular.ttf'
+import RobotoLight from './fonts/Roboto/Roboto-Light.ttf'
+import RobotoMono from './fonts/Roboto Mono/RobotoMono-Regular.ttf'
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -17,6 +18,11 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Roboto';
     src: url(${RobotoLight}) format('truetype');
     font-weight: 300;
+  }
+  @font-face {
+    font-family: 'Roboto Mono';
+    src: url(${RobotoMono}) format('truetype');
+    font-weight: 400;
   }
   html {
     -webkit-user-select: none;

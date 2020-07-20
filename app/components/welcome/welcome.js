@@ -12,6 +12,7 @@ import IllustrationAsYouGo2 from './illustrations/as-you-go-2.svg'
 import IllustrationProfileCreation from './illustrations/profile-creation.svg'
 import IllustrationVault from './illustrations/vault.svg'
 import Modal from '../modal'
+import Avatar from '../avatar/avatar'
 
 const Illustration = styled.div`
   margin-top: 22px;
@@ -38,21 +39,12 @@ const Form = styled.form`
   left: 32px;
   right: 32px;
 `
-const Initials = styled.div`
+const StyledAvatar = styled(Avatar)`
   position: absolute;
-  top: 4rem;
-  color: black;
-  font-size: 40px;
+  svg {
+    transform: scale(0.78);
+  }
 `
-
-const toInitials = name => {
-  if (!name || !name.length) return '?'
-  const initials = name
-    .split(' ')
-    .map(word => word.charAt(0))
-    .filter(Boolean)
-  return [initials.shift(), initials.pop()].filter(Boolean).join('')
-}
 
 const dialogs = [
   ({ page, next }) => (
@@ -128,13 +120,13 @@ const dialogs = [
   ),
   ({ page, next, previous, name, setName }) => {
     const [isValid, setIsValid] = useState(Boolean(name))
-    const [initials, setInitials] = useState(toInitials(name))
+    const [nameForAvatar, setNameForAvatar] = useState(name)
     return (
       <>
         <Back page={page} onClick={previous} />
         <Illustration>
           <IllustrationProfileCreation />
-          <Initials>{initials}</Initials>
+          <StyledAvatar name={nameForAvatar} />
         </Illustration>
         <Heading>What should we call you?</Heading>
         <p>
@@ -155,7 +147,7 @@ const dialogs = [
             onIsValid={setIsValid}
             autoFocus
             defaultValue={name}
-            onChange={e => setInitials(toInitials(e.target.value))}
+            onChange={e => setNameForAvatar(e.target.value)}
           />
           <Button emphasis='top' autoFocus disabled={!isValid}>
             Next
