@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import { purple, black, white, gray } from '../../lib/colors'
 import isContentRegistered from '../../lib/is-content-registered'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
-import { useHistory, Link } from 'react-router-dom'
+import { useHistory, useLocation, Link } from 'react-router-dom'
 import Plus from './plus.svg'
 import { encode } from 'dat-encoding'
 import Anchor from '../anchor'
@@ -108,6 +108,7 @@ const ToggleParentArrow = styled.span`
 
 const Row = ({ p2p, content, pad, to, isParent }) => {
   const history = useHistory()
+  const location = useLocation()
   const [authors, setAuthors] = useState([])
   const [showParent, setShowParent] = useState(false)
   const [parent, setParent] = useState()
@@ -147,11 +148,15 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
         </Attributes>
         <Content pad={pad}>
           <Title>{content.rawJSON.title}</Title>
-          {authors.map(author =>
-            isContentRegistered(content, author) ? (
+          {authors.map(author => {
+            const to = `/profile/${encode(author.rawJSON.url)}`
+            return isContentRegistered(content, author) ? (
               <AuthorWithContentRegistration
                 key={author.rawJSON.url}
-                to={`/profile/${encode(author.rawJSON.url)}`}
+                to={to}
+                onClick={() =>
+                  to === location.pathname && window.scrollTo(0, 0)
+                }
               >
                 {author.rawJSON.title}
               </AuthorWithContentRegistration>
@@ -160,7 +165,7 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
                 {author.rawJSON.title}
               </AuthorWithoutContentRegistration>
             )
-          )}
+          })}
           {!isParent && (
             <Description>
               {newlinesToBr(content.rawJSON.description)}
