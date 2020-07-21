@@ -131,8 +131,8 @@ const dialogs = [
         <Heading>What should we call you?</Heading>
         <p>
           Time to create a profile! This is where your published work is
-          displayed. Right now, your profile is just for you. In later versions,
-          your profile and your content can be shared with others.
+          displayed. You can share your profile with others to show them your
+          work.
         </p>
         <Form
           onSubmit={e => {
