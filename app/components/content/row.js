@@ -150,13 +150,12 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
           <Title>{content.rawJSON.title}</Title>
           {authors.map(author => {
             const to = `/profile/${encode(author.rawJSON.url)}`
+            const shouldScroll = to === location.pathname
             return isContentRegistered(content, author) ? (
               <AuthorWithContentRegistration
                 key={author.rawJSON.url}
                 to={to}
-                onClick={() =>
-                  to === location.pathname && window.scrollTo(0, 0)
-                }
+                onClick={() => shouldScroll && window.scrollTo(0, 0)}
               >
                 {author.rawJSON.title}
               </AuthorWithContentRegistration>
