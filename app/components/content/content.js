@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import { purple, white, green, yellow, red, gray } from '../../lib/colors'
+import { green, yellow, red, gray } from '../../lib/colors'
 import { encode } from 'dat-encoding'
 import { Button, Title } from '../layout/grid'
 import { useHistory, Link } from 'react-router-dom'
+import Anchor from '../anchor'
 import Arrow from '../icons/arrow.svg'
 import { remote } from 'electron'
 import { promises as fs } from 'fs'
 import AdmZip from 'adm-zip'
 import { Label } from '../forms/forms'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
-import Anchor from '../anchor'
 import newlinesToBr from '../../lib/newlines-to-br'
 import { ProfileContext } from '../../lib/context'
 import isContentRegistered from '../../lib/is-content-registered'
@@ -23,28 +23,15 @@ const BackArrow = styled(Arrow)`
   display: block;
   margin-bottom: 2rem;
 `
-const Parent = styled(Link)`
-  text-decoration: none;
-  color: ${white};
-  border-bottom: 2px solid ${purple};
-  display: inline-block;
-  -webkit-app-region: no-drag;
+const Parent = styled(Anchor)`
   margin-bottom: 2rem;
-
-  :hover {
-    background-color: ${purple};
-    cursor: pointer;
-  }
 `
 const ContentTitle = styled.h2`
   font-weight: normal;
   margin-block-start: 0;
   margin-block-end: 0;
 `
-const AuthorWithContentRegistration = styled(Anchor).attrs({
-  as: Link
-})`
-  display: inline-block;
+const AuthorWithContentRegistration = styled(Anchor)`
   font-size: 1.5rem;
 `
 const AuthorWithoutContentRegistration = styled.span`
@@ -203,24 +190,26 @@ const Content = ({ p2p, content, renderRow }) => {
       <Container>
         <BackArrow onClick={() => history.go(-1)} />
         {parents.map(parent => (
-          <Parent
+          <Link
+            component={Parent}
             key={`${parent.rawJSON.url}+${parent.rawJSON.version}`}
             to={`/profile/${encode(parent.rawJSON.authors[0])}/${encode(
               parent.rawJSON.url
             )}`}
           >
             {parent.rawJSON.title}
-          </Parent>
+          </Link>
         ))}
         <ContentTitle>{content.rawJSON.title}</ContentTitle>
         {authors.map(author => {
           return isContentRegistered(content, author) ? (
-            <AuthorWithContentRegistration
+            <Link
+              component={AuthorWithContentRegistration}
               key={author.rawJSON.url}
               to={`/profile/${encode(author.rawJSON.url)}`}
             >
               {author.rawJSON.title}
-            </AuthorWithContentRegistration>
+            </Link>
           ) : (
             <AuthorWithoutContentRegistration key={author.rawJSON.url}>
               {author.rawJSON.title}

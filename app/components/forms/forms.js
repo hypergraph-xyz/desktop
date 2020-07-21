@@ -71,7 +71,7 @@ export const Textarea = styled.textarea`
   background-color: ${black};
   font-size: 1rem;
   padding: 7px 17px;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   color: ${white};
   display: block;
   width: 100%;

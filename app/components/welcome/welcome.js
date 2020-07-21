@@ -175,7 +175,9 @@ const dialogs = [
           onSubmit={async e => {
             e.preventDefault()
             setIsLoading(true)
+            console.time('init profile')
             const profile = await p2p.init({ type: 'profile', title: name })
+            console.timeEnd('init profile')
             setProfileUrl(profile.rawJSON.url)
           }}
         >

@@ -50,7 +50,7 @@ const StyledButton = styled(Cell).attrs({
       : props.isLoading
       ? black
       : white};
-  margin-right: 1rem;
+  margin-right: 2rem;
   min-width: ${props => (props.content === 'icon' ? 0 : '8rem')};
   position: relative;
   text-align: center;

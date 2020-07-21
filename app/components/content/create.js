@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import styled from 'styled-components'
 import { TopRow, Title, Button } from '../layout/grid'
 import Arrow from '../icons/arrow.svg'
@@ -7,17 +7,20 @@ import TitleInput from '../forms/title-input'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import AddFile from './add-file.svg'
 import { remote } from 'electron'
-import { purple, red } from '../../lib/colors'
+import { purple, red, green, yellow } from '../../lib/colors'
 import { basename, extname } from 'path'
 import X from '../icons/x-1rem.svg'
 import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
 import { useHistory, useParams } from 'react-router-dom'
+import Anchor from '../anchor'
 import Store from 'electron-store'
 import { ProfileContext } from '../../lib/context'
 
+const { FormData } = window
+
 const Container = styled.div`
-  margin: 2rem 4rem;
+  margin: 2rem;
   max-width: 40rem;
 `
 const BackArrow = styled(Arrow)`
@@ -54,6 +57,9 @@ const Parent = styled.p`
 const Info = styled.p`
   margin-bottom: 2rem;
 `
+const StyledAnchor = styled(Anchor)`
+  margin-top: calc(1rem + 5px);
+`
 
 const store = new Store()
 
@@ -67,12 +73,15 @@ const allIndexesOf = (arr, el) => {
 
 const Create = ({ p2p }) => {
   const [files, setFiles] = useState({})
-  const [isCreating, setIsCreating] = useState(false)
+  const [isCreating, setIsCreating] = useState()
   const [parent, setParent] = useState()
-  const [isValid, setIsValid] = useState(false)
+  const [isValid, setIsValid] = useState()
+  const [isValidDraft, setIsValidDraft] = useState()
+  const [main, setMain] = useState()
   const history = useHistory()
   const { parentUrl } = useParams()
   const { url: profileUrl } = useContext(ProfileContext)
+  const formRef = useRef()
 
   if (parentUrl) {
     useEffect(() => {
@@ -86,6 +95,10 @@ const Create = ({ p2p }) => {
   useEffect(() => {
     document.documentElement.scrollTop = 0
   }, [])
+
+  useEffect(() => {
+    setIsValid(isValidDraft && Boolean(main))
+  }, [isValidDraft, main])
 
   const setFilesUnique = files => {
     const sources = Object.keys(files)
@@ -105,6 +118,40 @@ const Create = ({ p2p }) => {
     setFiles(files)
   }
 
+  const create = async ({ register }) => {
+    setIsCreating({ register })
+
+    console.time('init')
+    const data = new FormData(formRef.current)
+    let {
+      rawJSON: { url },
+      metadata: { version }
+    } = await p2p.init({
+      type: 'content',
+      subtype: data.get('subtype'),
+      title: data.get('title'),
+      description: data.get('description'),
+      authors: [profileUrl],
+      ...(parentUrl && { parents: [`hyper://${parentUrl}`] })
+    })
+    console.timeEnd('init')
+
+    const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(url)}`
+    for (const [source, destination] of Object.entries(files)) {
+      await fs.copyFile(source, `${dir}/${destination}`)
+    }
+    if (main) {
+      ;({
+        metadata: { version }
+      } = await p2p.set({ url, main }))
+    }
+    if (register) {
+      await p2p.register(`hyper://${encode(url)}+${version}`, profileUrl)
+    }
+
+    history.push(`/profile/${encode(profileUrl)}/${encode(url)}`)
+  }
+
   return (
     <>
       <TopRow>
@@ -113,36 +160,10 @@ const Create = ({ p2p }) => {
       <Container>
         <BackArrow onClick={() => history.go(-1)} />
         <Form
-          onSubmit={async e => {
-            e.preventDefault()
-            setIsCreating(true)
-
-            const subtype = e.target.subtype.value
-            const title = e.target.title.value
-            const description = e.target.description.value
-            const main = e.target.main.value
-
-            console.time('init')
-            const {
-              rawJSON: { url }
-            } = await p2p.init({
-              type: 'content',
-              subtype,
-              title,
-              description,
-              authors: [profileUrl],
-              ...(parentUrl && { parents: [`hyper://${parentUrl}`] })
-            })
-            console.timeEnd('init')
-
-            const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(
-              url
-            )}`
-            for (const [source, destination] of Object.entries(files)) {
-              await fs.copyFile(source, `${dir}/${destination}`)
-            }
-            if (main) await p2p.set({ url, main })
-            history.push('/')
+          ref={formRef}
+          onSubmit={ev => {
+            ev.preventDefault()
+            create({ register: false })
           }}
         >
           {parent && (
@@ -205,13 +226,14 @@ const Create = ({ p2p }) => {
                     const newFiles = { ...files }
                     delete newFiles[source]
                     setFilesUnique(newFiles)
+                    if (main === destination) setMain(null)
                   }}
                 />
               </File>
             ))}
           </Files>
           <Label htmlFor='main'>Main file</Label>
-          <Select name='main'>
+          <Select name='main' onChange={ev => setMain(ev.target.value)}>
             <option value=''>No main</option>
             {Object.values(files)
               .filter(destination => destination.charAt(0) !== '.')
@@ -222,15 +244,32 @@ const Create = ({ p2p }) => {
               ))}
           </Select>
           <Label htmlFor='title'>Title</Label>
-          <TitleInput name='title' onIsValid={setIsValid} />
+          <TitleInput name='title' onIsValid={setIsValidDraft} />
           <Label htmlFor='description'>Description</Label>
           <Textarea name='description' />
-          <Button emphasis='top' isLoading={isCreating} disabled={!isValid}>
-            Add content
+          <Button
+            type='button'
+            isLoading={isCreating && isCreating.register}
+            disabled={!isValid || isCreating}
+            color={green}
+            onClick={() => create({ register: true })}
+          >
+            Add to profile
           </Button>
-          <Button color={red} onClick={() => history.push('/')}>
+          <Button
+            isLoading={isCreating && !isCreating.register}
+            disabled={!isValidDraft || isCreating}
+            color={yellow}
+          >
+            Save as draft
+          </Button>
+          <StyledAnchor
+            onClick={() => history.go(-1)}
+            color={red}
+            disabled={isCreating}
+          >
             Cancel
-          </Button>
+          </StyledAnchor>
         </Form>
       </Container>
     </>

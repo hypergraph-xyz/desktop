@@ -6,7 +6,7 @@ import ProfileContent from './components/profile/content'
 import Welcome from './components/welcome/welcome'
 import Drafts from './components/drafts/drafts'
 import ShowDraft from './components/drafts/show'
-import CreateDraft from './components/drafts/create'
+import CreateContent from './components/content/create'
 import P2P from '@p2pcommons/sdk-js'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import { remote } from 'electron'
@@ -73,7 +73,7 @@ const App = () => {
             <ShowDraft p2p={p2p} />
           </Route>
           <Route path='/create/:parentUrl?'>
-            <CreateDraft p2p={p2p} />
+            <CreateContent p2p={p2p} />
           </Route>
           <Route path='/profile/:profileKey/:contentKey'>
             <ProfileContent p2p={p2p} />
