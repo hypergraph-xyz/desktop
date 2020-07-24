@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Fragment } from 'react'
+import React, { useState, useEffect, useRef, Fragment, useContext } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import Avatar from '../avatar/avatar'
 import ContentRow from '../content/row'
@@ -10,6 +10,7 @@ import { Textarea, Input } from '../forms/forms'
 import Share from './share.svg'
 import { useParams } from 'react-router-dom'
 import ShareModal from './share-modal'
+import { ProfileContext } from '../../lib/context'
 
 const Header = styled.div`
   position: relative;
@@ -123,6 +124,8 @@ const Profile = ({ p2p }) => {
   const [isTitleInvalid, setIsTitleInvalid] = useState()
   const [isSharing, setIsSharing] = useState()
   const [nameForAvatar, setNameForAvatar] = useState()
+  const [ownProfile, setOwnProfile] = useState()
+  const { url: ownProfileUrl } = useContext(ProfileContext)
   const titleRef = useRef()
   const descriptionRef = useRef()
 
@@ -138,6 +141,9 @@ const Profile = ({ p2p }) => {
     setContents(contents)
     console.timeEnd('fetch contents')
   }
+
+  const fetchOwnProfile = async () =>
+    setOwnProfile(await p2p.get(ownProfileUrl))
 
   const onSubmit = async e => {
     e.preventDefault()
@@ -179,6 +185,10 @@ const Profile = ({ p2p }) => {
     setIsPopulatingDescription(false)
   }, [key, isPopulatingDescription])
 
+  useEffect(() => {
+    fetchOwnProfile()
+  }, [])
+
   if (!profile) return null
 
   return (
@@ -213,6 +223,36 @@ const Profile = ({ p2p }) => {
               profile.rawJSON.title
             )}
           </Title>
+          {(() => {
+            if (profile.metadata.isWritable || !ownProfile) return
+            const follows = ownProfile.rawJSON.follows.find(
+              url => encode(url) === encode(profile.rawJSON.url)
+            )
+            return follows ? (
+              <Button
+                type='button'
+                onClick={async () => {
+                  await p2p.unfollow(
+                    ownProfile.rawJSON.url,
+                    profile.rawJSON.url
+                  )
+                  await fetchOwnProfile()
+                }}
+              >
+                Unfollow
+              </Button>
+            ) : (
+              <Button
+                type='button'
+                onClick={async () => {
+                  await p2p.follow(ownProfile.rawJSON.url, profile.rawJSON.url)
+                  await fetchOwnProfile()
+                }}
+              >
+                Follow
+              </Button>
+            )
+          })()}
           <Button
             content='icon'
             type='button'
