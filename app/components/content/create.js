@@ -147,9 +147,10 @@ const Create = ({ p2p }) => {
     }
     if (register) {
       await p2p.register(`hyper://${encode(url)}+${version}`, profileUrl)
+      history.push(`/profile/${encode(profileUrl)}/${encode(url)}`)
+    } else {
+      history.push(`/draft/${encode(url)}`)
     }
-
-    history.push(`/profile/${encode(profileUrl)}/${encode(url)}`)
   }
 
   return (
