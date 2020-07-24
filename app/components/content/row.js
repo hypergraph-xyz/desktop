@@ -180,16 +180,18 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
             </ToggleParent>
           )}
         </Content>
-        <AddContentWithParent
-          onClick={e => {
-            e.stopPropagation()
-            history.push(
-              `/create/${encode(content.rawJSON.url)}+${
-                content.metadata.version
-              }`
-            )
-          }}
-        />
+        {authors.find(author => isContentRegistered(content, author)) && (
+          <AddContentWithParent
+            onClick={e => {
+              e.stopPropagation()
+              history.push(
+                `/create/${encode(content.rawJSON.url)}+${
+                  content.metadata.version
+                }`
+              )
+            }}
+          />
+        )}
       </Container>
       {(showParent || isParent) && parent && (
         <Row
