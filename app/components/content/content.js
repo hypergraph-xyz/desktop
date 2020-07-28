@@ -14,6 +14,8 @@ import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import newlinesToBr from '../../lib/newlines-to-br'
 import { ProfileContext } from '../../lib/context'
 import isContentRegistered from '../../lib/is-content-registered'
+import Share from '../icons/share.svg'
+import ShareModal from './share-modal'
 
 const Container = styled.div`
   margin: 2rem;
@@ -116,6 +118,7 @@ const Content = ({ p2p, content, renderRow }) => {
   const [isUpdatingRegistration, setIsUpdatingRegistration] = useState()
   const [canRegisterContent, setCanRegisterContent] = useState()
   const [canDeregisterContent, setCanDeregisterContent] = useState()
+  const [isSharing, setIsSharing] = useState()
   const history = useHistory()
   const { url: profileUrl } = useContext(ProfileContext)
 
@@ -178,9 +181,28 @@ const Content = ({ p2p, content, renderRow }) => {
 
   return authors && parents ? (
     <>
+      {isSharing && (
+        <ShareModal
+          url={
+            authors.find(author => isContentRegistered(content, author))
+              ? `${content.rawJSON.url}+${content.metadata.version}`
+              : content.rawJSON.url
+          }
+          onClose={() => setIsSharing(false)}
+        />
+      )}
       {renderRow(
         <>
           <Title>{subtypes[content.rawJSON.subtype] || 'Content'}</Title>
+          {content.rawJSON.main && (
+            <Button
+              content='icon'
+              type='button'
+              onClick={() => setIsSharing(true)}
+            >
+              <Share />
+            </Button>
+          )}
           <Button onClick={() => remote.shell.openPath(directory)}>
             Open folder
           </Button>

@@ -1,0 +1,20 @@
+import React from 'react'
+import Modal, { Close } from '../modal'
+import { Heading2, Paragraph } from '../typography'
+import { Label, Input } from '../forms/forms'
+
+export default ({ url, onClose }) => (
+  <Modal height={329} border onClose={onClose}>
+    <>
+      <Close onClick={onClose} />
+      <Heading2>Share content 🎉</Heading2>
+      <Paragraph>
+        Want other Hypergraph users to see this work? Copy the link below and
+        send it any way you want to. Disclaimer: Once information is shared, you
+        cannot delete it from their computers.
+      </Paragraph>
+      <Label>Content URL</Label>
+      <Input value={url} readOnly onClick={ev => ev.target.select()} />
+    </>
+  </Modal>
+)
