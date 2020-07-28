@@ -7,6 +7,7 @@ import AddContent from '../icons/add-content.svg'
 import styled from 'styled-components'
 import isContentRegistered from '../../lib/is-content-registered'
 import { ProfileContext } from '../../lib/context'
+import sort from '../../lib/sort'
 
 const StyledAddContent = styled(AddContent)`
   vertical-align: middle;
@@ -27,9 +28,9 @@ export default ({ p2p }) => {
         p2p.listContent()
       ])
       setHasRegisteredContent(profile.rawJSON.contents.length)
-      const drafts = contents.filter(
-        content => !isContentRegistered(content, profile)
-      )
+      const drafts = contents
+        .filter(content => !isContentRegistered(content, profile))
+        .sort(sort)
       setDrafts(drafts)
     })()
   }, [])

@@ -10,6 +10,7 @@ import { Textarea, Input } from '../forms/forms'
 import Share from './share.svg'
 import { useParams } from 'react-router-dom'
 import ShareModal from './share-modal'
+import sort from '../../lib/sort'
 import { ProfileContext } from '../../lib/context'
 
 const Header = styled.div`
@@ -130,7 +131,6 @@ const Profile = ({ p2p }) => {
   const descriptionRef = useRef()
 
   const fetchContents = async profile => {
-    console.time('fetch contents')
     const contents = await Promise.all(
       profile.rawJSON.contents.map(url => {
         const [key, version] = url.split('+')
@@ -138,8 +138,8 @@ const Profile = ({ p2p }) => {
         return p2p.clone(key, version, download)
       })
     )
+    contents.sort(sort)
     setContents(contents)
-    console.timeEnd('fetch contents')
   }
 
   const fetchOwnProfile = async () =>
