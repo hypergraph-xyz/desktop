@@ -1,10 +1,6 @@
 'use strict'
 
 const { app, BrowserWindow, Menu, shell, dialog } = require('electron')
-const {
-  default: installExtension,
-  REACT_DEVELOPER_TOOLS
-} = require('electron-devtools-installer')
 const debug = require('electron-debug')
 const del = require('del')
 const { once } = require('events')
@@ -177,9 +173,6 @@ app.on('activate', async () => {
 
 const main = async () => {
   await app.whenReady()
-  if (!process.env.CI && process.platform !== 'win32') {
-    await installExtension(REACT_DEVELOPER_TOOLS)
-  }
   mainWindow = await createMainWindow()
 }
 
