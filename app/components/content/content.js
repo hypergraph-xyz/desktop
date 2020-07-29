@@ -75,7 +75,7 @@ const Actions = styled.div`
   margin-top: 2rem;
 `
 
-const ExportZip = directory => (
+const ExportZip = ({ directory }) => (
   <Button
     onClick={async () => {
       const zip = new AdmZip()
