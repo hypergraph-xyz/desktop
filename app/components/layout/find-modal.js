@@ -82,12 +82,13 @@ const FindModal = ({ onClose, p2p }) => {
             setIsLoading(false)
           } else {
             setIsUnavailable(false)
-            const key = inputEl.current.value
-            clonePromise.current = p2p.clone(key, null, false /* download */)
+            const [key, version] = inputEl.current.value.split('+')
+            clonePromise.current = p2p.clone(key, version)
             setIsLoading(true)
+            let module
 
             try {
-              await clonePromise.current
+              module = await clonePromise.current
             } catch (err) {
               if (clonePromise.current.isCanceled) return
               console.error(err)
@@ -98,7 +99,12 @@ const FindModal = ({ onClose, p2p }) => {
 
             setIsLoading(false)
             onClose()
-            history.push(`/profile/${encode(key)}`)
+            if (module.type === 'profile') {
+              history.push(`/profile/${encode(key)}`)
+            } else {
+              const url = version ? `${encode(key)}/${version}` : encode(key)
+              history.push(`/content/${url}`)
+            }
           }
         }}
       >
