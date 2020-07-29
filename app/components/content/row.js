@@ -50,6 +50,7 @@ const Container = styled.div`
 `
 const Attributes = styled.div`
   display: inline-block;
+  font-family: 'Roboto Mono';
 `
 const Attribute = styled.div``
 const Content = styled.div`
@@ -146,7 +147,7 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
         <Content pad={pad}>
           <Title>{content.rawJSON.title}</Title>
           {authors.map(author => {
-            const to = `/profile/${encode(author.rawJSON.url)}`
+            const to = `/profiles/${encode(author.rawJSON.url)}`
             const shouldScroll = to === location.pathname
             return isContentRegistered(content, author) ? (
               <Link
@@ -197,7 +198,7 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
         <Row
           p2p={p2p}
           content={parent}
-          to={`/profile/${encode(parent.rawJSON.authors[0])}/${encode(
+          to={`/profiles/${encode(parent.rawJSON.authors[0])}/${encode(
             parent.rawJSON.url
           )}`}
           pad={isParent ? pad : 4}

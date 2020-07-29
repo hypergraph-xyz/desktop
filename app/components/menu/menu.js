@@ -85,7 +85,6 @@ const FindButton = styled(StyledButton)`
 const StyledSearch = styled(Search)`
   margin-right: 0.5rem;
 `
-const isDrafts = location => /^\/$|^\/content\//.test(location.pathname)
 
 const Menu = ({ onFind }) => {
   const history = useHistory()
@@ -95,10 +94,15 @@ const Menu = ({ onFind }) => {
     <Container>
       <StyledLogo onClick={() => history.push('/')} />
       <StyledRow>
-        <StyledNavLink to='/' isActive={(_, location) => isDrafts(location)}>
+        <StyledNavLink to='/' exact>
+          <StyledButton>Feed</StyledButton>
+        </StyledNavLink>
+        <StyledNavLink to='/drafts'>
           <StyledButton>Drafts</StyledButton>
         </StyledNavLink>
-        <StyledNavLink to={profileUrl ? `/profile/${encode(profileUrl)}` : '#'}>
+        <StyledNavLink
+          to={profileUrl ? `/profiles/${encode(profileUrl)}` : '#'}
+        >
           <StyledButton>Profile</StyledButton>
         </StyledNavLink>
       </StyledRow>

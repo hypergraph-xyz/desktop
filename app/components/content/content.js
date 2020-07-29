@@ -215,7 +215,7 @@ const Content = ({ p2p, content, renderRow }) => {
           <Link
             component={Parent}
             key={`${parent.rawJSON.url}+${parent.rawJSON.version}`}
-            to={`/profile/${encode(parent.rawJSON.authors[0])}/${encode(
+            to={`/profiles/${encode(parent.rawJSON.authors[0])}/${encode(
               parent.rawJSON.url
             )}`}
           >
@@ -228,7 +228,7 @@ const Content = ({ p2p, content, renderRow }) => {
             <Link
               component={AuthorWithContentRegistration}
               key={author.rawJSON.url}
-              to={`/profile/${encode(author.rawJSON.url)}`}
+              to={`/profiles/${encode(author.rawJSON.url)}`}
             >
               {author.rawJSON.title}
             </Link>

@@ -48,7 +48,7 @@ export default ({ p2p }) => {
                 key={draft.rawJSON.url}
                 p2p={p2p}
                 content={draft}
-                to={`/draft/${encode(draft.rawJSON.url)}`}
+                to={`/drafts/${encode(draft.rawJSON.url)}`}
               />
             )
           })}

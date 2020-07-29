@@ -332,7 +332,7 @@ const Profile = ({ p2p }) => {
                 key={content.rawJSON.url}
                 p2p={p2p}
                 content={content}
-                to={`/profile/${encode(profile.rawJSON.url)}/${encode(
+                to={`/profiles/${encode(profile.rawJSON.url)}/${encode(
                   content.rawJSON.url
                 )}`}
               />

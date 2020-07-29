@@ -100,10 +100,10 @@ const FindModal = ({ onClose, p2p }) => {
             setIsLoading(false)
             onClose()
             if (module.rawJSON.type === 'profile') {
-              history.push(`/profile/${encode(key)}`)
+              history.push(`/profiles/${encode(key)}`)
             } else {
               const url = version ? `${encode(key)}/${version}` : encode(key)
-              history.push(`/content/${url}`)
+              history.push(`/contents/${url}`)
             }
           }
         }}
