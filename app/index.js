@@ -7,6 +7,7 @@ import Welcome from './components/welcome/welcome'
 import Drafts from './components/drafts/drafts'
 import ShowDraft from './components/drafts/show'
 import CreateContent from './components/content/create'
+import Following from './components/profile/following'
 import ShowContent from './components/content/show'
 import Feed from './components/feed/feed'
 import P2P from '@p2pcommons/sdk-js'
@@ -82,6 +83,9 @@ const App = () => {
           </Route>
           <Route path='/profiles/:profileKey/:contentKey'>
             <ProfileContent p2p={p2p} />
+          </Route>
+          <Route path='/following'>
+            <Following p2p={p2p} />
           </Route>
           <Route path='/profiles/:key'>
             <Profile p2p={p2p} />

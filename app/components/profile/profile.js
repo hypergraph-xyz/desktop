@@ -113,6 +113,9 @@ const Form = styled.form`
   display: flex;
   width: 100%;
 `
+const StyledInput = styled(Input)`
+  margin-bottom: 0;
+`
 
 const Profile = ({ p2p }) => {
   const { key } = useParams()
@@ -209,7 +212,7 @@ const Profile = ({ p2p }) => {
               isInvalid={isTitleInvalid}
             />
             {isEditing ? (
-              <Input
+              <StyledInput
                 ref={titleRef}
                 defaultValue={profile.rawJSON.title}
                 onChange={e => {

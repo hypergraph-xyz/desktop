@@ -2,16 +2,20 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { black, purple, white, gray } from '../../lib/colors'
 import Loading from '../loading/loading'
-
-const rowHeight = 64
+import { Heading3 } from '../typography'
 
 export const Row = styled.div`
   border-top: ${props => (props.noBorderTop ? 0 : 2)}px solid ${purple};
   border-bottom: 2px solid ${purple};
-  height: ${rowHeight}px;
+  height: 4rem;
+  line-height: 4rem;
   white-space: nowrap;
-  line-height: ${rowHeight}px;
   display: flex;
+  align-items: center;
+
+  ${Heading3} {
+    margin: 0;
+  }
 `
 export const Cell = styled.div`
   border-right: 2px solid ${purple};

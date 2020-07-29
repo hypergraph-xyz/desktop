@@ -105,6 +105,9 @@ const Menu = ({ onFind }) => {
         >
           <StyledButton>Profile</StyledButton>
         </StyledNavLink>
+        <StyledNavLink to='/following'>
+          <StyledButton>Following</StyledButton>
+        </StyledNavLink>
       </StyledRow>
       <FindButton onClick={onFind}>
         <StyledSearch />
