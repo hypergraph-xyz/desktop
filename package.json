@@ -10,7 +10,7 @@
     "build": "webpack -p",
     "dist": "electron-builder",
     "pack": "electron-builder --dir",
-    "release": "np --no-publish --no-yarn --any-branch",
+    "release": "np --no-publish --no-yarn --no-cleanup --any-branch",
     "start": "webpack-dev-server",
     "start:main": "electron .",
     "test": "prettier-standard && standard && npm run test:integration",
