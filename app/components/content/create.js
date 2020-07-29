@@ -50,10 +50,6 @@ const RemoveFile = styled(X)`
   right: 14px;
   top: 8px;
 `
-const Parent = styled.p`
-  margin-top: 0;
-  margin-bottom: 2rem;
-`
 const Info = styled.p`
   margin-bottom: 2rem;
 `
@@ -74,23 +70,34 @@ const allIndexesOf = (arr, el) => {
 const Create = ({ p2p }) => {
   const [files, setFiles] = useState({})
   const [isCreating, setIsCreating] = useState()
-  const [parent, setParent] = useState()
   const [isValid, setIsValid] = useState()
   const [isValidDraft, setIsValidDraft] = useState()
   const [main, setMain] = useState()
+  const [potentialParents, setPotentialParents] = useState()
   const history = useHistory()
   const { parentUrl } = useParams()
   const { url: profileUrl } = useContext(ProfileContext)
   const formRef = useRef()
 
-  if (parentUrl) {
-    useEffect(() => {
-      ;(async () => {
-        const [key, version] = parentUrl.split('+')
-        setParent(await p2p.clone(key, version))
-      })()
-    }, [])
-  }
+  useEffect(() => {
+    ;(async () => {
+      const profiles = await p2p.listProfiles()
+      setPotentialParents(
+        (
+          await Promise.all(
+            profiles.map(profile =>
+              Promise.all(
+                profile.rawJSON.contents.map(url => {
+                  const [key, version] = url.split('+')
+                  return p2p.clone(key, version, /* download */ false)
+                })
+              )
+            )
+          )
+        ).flat()
+      )
+    })()
+  }, [])
 
   useEffect(() => {
     document.documentElement.scrollTop = 0
@@ -121,7 +128,6 @@ const Create = ({ p2p }) => {
   const create = async ({ register }) => {
     setIsCreating({ register })
 
-    console.time('init')
     const data = new FormData(formRef.current)
     let {
       rawJSON: { url },
@@ -132,9 +138,8 @@ const Create = ({ p2p }) => {
       title: data.get('title'),
       description: data.get('description'),
       authors: [profileUrl],
-      ...(parentUrl && { parents: [`hyper://${parentUrl}`] })
+      parents: [data.get('parent')].filter(Boolean)
     })
-    console.timeEnd('init')
 
     const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(url)}`
     for (const [source, destination] of Object.entries(files)) {
@@ -167,10 +172,20 @@ const Create = ({ p2p }) => {
             create({ register: false })
           }}
         >
-          {parent && (
+          {potentialParents && potentialParents.length > 0 && (
             <>
               <Label htmlFor='parent'>Follows from</Label>
-              <Parent>{parent.rawJSON.title}</Parent>
+              <Select name='parent' defaultValue={`hyper://${parentUrl}`}>
+                <option />
+                {potentialParents.map(parent => (
+                  <option
+                    value={`${parent.rawJSON.url}+${parent.metadata.version}`}
+                    key={`${parent.rawJSON.url}+${parent.metadata.version}`}
+                  >
+                    {parent.rawJSON.title}
+                  </option>
+                ))}
+              </Select>
             </>
           )}
           <Label htmlFor='subtype'>Content type</Label>
