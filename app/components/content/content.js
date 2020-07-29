@@ -321,7 +321,18 @@ const Content = ({ p2p, content, renderRow }) => {
               isLoading={isDeleting}
               onClick={async () => {
                 setIsDeleting(true)
-                await p2p.delete(content.rawJSON.url)
+                const { response } = await remote.dialog.showMessageBox(
+                  remote.getCurrentWindow(),
+                  {
+                    type: 'warning',
+                    buttons: ['Delete files', 'Cancel'],
+                    message:
+                      'This will also delete these files from your Hypergraph folder. Are you sure you want to delete this content?'
+                  }
+                )
+                if (response === 1) return
+                const deleteFiles = true
+                await p2p.delete(content.rawJSON.url, deleteFiles)
                 history.push('/')
               }}
             >
