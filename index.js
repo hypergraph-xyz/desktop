@@ -8,6 +8,7 @@ const AdmZip = require('adm-zip')
 
 debug({ isEnabled: true, showDevTools: false })
 app.allowRendererProcessReuse = false
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
 let mainWindow
 let restarting = false
