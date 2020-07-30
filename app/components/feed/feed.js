@@ -14,7 +14,7 @@ export default ({ p2p }) => {
     ;(async () => {
       const profile = await p2p.get(profileUrl)
       const follows = await Promise.all(
-        profile.rawJSON.follows.map(url => p2p.clone(url))
+        profile.rawJSON.follows.map(url => p2p.clone(encode(url)))
       )
       const profiles = [profile, ...follows]
       const contents = await Promise.all(
@@ -22,7 +22,7 @@ export default ({ p2p }) => {
           Promise.all(
             profile.rawJSON.contents.map(url => {
               const [key, version] = url.split('+')
-              return p2p.clone(key, version)
+              return p2p.clone(encode(key), version)
             })
           )
         )

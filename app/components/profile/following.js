@@ -39,7 +39,9 @@ const Following = ({ p2p }) => {
     ;(async () => {
       setFollowing(
         await Promise.all(
-          (await p2p.get(profileUrl)).rawJSON.follows.map(key => p2p.clone(key))
+          (await p2p.get(profileUrl)).rawJSON.follows.map(key =>
+            p2p.clone(encode(key))
+          )
         )
       )
     })()
@@ -67,7 +69,10 @@ const Following = ({ p2p }) => {
                         ...unfollowed,
                         [profile.rawJSON.url]: false
                       })
-                      await p2p.follow(profileUrl, profile.rawJSON.url)
+                      await p2p.follow(
+                        encode(profileUrl),
+                        encode(profile.rawJSON.url)
+                      )
                     }}
                   >
                     Follow
@@ -79,7 +84,10 @@ const Following = ({ p2p }) => {
                         ...unfollowed,
                         [profile.rawJSON.url]: true
                       })
-                      await p2p.unfollow(profileUrl, profile.rawJSON.url)
+                      await p2p.unfollow(
+                        encode(profileUrl),
+                        encode(profile.rawJSON.url)
+                      )
                     }}
                   >
                     Unfollow

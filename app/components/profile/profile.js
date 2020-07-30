@@ -138,7 +138,7 @@ const Profile = ({ p2p }) => {
       profile.rawJSON.contents.map(url => {
         const [key, version] = url.split('+')
         const download = true
-        return p2p.clone(key, version, download)
+        return p2p.clone(encode(key), version, download)
       })
     )
     contents.sort(sort)
@@ -175,7 +175,7 @@ const Profile = ({ p2p }) => {
   useEffect(() => {
     ;(async () => {
       setContents(null)
-      const profile = await p2p.clone(key, null, false /* download */)
+      const profile = await p2p.clone(encode(key), null, false /* download */)
       setProfile(profile)
       setNameForAvatar(profile.rawJSON.title)
       await fetchContents(profile)
@@ -236,8 +236,8 @@ const Profile = ({ p2p }) => {
                 type='button'
                 onClick={async () => {
                   await p2p.unfollow(
-                    ownProfile.rawJSON.url,
-                    profile.rawJSON.url
+                    encode(ownProfile.rawJSON.url),
+                    encode(profile.rawJSON.url)
                   )
                   await fetchOwnProfile()
                 }}
@@ -248,7 +248,10 @@ const Profile = ({ p2p }) => {
               <Button
                 type='button'
                 onClick={async () => {
-                  await p2p.follow(ownProfile.rawJSON.url, profile.rawJSON.url)
+                  await p2p.follow(
+                    encode(ownProfile.rawJSON.url),
+                    encode(profile.rawJSON.url)
+                  )
                   await fetchOwnProfile()
                 }}
               >

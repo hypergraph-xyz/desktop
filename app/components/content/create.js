@@ -90,7 +90,7 @@ const Create = ({ p2p }) => {
               Promise.all(
                 profile.rawJSON.contents.map(url => {
                   const [key, version] = url.split('+')
-                  return p2p.clone(key, version, /* download */ false)
+                  return p2p.clone(encode(key), version, /* download */ false)
                 })
               )
             )
@@ -138,7 +138,7 @@ const Create = ({ p2p }) => {
       subtype: data.get('subtype'),
       title: data.get('title'),
       description: data.get('description'),
-      authors: [profileUrl],
+      authors: [encode(profileUrl)],
       parents: [data.get('parent')].filter(Boolean)
     })
 
@@ -152,7 +152,7 @@ const Create = ({ p2p }) => {
       } = await p2p.set({ url, main }))
     }
     if (register) {
-      await p2p.register(`hyper://${encode(url)}+${version}`, profileUrl)
+      await p2p.register(`${encode(url)}+${version}`, profileUrl)
       history.push(`/profiles/${encode(profileUrl)}/${encode(url)}`)
     } else {
       history.push(`/drafts/${encode(url)}`)
@@ -176,16 +176,19 @@ const Create = ({ p2p }) => {
           {potentialParents && potentialParents.length > 0 && (
             <>
               <Label htmlFor='parent'>Follows from</Label>
-              <Select name='parent' defaultValue={`hyper://${parentUrl}`}>
+              <Select name='parent' defaultValue={parentUrl}>
                 <option />
-                {potentialParents.map(parent => (
-                  <option
-                    value={`${parent.rawJSON.url}+${parent.metadata.version}`}
-                    key={`${parent.rawJSON.url}+${parent.metadata.version}`}
-                  >
-                    {parent.rawJSON.title}
-                  </option>
-                ))}
+                {potentialParents.map(parent => {
+                  const value = [
+                    encode(parent.rawJSON.url),
+                    parent.metadata.version
+                  ].join('+')
+                  return (
+                    <option value={value} key={value}>
+                      {parent.rawJSON.title}
+                    </option>
+                  )
+                })}
               </Select>
             </>
           )}

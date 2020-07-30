@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@hypergraph-xyz/wikidata-identifiers": "^1.1.1",
-    "@p2pcommons/sdk-js": "github:p2pcommons/sdk-js#dpaez/check-clone-times",
+    "@p2pcommons/sdk-js": "github:p2pcommons/sdk-js#fix/list-profiles-not-writable",
     "adm-zip": "^0.4.16",
     "dat-encoding": "^5.0.1",
     "del": "^5.1.0",

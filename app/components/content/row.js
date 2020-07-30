@@ -116,7 +116,7 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
     ;(async () => {
       const authors = await Promise.all(
         content.rawJSON.authors.map(key =>
-          p2p.clone(key, null, /* download */ false)
+          p2p.clone(encode(key), null, /* download */ false)
         )
       )
       setAuthors(authors)

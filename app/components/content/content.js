@@ -134,7 +134,7 @@ const Content = ({ p2p, content, renderRow }) => {
   const fetchAuthors = async () => {
     const authors = await Promise.all(
       content.rawJSON.authors.map(key =>
-        p2p.clone(key, null, /* download */ false)
+        p2p.clone(encode(key), null, /* download */ false)
       )
     )
     setAuthors(authors)
@@ -143,7 +143,7 @@ const Content = ({ p2p, content, renderRow }) => {
   const fetchParents = async () => {
     const parents = await Promise.all(
       content.rawJSON.parents.map(url =>
-        p2p.clone(url.split('+')[0], null, /* download */ false)
+        p2p.clone(encode(url.split('+')[0]), null, /* download */ false)
       )
     )
     setParents(parents)
@@ -280,14 +280,13 @@ const Content = ({ p2p, content, renderRow }) => {
               onClick={async () => {
                 setIsUpdatingRegistration(true)
                 try {
-                  console.time('register')
                   await p2p.register(
-                    `hyper://${encode(content.rawJSON.url)}+${
+                    [
+                      encode(content.rawJSON.url),
                       content.metadata.version
-                    }`,
+                    ].join('+'),
                     profileUrl
                   )
-                  console.timeEnd('register')
                 } finally {
                   setIsUpdatingRegistration(false)
                 }
@@ -304,9 +303,10 @@ const Content = ({ p2p, content, renderRow }) => {
                 setIsUpdatingRegistration(true)
                 try {
                   await p2p.deregister(
-                    `hyper://${encode(content.rawJSON.url)}+${
+                    [
+                      encode(content.rawJSON.url),
                       content.metadata.version
-                    }`,
+                    ].join('+'),
                     profileUrl
                   )
                 } finally {

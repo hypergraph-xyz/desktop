@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { TopRow } from '../layout/grid'
 import { useParams } from 'react-router-dom'
 import Content from './content'
+import { encode } from 'dat-encoding'
 
 const ShowContent = ({ p2p }) => {
   const { key, version } = useParams()
@@ -9,7 +10,7 @@ const ShowContent = ({ p2p }) => {
 
   useEffect(() => {
     ;(async () => {
-      setContent(await p2p.clone(key, version))
+      setContent(await p2p.clone(encode(key), version))
     })()
   }, [key, version])
 

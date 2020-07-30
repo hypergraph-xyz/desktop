@@ -83,7 +83,7 @@ const FindModal = ({ onClose, p2p }) => {
           } else {
             setIsUnavailable(false)
             const [key, version] = inputEl.current.value.split('+')
-            clonePromise.current = p2p.clone(key, version)
+            clonePromise.current = p2p.clone(encode(key), version)
             setIsLoading(true)
             let module
 
