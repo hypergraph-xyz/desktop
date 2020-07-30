@@ -320,7 +320,6 @@ const Content = ({ p2p, content, renderRow }) => {
               color={red}
               isLoading={isDeleting}
               onClick={async () => {
-                setIsDeleting(true)
                 const { response } = await remote.dialog.showMessageBox(
                   remote.getCurrentWindow(),
                   {
@@ -331,6 +330,8 @@ const Content = ({ p2p, content, renderRow }) => {
                   }
                 )
                 if (response === 1) return
+
+                setIsDeleting(true)
                 const deleteFiles = true
                 await p2p.delete(content.rawJSON.url, deleteFiles)
                 history.push('/')
