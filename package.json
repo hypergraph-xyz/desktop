@@ -27,6 +27,7 @@
     "electron-debug": "^3.1.0",
     "electron-devtools-installer": "^3.1.0",
     "electron-store": "^5.2.0",
+    "focus-visible": "^5.1.0",
     "html-webpack-plugin": "^3.2.0",
     "polished": "^3.6.5",
     "react": "^16.13.1",

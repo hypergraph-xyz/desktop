@@ -16,6 +16,7 @@ import { ProfileContext } from '../../lib/context'
 import isContentRegistered from '../../lib/is-content-registered'
 import Share from '../icons/share.svg'
 import ShareModal from './share-modal'
+import Tabbable from '../accessibility/tabbable'
 
 const Container = styled.div`
   margin: 2rem;
@@ -210,7 +211,7 @@ const Content = ({ p2p, content, renderRow }) => {
         </>
       )}
       <Container>
-        <BackArrow onClick={() => history.go(-1)} />
+        <Tabbable component={BackArrow} onClick={() => history.go(-1)} />
         {parents.map(parent => (
           <Link
             component={Parent}
@@ -241,13 +242,14 @@ const Content = ({ p2p, content, renderRow }) => {
         <Description>{newlinesToBr(content.rawJSON.description)}</Description>
         <Label>Main file</Label>
         {content.rawJSON.main ? (
-          <File
+          <Tabbable
+            component={File}
             onClick={() => {
               remote.shell.openPath(`${directory}/${content.rawJSON.main}`)
             }}
           >
             {content.rawJSON.main}
-          </File>
+          </Tabbable>
         ) : (
           <NoMain>Required for adding to profile and sharing</NoMain>
         )}
@@ -256,14 +258,15 @@ const Content = ({ p2p, content, renderRow }) => {
             <Label>Supporting Files</Label>
             <div>
               {supportingFiles.map(path => (
-                <File
+                <Tabbable
+                  component={File}
                   key={path}
                   onClick={() => {
                     remote.shell.openPath(`${directory}/${path}`)
                   }}
                 >
                   {path}
-                </File>
+                </Tabbable>
               ))}
             </div>
           </>

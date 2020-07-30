@@ -30,5 +30,8 @@ const Anchor = ({ onClick, disabled, ...props }) => (
     {...props}
   />
 )
+Anchor.defaultProps = {
+  href: '#'
+}
 
 export default Anchor

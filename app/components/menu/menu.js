@@ -42,7 +42,7 @@ const StyledButton = styled(Button)`
   border-right-width: 2px !important;
   border-bottom-width: 2px !important;
 
-  .active > & {
+  &.active {
     background-color: ${purple};
     :active {
       background-color: ${purple};
@@ -53,9 +53,6 @@ const StyledButton = styled(Button)`
     background-color: ${black};
     color: ${white} !important;
   }
-`
-const StyledNavLink = styled(NavLink)`
-  text-decoration: none;
 `
 const AddContentLink = styled(Link)`
   position: absolute;
@@ -85,6 +82,14 @@ const FindButton = styled(StyledButton)`
 const StyledSearch = styled(Search)`
   margin-right: 0.5rem;
 `
+const ButtonNavLink = ({ history, to, ...props }) => (
+  <NavLink
+    to={to}
+    onClick={() => history.push(to)}
+    component={StyledButton}
+    {...props}
+  />
+)
 
 const Menu = ({ onFind }) => {
   const history = useHistory()
@@ -94,18 +99,21 @@ const Menu = ({ onFind }) => {
     <Container>
       <StyledLogo onClick={() => history.push('/')} />
       <StyledRow>
-        <StyledNavLink to='/' exact>
-          <StyledButton>Feed</StyledButton>
-        </StyledNavLink>
-        <StyledNavLink to='/drafts'>
-          <StyledButton>Drafts</StyledButton>
-        </StyledNavLink>
-        <StyledNavLink to={`/profiles/${profileUrl ? encode(profileUrl) : ''}`}>
-          <StyledButton>Profile</StyledButton>
-        </StyledNavLink>
-        <StyledNavLink to='/following'>
-          <StyledButton>Following</StyledButton>
-        </StyledNavLink>
+        <ButtonNavLink to='/' exact history={history}>
+          Feed
+        </ButtonNavLink>
+        <ButtonNavLink to='/drafts' history={history}>
+          Drafts
+        </ButtonNavLink>
+        <ButtonNavLink
+          to={`/profiles/${profileUrl ? encode(profileUrl) : ''}`}
+          history={history}
+        >
+          Profile
+        </ButtonNavLink>
+        <ButtonNavLink to='/following' history={history}>
+          Following
+        </ButtonNavLink>
       </StyledRow>
       <FindButton onClick={onFind}>
         <StyledSearch />

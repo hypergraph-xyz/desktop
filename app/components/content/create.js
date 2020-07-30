@@ -16,6 +16,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import Anchor from '../anchor'
 import Store from 'electron-store'
 import { ProfileContext } from '../../lib/context'
+import Tabbable from '../accessibility/tabbable'
 
 const { FormData } = window
 
@@ -164,7 +165,7 @@ const Create = ({ p2p }) => {
         <Title>Add Content</Title>
       </TopRow>
       <Container>
-        <BackArrow onClick={() => history.go(-1)} />
+        <Tabbable component={BackArrow} onClick={() => history.go(-1)} />
         <Form
           ref={formRef}
           onSubmit={ev => {

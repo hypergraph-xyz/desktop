@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { purple, black } from '../lib/colors'
 import { rgba } from 'polished'
 import X from './icons/x-1rem.svg'
+import Tabbable from './accessibility/tabbable'
 
 const Overlay = styled.div`
   position: fixed;
@@ -41,10 +42,13 @@ Modal.defaultProps = {
   overlay: rgba(black, 0.7),
   border: true
 }
-export const Close = styled(X)`
+const StyledClose = styled(X)`
   position: absolute;
   right: 1rem;
   top: 1rem;
 `
+export const Close = ({ ...props }) => (
+  <Tabbable component={StyledClose} {...props} />
+)
 
 export default Modal

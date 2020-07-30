@@ -7,6 +7,7 @@ import Avatar from '../avatar/avatar'
 import { useHistory } from 'react-router-dom'
 import { encode } from 'dat-encoding'
 import Footer from '../footer/footer'
+import Tabbable from '../accessibility/tabbable'
 
 const StyledButton = styled(Button)`
   display: none;
@@ -55,10 +56,10 @@ const Following = ({ p2p }) => {
             const url = `/profiles/${encode(profile.rawJSON.url)}`
             return (
               <Row noBorderTop key={profile.rawJSON.url}>
-                <Profile onClick={() => history.push(url)}>
+                <Tabbable component={Profile} onClick={() => history.push(url)}>
                   <StyledAvatar name={profile.rawJSON.title} size='40px' />
                   <Heading3>{profile.rawJSON.title}</Heading3>
-                </Profile>
+                </Tabbable>
                 {unfollowed[profile.rawJSON.url] ? (
                   <StyledButton
                     onClick={async () => {

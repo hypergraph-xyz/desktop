@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { black, white } from '../../lib/colors'
 import Menu from '../menu/menu'
 import FindModal from './find-modal'
+import 'focus-visible'
 
 import RobotoRegular from './fonts/Roboto/Roboto-Regular.ttf'
 import RobotoLight from './fonts/Roboto/Roboto-Light.ttf'
@@ -46,6 +47,9 @@ const GlobalStyle = createGlobalStyle`
   }
   #chatra.chatra--side-bottom {
     bottom: 1rem !important;
+  }
+  *:focus:not(.focus-visible) {
+    outline: none;
   }
 `
 const Content = styled.div`

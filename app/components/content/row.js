@@ -8,6 +8,7 @@ import Plus from './plus.svg'
 import { encode } from 'dat-encoding'
 import Anchor from '../anchor'
 import newlinesToBr from '../../lib/newlines-to-br'
+import Tabbable from '../accessibility/tabbable'
 
 const AddContentWithParent = styled(Plus)`
   position: absolute;
@@ -132,10 +133,11 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
 
   return (
     <>
-      <Container
+      <Tabbable
+        component={Container}
         pad={pad}
         onClick={e => {
-          if (e.target.tagName !== 'A') history.push(to)
+          if (!e || e.target.tagName !== 'A') history.push(to)
         }}
         isParent={isParent}
       >
@@ -193,7 +195,7 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
             }}
           />
         )}
-      </Container>
+      </Tabbable>
       {(showParent || isParent) && parent && (
         <Row
           p2p={p2p}
