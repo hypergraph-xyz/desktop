@@ -100,9 +100,7 @@ const Menu = ({ onFind }) => {
         <StyledNavLink to='/drafts'>
           <StyledButton>Drafts</StyledButton>
         </StyledNavLink>
-        <StyledNavLink
-          to={profileUrl ? `/profiles/${encode(profileUrl)}` : '#'}
-        >
+        <StyledNavLink to={`/profiles/${profileUrl ? encode(profileUrl) : ''}`}>
           <StyledButton>Profile</StyledButton>
         </StyledNavLink>
         <StyledNavLink to='/following'>
