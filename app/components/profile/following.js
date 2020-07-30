@@ -52,7 +52,7 @@ const Following = ({ p2p }) => {
       {following && (
         <>
           {following.map(profile => {
-            const url = `/profile/${encode(profile.rawJSON.url)}`
+            const url = `/profiles/${encode(profile.rawJSON.url)}`
             return (
               <Row noBorderTop key={profile.rawJSON.url}>
                 <Profile onClick={() => history.push(url)}>
