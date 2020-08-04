@@ -1,5 +1,12 @@
 import styled from 'styled-components'
 
+export const Heading1 = styled.h1`
+  font-size: 3rem;
+  font-weight: normal;
+  margin-block-start: 0;
+  margin-block-end: 0;
+`
+
 export const Heading2 = styled.h2`
   font-size: 2rem;
   font-weight: normal;

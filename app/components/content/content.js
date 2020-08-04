@@ -17,6 +17,7 @@ import isContentRegistered from '../../lib/is-content-registered'
 import Share from '../icons/share.svg'
 import ShareModal from './share-modal'
 import Tabbable from '../accessibility/tabbable'
+import { Heading1 } from '../typography'
 
 const Container = styled.div`
   margin: 2rem;
@@ -28,11 +29,6 @@ const BackArrow = styled(Arrow)`
 `
 const Parent = styled(Anchor)`
   margin-bottom: 2rem;
-`
-const ContentTitle = styled.h2`
-  font-weight: normal;
-  margin-block-start: 0;
-  margin-block-end: 0;
 `
 const AuthorWithContentRegistration = styled(Anchor)`
   font-size: 1.5rem;
@@ -223,7 +219,7 @@ const Content = ({ p2p, content, renderRow }) => {
             {parent.rawJSON.title}
           </Link>
         ))}
-        <ContentTitle>{content.rawJSON.title}</ContentTitle>
+        <Heading1>{content.rawJSON.title}</Heading1>
         {authors.map(author => {
           return isContentRegistered(content, author) ? (
             <Link
