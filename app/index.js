@@ -12,7 +12,7 @@ import ShowContent from './components/content/show'
 import Feed from './components/feed/feed'
 import P2P from '@p2pcommons/sdk-js'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
-import { remote } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import { ProfileContext } from './lib/context'
 
 const showError = err => {
@@ -31,6 +31,74 @@ if (remote.app.isPackaged) {
 
 const p2p = new P2P()
 window.addEventListener('beforeunload', () => p2p.destroy())
+
+ipcRenderer.on('export graph', async () => {
+  const [profiles, contents] = await Promise.all([
+    p2p.listProfiles(),
+    p2p.listContent()
+  ])
+  const graph = {
+    nodes: [
+      ...profiles.map(module => ({
+        url: module.rawJSON.url,
+        type: module.rawJSON.type,
+        subtype: module.rawJSON.subtype
+      })),
+      ...contents.map(module => ({
+        url: `${module.rawJSON.url}+${module.metadata.version}`,
+        type: module.rawJSON.type,
+        subtype: module.rawJSON.subtype
+      }))
+    ],
+    edges: [
+      ...profiles
+        .map(profile => [
+          ...profile.rawJSON.contents.map(url => ({
+            source: profile.rawJSON.url,
+            target: `hyper://${url}`
+          })),
+          ...profile.rawJSON.follows.map(url => ({
+            source: profile.rawJSON.url,
+            target: `hyper://${url}`
+          }))
+        ])
+        .flat(),
+      ...contents
+        .map(content => [
+          ...content.rawJSON.parents.map(url => ({
+            source: `${content.rawJSON.url}+${content.metadata.version}`,
+            target: `hyper://${url}`
+          })),
+          ...content.rawJSON.authors.map(url => ({
+            source: `${content.rawJSON.url}+${content.metadata.version}`,
+            target: `hyper://${url}`
+          }))
+        ])
+        .flat()
+    ]
+  }
+  const nodesByUrl = {}
+  for (const node of graph.nodes) {
+    nodesByUrl[node.url] = node
+  }
+  for (const edge of graph.edges) {
+    const urls = [edge.source, edge.target]
+    for (const url of urls) {
+      if (!nodesByUrl[url]) {
+        const [key, version] = url.split('+')
+        const module = await p2p.clone(key, version, /* download */ false)
+        const node = {
+          url,
+          type: module.rawJSON.type,
+          subtype: module.rawJSON.subtype
+        }
+        nodesByUrl[url] = node
+        graph.nodes.push(node)
+      }
+    }
+  }
+  ipcRenderer.send('export graph', graph)
+})
 
 const Container = ({ children }) => (
   <Router>

@@ -1,10 +1,11 @@
 'use strict'
 
-const { app, BrowserWindow, Menu, shell, dialog } = require('electron')
+const { app, BrowserWindow, Menu, shell, dialog, ipcMain } = require('electron')
 const debug = require('electron-debug')
 const del = require('del')
 const { once } = require('events')
 const AdmZip = require('adm-zip')
+const { promises: fs } = require('fs')
 
 debug({ isEnabled: true, showDevTools: false })
 app.allowRendererProcessReuse = false
@@ -118,6 +119,19 @@ const createMainWindow = async () => {
                   console.error(err)
                 }
               })
+            }
+          },
+          {
+            label: 'Export module graph',
+            click: async () => {
+              const { filePath } = await dialog.showSaveDialog(win, {
+                defaultPath: 'p2pcommons.json'
+              })
+              if (!filePath) return
+
+              win.webContents.send('export graph')
+              const [, graph] = await once(ipcMain, 'export graph')
+              await fs.writeFile(filePath, JSON.stringify(graph, null, 2))
             }
           }
         ]
