@@ -20,9 +20,7 @@ const Footer = ({ title }) => (
   <Container>
     <Title>{title}</Title>
     Cooperatively made with 💜 in Berlin by{' '}
-    <Anchor href='https://libscie.org'>
-      Liberate Science GmbH
-    </Anchor>
+    <Anchor href='https://libscie.org'>Liberate Science GmbH</Anchor>
   </Container>
 )
 

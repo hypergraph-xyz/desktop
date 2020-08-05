@@ -57,12 +57,10 @@ const dialogs = [
       </Illustration>
       <Heading>Welcome to Hypergraph</Heading>
       <p>
-        At{' '}
-        <Anchor href='https://libscie.org'>
-          Liberate Science
-        </Anchor>, we reinvent the publication process in a way that empowers
-        you to do better research. Research that is transparent and accessible to
-        everyone, free from time-consuming bureaucracy and centralized control.
+        At <Anchor href='https://libscie.org'>Liberate Science</Anchor>, we
+        reinvent the publication process in a way that empowers you to do better
+        research. Research that is transparent and accessible to everyone, free
+        from time-consuming bureaucracy and centralized control.
       </p>
       <p>
         Let us explain some of the basic concepts of Hypergraph before you get
@@ -83,14 +81,14 @@ const dialogs = [
       </Illustration>
       <Heading>As-you-go, not after-the-fact</Heading>
       <p>
-        You are probably used to doing research, writing a full paper, and then going
-        through the laborious process of finding a journal. With Hypergraph, you can
-        publish each step of your research as-you-go.
+        You are probably used to doing research, writing a full paper, and then
+        going through the laborious process of finding a journal. With
+        Hypergraph, you can publish each step of your research as-you-go.
       </p>
       <p>
-        As-you-go publishing increases the value of your work by making it available to
-        others as soon as you feel ready. It also breaks down the research process into
-        bite-size chunks. 🍰
+        As-you-go publishing increases the value of your work by making it
+        available to others as soon as you feel ready. It also breaks down the
+        research process into bite-size chunks. 🍰
       </p>
       <Form onSubmit={next}>
         <Button emphasis='top' autoFocus>
@@ -107,14 +105,14 @@ const dialogs = [
       </Illustration>
       <Heading>How Hypergraph works</Heading>
       <p>
-        Each part of your research is its own publication, whether it's a proposal, a
-        literature study, a data set, or a conclusion. You link them together as you go
-        along, to create a connected body of work.
+        Each part of your research is its own publication, whether it's a
+        proposal, a literature study, a data set, or a conclusion. You link them
+        together as you go along, to create a connected body of work.
       </p>
       <p>
-        This makes it much easier to do replications or multiple interpretations with the
-        same source material - even if someone else created it. You just link your
-        content to the existing content and there you go! 🌈
+        This makes it much easier to do replications or multiple interpretations
+        with the same source material - even if someone else created it. You
+        just link your content to the existing content and there you go! 🌈
       </p>
       <Form onSubmit={next}>
         <Button emphasis='top' autoFocus color={green}>
@@ -135,12 +133,11 @@ const dialogs = [
         </Illustration>
         <Heading>What should we call you?</Heading>
         <p>
-          Time to create a profile! This is where your published work is displayed. You can
-          share your profile with others to show them your research.
+          Time to create a profile! This is where your published work is
+          displayed. You can share your profile with others to show them your
+          research.
         </p>
-        <p>
-          Now, what name should we display on your work?
-        </p>
+        <p>Now, what name should we display on your work?</p>
         <Form
           onSubmit={e => {
             e.preventDefault()
@@ -172,15 +169,18 @@ const dialogs = [
         </Illustration>
         <Heading>Introducing the Vault</Heading>
         <p>
-          We use peer-to-peer technology: Hypergraph is powered by the people using it!
-          Share your content as you'd like, without anybody getting in between.
+          We use peer-to-peer technology: Hypergraph is powered by the people
+          using it! Share your content as you'd like, without anybody getting in
+          between.
         </p>
         <p>
-          Hypergraph Vault makes your work available even when your computer is offline. Plus, we're
-          working with libraries on archiving it for future generations! 👵🏾👨🏻👶
+          Hypergraph Vault makes your work available even when your computer is
+          offline. Plus, we're working with libraries on archiving it for future
+          generations! 👵🏾👨🏻👶
         </p>
         <p>
-          Until January 1st, 2021, Hypergraph Vault is free, while we figure out the costs.
+          Until January 1st, 2021, Hypergraph Vault is free, while we figure out
+          the costs.
         </p>
         <Form onSubmit={next}>
           <Button emphasis='top' autoFocus>
@@ -201,37 +201,31 @@ const dialogs = [
         </Illustration>
         <Heading>One last thing</Heading>
         <p>
-          Liberate Science is on a mission to reset research work. We would love it if you'd
-          join us! 💜
+          Liberate Science is on a mission to reset research work. We would love
+          it if you'd join us! 💜
         </p>
         <p>
           Read our manifesto. Check out our{' '}
-          <Anchor href='https://libscie.org'>
-            website
-          </Anchor>,{' '}
-          <Anchor href='https://blog.libscie.org'>
-            blog
-          </Anchor>,{' '}
-          <Anchor href='https://twitter.com/libscie'>
-            Twitter
-          </Anchor>, or{' '}
+          <Anchor href='https://libscie.org'>website</Anchor>,{' '}
+          <Anchor href='https://blog.libscie.org'>blog</Anchor>,{' '}
+          <Anchor href='https://twitter.com/libscie'>Twitter</Anchor>, or{' '}
           <Anchor href='https://github.com/hypergraph-xyz/desktop'>
             GitHub
-          </Anchor>. Sign up for our{' '}
-          <Anchor href='https://www.libscie.org/#newsletter'>
-            newsletter
-          </Anchor> or{' '}
+          </Anchor>
+          . Sign up for our{' '}
+          <Anchor href='https://www.libscie.org/#newsletter'>newsletter</Anchor>{' '}
+          or{' '}
           <Anchor href='https://chrishartgerink.typeform.com/to/VNfDMq'>
             testing
-          </Anchor>. If you're interested in becoming a supporting
-            member, get in touch at{' '}
+          </Anchor>
+          . If you're interested in becoming a supporting member, get in touch
+          at{' '}
           <Anchor href='mailto:community@libscie.org'>
             community@libscie.org
-          </Anchor>.
+          </Anchor>
+          .
         </p>
-        <p>
-          We're in the chat any time if you'd like to talk! 💬
-        </p>
+        <p>We're in the chat any time if you'd like to talk! 💬</p>
         <Form
           onSubmit={async e => {
             e.preventDefault()
