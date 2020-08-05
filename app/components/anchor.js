@@ -1,3 +1,4 @@
+import { shell } from 'electron'
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { white, purple, gray } from '../lib/colors'
@@ -7,7 +8,6 @@ const StyledAnchor = styled.a`
   color: ${props => (props.disabled ? gray : white)};
   border-bottom: 2px solid
     ${props => (props.disabled ? gray : props.color || purple)};
-  display: inline-block;
   -webkit-app-region: no-drag;
 
   ${props =>
@@ -23,10 +23,21 @@ const StyledAnchor = styled.a`
         `}
 `
 
-const Anchor = ({ onClick, disabled, ...props }) => (
+const Anchor = ({ onClick, disabled, href, ...props }) => (
   <StyledAnchor
     disabled={disabled}
-    onClick={() => !disabled && onClick && onClick()}
+    href={href}
+    onClick={e => {
+      if (disabled) return
+      if (onClick) {
+        onClick()
+        return
+      }
+      if (href.match(/^(http|mailto:)/i)) {
+        shell.openExternal(href)
+        e.preventDefault()
+      }
+    }}
     {...props}
   />
 )

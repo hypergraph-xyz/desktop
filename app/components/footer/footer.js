@@ -1,4 +1,3 @@
-import { shell } from 'electron'
 import React from 'react'
 import styled from 'styled-components'
 import Anchor from '../anchor'
@@ -21,7 +20,7 @@ const Footer = ({ title }) => (
   <Container>
     <Title>{title}</Title>
     Cooperatively made with 💜 in Berlin by{' '}
-    <Anchor onClick={() => shell.openExternal('https://libscie.org')}>
+    <Anchor href='https://libscie.org'>
       Liberate Science GmbH
     </Anchor>
   </Container>
