@@ -56,11 +56,11 @@ const Content = styled.div`
   margin-top: 3rem;
 `
 
-const Layout = ({ children, onFind }) => {
+const Layout = ({ children, p2p, onFind }) => {
   return (
     <>
       <GlobalStyle />
-      <Menu onFind={onFind} />
+      <Menu p2p={p2p} onFind={onFind} />
       <Content>{children}</Content>
     </>
   )

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Logo from './logo.svg'
 import { white, purple, black } from '../../lib/colors'
@@ -8,6 +8,10 @@ import AddContent from '../icons/add-content.svg'
 import Search from './search-icon-1rem.svg'
 import { encode } from 'dat-encoding'
 import { ProfileContext } from '../../lib/context'
+import NetworkStatusRed from './network-status-red.svg'
+import NetworkStatusYellow from './network-status-yellow.svg'
+import NetworkStatusGreen from './network-status-green.svg'
+import isOnline from 'is-online'
 
 const Container = styled.div`
   width: 8rem;
@@ -82,6 +86,19 @@ const FindButton = styled(StyledButton)`
 const StyledSearch = styled(Search)`
   margin-right: 0.5rem;
 `
+const NetworkStatusContainer = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 8rem;
+  height: 9.5rem;
+  padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+`
 const ButtonNavLink = ({ history, to, ...props }) => (
   <NavLink
     to={to}
@@ -90,14 +107,54 @@ const ButtonNavLink = ({ history, to, ...props }) => (
     {...props}
   />
 )
+const getNetworkStatus = async p2p => {
+  if (!p2p.networker || !(await isOnline())) return 'red'
+  if (!p2p.networker.swarm.holepunchable()) return 'yellow'
+  return 'green'
+}
 
-const Menu = ({ onFind }) => {
+const Menu = ({ p2p, onFind }) => {
   const history = useHistory()
   const { url: profileUrl } = useContext(ProfileContext)
+  const [networkStatus, setNetworkStatus] = useState('red')
+
+  useEffect(() => {
+    let unmounted = false
+    ;(async () => {
+      const check = async () => {
+        if (unmounted) return
+        const status = await getNetworkStatus(p2p)
+        if (unmounted) return
+        if (status !== networkStatus) setNetworkStatus(status)
+        setTimeout(check, 1000)
+      }
+      check()
+    })()
+    return () => {
+      unmounted = true
+    }
+  }, [networkStatus])
 
   return (
     <Container>
       <StyledLogo onClick={() => history.push('/')} />
+      <NetworkStatusContainer
+        title={
+          {
+            green: 'Connected',
+            yellow: 'Connection limited - hole punching unavailable',
+            red: 'Disconnected'
+          }[networkStatus]
+        }
+      >
+        {networkStatus === 'green' ? (
+          <NetworkStatusGreen />
+        ) : networkStatus === 'yellow' ? (
+          <NetworkStatusYellow />
+        ) : (
+          <NetworkStatusRed />
+        )}
+      </NetworkStatusContainer>
       <StyledRow>
         <ButtonNavLink to='/' exact history={history}>
           Feed

@@ -56,6 +56,10 @@ module.exports = (_, { mode }) => {
       })
     ],
 
+    resolve: {
+      aliasFields: []
+    },
+
     target: 'electron-renderer',
 
     entry: `${__dirname}/app/index.js`,

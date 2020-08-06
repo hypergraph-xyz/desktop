@@ -103,7 +103,9 @@ ipcRenderer.on('export graph', async () => {
 
 const Container = ({ children, onFind }) => (
   <Router>
-    <Layout onFind={onFind}>{children}</Layout>
+    <Layout onFind={onFind} p2p={p2p}>
+      {children}
+    </Layout>
   </Router>
 )
 
