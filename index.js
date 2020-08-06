@@ -170,18 +170,25 @@ const createMainWindow = async () => {
 
 if (!app.requestSingleInstanceLock()) app.quit()
 
-app.on('second-instance', () => {
+app.on('second-instance', (_, argv) => {
   if (!mainWindow) return
   if (mainWindow.isMinimized()) mainWindow.restore()
   mainWindow.show()
+  const lastArg = argv[argv.length - 1]
+  if (/^hyper/.test(lastArg)) {
+    const url = lastArg.replace(/\/$/, '')
+    mainWindow.webContents.send('open', url)
+  }
 })
-
+app.on('open-url', (ev, url) => {
+  ev.preventDefault()
+  mainWindow.webContents.send('open', url)
+})
 app.on('window-all-closed', () => {
   if (!restarting && (process.platform !== 'darwin' || process.env.CI)) {
     app.quit()
   }
 })
-
 app.on('activate', async () => {
   if (!mainWindow) mainWindow = await createMainWindow()
 })
@@ -189,6 +196,7 @@ app.on('activate', async () => {
 const main = async () => {
   await app.whenReady()
   mainWindow = await createMainWindow()
+  app.setAsDefaultProtocolClient('hyper')
 }
 
 main()

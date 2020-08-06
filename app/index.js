@@ -14,6 +14,7 @@ import P2P from '@p2pcommons/sdk-js'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import { remote, ipcRenderer } from 'electron'
 import { ProfileContext } from './lib/context'
+import FindModal from './components/modal/find-modal'
 
 const showError = err => {
   window.alert(
@@ -100,15 +101,21 @@ ipcRenderer.on('export graph', async () => {
   ipcRenderer.send('export graph', graph)
 })
 
-const Container = ({ children }) => (
+const Container = ({ children, onFind }) => (
   <Router>
-    <Layout p2p={p2p}>{children}</Layout>
+    <Layout onFind={onFind}>{children}</Layout>
   </Router>
 )
+
+const lastArg = remote.process.argv[remote.process.argv.length - 1]
 
 const App = () => {
   const [profileUrl, setProfileUrl] = useState()
   const [loading, setLoading] = useState(true)
+  const [findModalUrl, setFindModalUrl] = useState(
+    /^hyper/.test(lastArg) ? lastArg : null
+  )
+  const [isFinding, setIsFinding] = useState(Boolean(findModalUrl))
 
   useEffect(() => {
     ;(async () => {
@@ -124,6 +131,13 @@ const App = () => {
     })()
   }, [])
 
+  useEffect(() => {
+    ipcRenderer.on('open', (_, url) => {
+      setFindModalUrl(url)
+      setIsFinding(true)
+    })
+  }, [])
+
   if (loading) return <Container />
   if (!profileUrl) {
     return (
@@ -135,7 +149,17 @@ const App = () => {
 
   return (
     <ProfileContext.Provider value={{ url: profileUrl }}>
-      <Container>
+      <Container onFind={() => setIsFinding(true)}>
+        {isFinding && (
+          <FindModal
+            p2p={p2p}
+            onClose={() => {
+              setIsFinding(false)
+              setFindModalUrl()
+            }}
+            prefilledUrl={findModalUrl}
+          />
+        )}
         <Switch>
           <Route path='/' exact>
             <Feed p2p={p2p} />

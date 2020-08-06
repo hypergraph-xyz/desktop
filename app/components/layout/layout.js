@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { black, white } from '../../lib/colors'
 import Menu from '../menu/menu'
-import FindModal from './find-modal'
 import 'focus-visible'
 
 import RobotoRegular from './fonts/Roboto/Roboto-Regular.ttf'
@@ -57,14 +56,11 @@ const Content = styled.div`
   margin-top: 3rem;
 `
 
-const Layout = ({ p2p, children }) => {
-  const [isFinding, setIsFinding] = useState()
-
+const Layout = ({ children, onFind }) => {
   return (
     <>
       <GlobalStyle />
-      {isFinding && <FindModal p2p={p2p} onClose={() => setIsFinding(false)} />}
-      <Menu onFind={() => setIsFinding(true)} />
+      <Menu onFind={onFind} />
       <Content>{children}</Content>
     </>
   )

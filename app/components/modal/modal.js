@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { purple, black } from '../lib/colors'
+import { purple, black } from '../../lib/colors'
 import { rgba } from 'polished'
-import X from './icons/x-1rem.svg'
-import Tabbable from './accessibility/tabbable'
+import X from '../icons/x-1rem.svg'
+import Tabbable from '../accessibility/tabbable'
 
 const Overlay = styled.div`
   position: fixed;

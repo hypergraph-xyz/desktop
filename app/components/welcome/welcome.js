@@ -11,7 +11,7 @@ import IllustrationAsYouGo from './illustrations/as-you-go.svg'
 import IllustrationAsYouGo2 from './illustrations/as-you-go-2.svg'
 import IllustrationProfileCreation from './illustrations/profile-creation.svg'
 import IllustrationVault from './illustrations/vault.svg'
-import Modal from '../modal'
+import Modal from '../modal/modal'
 import Avatar from '../avatar/avatar'
 
 const Illustration = styled.div`

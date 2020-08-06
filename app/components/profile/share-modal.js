@@ -1,5 +1,5 @@
 import React from 'react'
-import Modal, { Close } from '../modal'
+import Modal, { Close } from '../modal/modal'
 import { Heading2, Paragraph } from '../typography'
 import { Label, Input } from '../forms/forms'
 

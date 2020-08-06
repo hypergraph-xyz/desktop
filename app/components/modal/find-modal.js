@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react'
 import styled, { css } from 'styled-components'
-import Modal, { Close } from '../modal'
+import Modal, { Close } from './modal'
 import { Heading2, Paragraph } from '../typography'
 import { Label, Input } from '../forms/forms'
-import { Button } from './grid'
+import { Button } from '../layout/grid'
 import ArrowRight from '../icons/arrow-right-2rem.svg'
 import X from '../icons/x-2rem.svg'
 import Loading from '../loading/loading'
@@ -43,9 +43,9 @@ const WarningEmoji = styled.span`
   font-style: normal;
 `
 
-const FindModal = ({ onClose, p2p }) => {
+const FindModal = ({ onClose, prefilledUrl, p2p }) => {
   const [isLoading, setIsLoading] = useState()
-  const [url, setUrl] = useState()
+  const [url, setUrl] = useState(prefilledUrl)
   const [isUnavailable, setIsUnavailable] = useState()
   const inputEl = useRef()
   const clonePromise = useRef()

@@ -96,6 +96,12 @@
     "afterSign": "electron-builder-notarize",
     "mac": {
       "hardenedRuntime": true
+    },
+    "protocols": {
+      "name": "Hyper",
+      "schemes": [
+        "hyper"
+      ]
     }
   }
 }
