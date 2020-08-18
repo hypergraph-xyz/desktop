@@ -12052,6 +12052,10 @@ MIT
 
 </details>
 
+### [sha256-universal](https://ghub.io/sha256-universal)
+
+ISC
+
 ### [sha256-wasm](https://ghub.io/sha256-wasm)
 
 <details>
@@ -12081,6 +12085,10 @@ MIT
     
 
 </details>
+
+### [sha512-universal](https://ghub.io/sha512-universal)
+
+ISC
 
 ### [sha512-wasm](https://ghub.io/sha512-wasm)
 
