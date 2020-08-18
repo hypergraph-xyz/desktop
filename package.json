@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@hypergraph-xyz/wikidata-identifiers": "^1.1.1",
-    "@p2pcommons/sdk-js": "github:p2pcommons/sdk-js#8874de464a5c981dcd4058b0e4fc80d53bc4b914",
+    "@p2pcommons/sdk-js": "github:p2pcommons/sdk-js",
     "adm-zip": "^0.4.16",
     "dat-encoding": "^5.0.1",
     "del": "^5.1.0",
