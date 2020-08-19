@@ -10,6 +10,7 @@ import Loading from '../loading/loading'
 import { gray, red, yellow } from '../../lib/colors'
 import { useHistory } from 'react-router-dom'
 import { encode } from 'dat-encoding'
+import { decode } from '../../lib/hypergraph-url'
 
 const StyledButton = styled(Button)`
   margin-right: 0;
@@ -82,8 +83,10 @@ const FindModal = ({ onClose, prefilledUrl, p2p }) => {
             setIsLoading(false)
           } else {
             setIsUnavailable(false)
-            const [key, version] = inputEl.current.value.split('+')
-            clonePromise.current = p2p.clone(encode(key), version)
+            const [, key, version] = /([^+]+)\+?([^/+]+)?/.exec(
+              inputEl.current.value
+            )
+            clonePromise.current = p2p.clone(decode(key), version)
             setIsLoading(true)
             let module
 

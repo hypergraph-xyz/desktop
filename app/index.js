@@ -115,7 +115,7 @@ const App = () => {
   const [profileUrl, setProfileUrl] = useState()
   const [loading, setLoading] = useState(true)
   const [findModalUrl, setFindModalUrl] = useState(
-    /^hyper/.test(lastArg) ? lastArg : null
+    /^hypergraph:\/\//.test(lastArg) ? lastArg : null
   )
   const [isFinding, setIsFinding] = useState(Boolean(findModalUrl))
 

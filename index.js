@@ -175,7 +175,7 @@ app.on('second-instance', (_, argv) => {
   if (mainWindow.isMinimized()) mainWindow.restore()
   mainWindow.show()
   const lastArg = argv[argv.length - 1]
-  if (/^hyper/.test(lastArg)) {
+  if (/^hypergraph:\/\//.test(lastArg)) {
     const url = lastArg.replace(/\/$/, '')
     mainWindow.webContents.send('open', url)
   }
@@ -196,7 +196,7 @@ app.on('activate', async () => {
 const main = async () => {
   await app.whenReady()
   mainWindow = await createMainWindow()
-  app.setAsDefaultProtocolClient('hyper')
+  app.setAsDefaultProtocolClient('hypergraph')
 }
 
 main()

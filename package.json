@@ -99,9 +99,9 @@
       "hardenedRuntime": true
     },
     "protocols": {
-      "name": "Hyper",
+      "name": "Hypergraph",
       "schemes": [
-        "hyper"
+        "hypergraph"
       ]
     }
   }

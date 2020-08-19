@@ -2,6 +2,7 @@ import React from 'react'
 import Modal, { Close } from '../modal/modal'
 import { Heading2, Paragraph } from '../typography'
 import { Label, Input } from '../forms/forms'
+import { encode } from '../../lib/hypergraph-url'
 
 export default ({ url, onClose }) => (
   <Modal height={329} border onClose={onClose}>
@@ -14,7 +15,7 @@ export default ({ url, onClose }) => (
         cannot delete it from their computers.
       </Paragraph>
       <Label>Content URL</Label>
-      <Input value={url} readOnly onClick={ev => ev.target.select()} />
+      <Input value={encode(url)} readOnly onClick={ev => ev.target.select()} />
     </>
   </Modal>
 )
