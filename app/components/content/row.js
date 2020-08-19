@@ -8,6 +8,7 @@ import Plus from './plus.svg'
 import { encode } from 'dat-encoding'
 import Anchor from '../anchor'
 import newlinesToBr from '../../lib/newlines-to-br'
+import OneParent from './1-parent.svg'
 import Tabbable from '../accessibility/tabbable'
 
 const AddContentWithParent = styled(Plus)`
@@ -53,7 +54,9 @@ const Attributes = styled.div`
   display: inline-block;
   font-family: 'Roboto Mono';
 `
-const Attribute = styled.div``
+const Attribute = styled.div`
+  margin-bottom: 0.5rem;
+`
 const Content = styled.div`
   position: absolute;
   left: calc(8rem + ${props => props.pad || 2}rem);
@@ -144,6 +147,11 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
           <Attribute>
             {subtypes[content.rawJSON.subtype] || 'Unknown'}
           </Attribute>
+          {parent && (
+            <Attribute title={`Follows from "${parent.rawJSON.title}"`}>
+              <OneParent />
+            </Attribute>
+          )}
         </Attributes>
         <Content pad={pad}>
           <Title>{content.rawJSON.title}</Title>
