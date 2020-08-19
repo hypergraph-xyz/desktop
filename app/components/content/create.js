@@ -54,8 +54,9 @@ const RemoveFile = styled(X)`
 const Info = styled.p`
   margin-bottom: 2rem;
 `
-const StyledAnchor = styled(Anchor)`
-  margin-top: calc(1rem + 5px);
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: baseline;
 `
 
 const store = new Store()
@@ -267,29 +268,31 @@ const Create = ({ p2p }) => {
           <TitleInput name='title' onIsValid={setIsValidDraft} />
           <Label htmlFor='description'>Description</Label>
           <Textarea name='description' />
-          <Button
-            type='button'
-            isLoading={isCreating && isCreating.register}
-            disabled={!isValid || isCreating}
-            color={green}
-            onClick={() => create({ register: true })}
-          >
-            Add to profile
-          </Button>
-          <Button
-            isLoading={isCreating && !isCreating.register}
-            disabled={!isValidDraft || isCreating}
-            color={yellow}
-          >
-            Save as draft
-          </Button>
-          <StyledAnchor
-            onClick={() => history.go(-1)}
-            color={red}
-            disabled={isCreating}
-          >
-            Cancel
-          </StyledAnchor>
+          <ButtonGroup>
+            <Button
+              type='button'
+              isLoading={isCreating && isCreating.register}
+              disabled={!isValid || isCreating}
+              color={green}
+              onClick={() => create({ register: true })}
+            >
+              Add to profile
+            </Button>
+            <Button
+              isLoading={isCreating && !isCreating.register}
+              disabled={!isValidDraft || isCreating}
+              color={yellow}
+            >
+              Save as draft
+            </Button>
+            <Anchor
+              onClick={() => history.go(-1)}
+              color={red}
+              disabled={isCreating}
+            >
+              Cancel
+            </Anchor>
+          </ButtonGroup>
         </Form>
       </Container>
     </>

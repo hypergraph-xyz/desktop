@@ -27,9 +27,6 @@ const BackArrow = styled(Arrow)`
   display: block;
   margin-bottom: 2rem;
 `
-const Parent = styled(Anchor)`
-  margin-bottom: 2rem;
-`
 const AuthorWithContentRegistration = styled(Anchor)`
   font-size: 1.5rem;
 `
@@ -69,6 +66,9 @@ const File = styled.div`
   }
 `
 const Actions = styled.div`
+  margin-top: 2rem;
+`
+const StyledHeading1 = styled(Heading1)`
   margin-top: 2rem;
 `
 
@@ -210,7 +210,7 @@ const Content = ({ p2p, content, renderRow }) => {
         <Tabbable component={BackArrow} onClick={() => history.go(-1)} />
         {parents.map(parent => (
           <Link
-            component={Parent}
+            component={Anchor}
             key={`${parent.rawJSON.url}+${parent.rawJSON.version}`}
             to={`/profiles/${encode(parent.rawJSON.authors[0])}/${encode(
               parent.rawJSON.url
@@ -219,7 +219,7 @@ const Content = ({ p2p, content, renderRow }) => {
             {parent.rawJSON.title}
           </Link>
         ))}
-        <Heading1>{content.rawJSON.title}</Heading1>
+        <StyledHeading1>{content.rawJSON.title}</StyledHeading1>
         {authors.map(author => {
           return isContentRegistered(content, author) ? (
             <Link

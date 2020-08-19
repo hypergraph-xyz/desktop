@@ -65,9 +65,7 @@ const Content = styled.div`
 const Title = styled.div`
   font-size: 1.5rem;
   line-height: 1.75rem;
-`
-const AuthorWithContentRegistration = styled(Anchor)`
-  margin: 1rem 0;
+  margin-bottom: 1rem;
 `
 const AuthorWithoutContentRegistration = styled.span`
   color: ${gray};
@@ -78,6 +76,7 @@ const AuthorWithoutContentRegistration = styled.span`
 const Description = styled.div`
   overflow: hidden;
   max-height: 9em;
+  margin-top: 1rem;
   :before {
     content: '';
     width: 100%;
@@ -153,7 +152,7 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
             const shouldScroll = to === location.pathname
             return isContentRegistered(content, author) ? (
               <Link
-                component={AuthorWithContentRegistration}
+                component={Anchor}
                 key={author.rawJSON.url}
                 to={to}
                 onClick={() => shouldScroll && window.scrollTo(0, 0)}
