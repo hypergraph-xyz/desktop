@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { black, red, yellow, white } from '../../lib/colors'
 import { Input } from './forms'
@@ -19,7 +19,8 @@ const TitleInput = styled(Input).attrs({
 })`
   margin-bottom: 8px;
 `
-export default ({ onIsValid = () => {}, ...props }) => {
+const validate = title => title.length > 0 && title.length <= 300
+export default ({ onIsValid = () => {}, defaultValue, ...props }) => {
   const [charCount, setCharCount] = useState(0)
 
   let color
@@ -33,18 +34,23 @@ export default ({ onIsValid = () => {}, ...props }) => {
     color = white
   }
 
+  if (defaultValue) {
+    useEffect(() => {
+      onIsValid(validate(defaultValue))
+    }, [])
+  }
+
   return (
     <Container>
       <TitleInput
         {...props}
+        defaultValue={defaultValue}
         onChange={e => {
           const {
-            target: {
-              value: { length: count }
-            }
+            target: { value: title }
           } = e
-          setCharCount(count)
-          onIsValid(count > 0 && count <= 300)
+          setCharCount(title.length)
+          onIsValid(validate(title))
           if (props.onChange) props.onChange(e)
         }}
       />

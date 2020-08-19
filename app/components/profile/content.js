@@ -4,9 +4,8 @@ import { useParams } from 'react-router-dom'
 import Content from '../content/content'
 
 const ProfileContent = ({ p2p }) => {
-  const { profileKey, contentKey } = useParams()
+  const { profileKey, contentKey, version } = useParams()
   const [profile, setProfile] = useState()
-  const [content, setContent] = useState()
 
   useEffect(() => {
     ;(async () => {
@@ -14,29 +13,21 @@ const ProfileContent = ({ p2p }) => {
     })()
   }, [profileKey])
 
-  useEffect(() => {
-    ;(async () => {
-      setContent(await p2p.get(contentKey))
-    })()
-  }, [contentKey])
-
-  return profile && content ? (
+  return profile ? (
     <>
       <TopRow>
         <Title>{profile.rawJSON.title}</Title>
       </TopRow>
-      {content && (
-        <Content
-          p2p={p2p}
-          content={content}
-          profile={profile}
-          renderRow={children => (
-            <StickyRow top='116px' noBorderTop>
-              {children}
-            </StickyRow>
-          )}
-        />
-      )}
+      <Content
+        p2p={p2p}
+        contentKey={contentKey}
+        version={version}
+        renderRow={children => (
+          <StickyRow top='116px' noBorderTop>
+            {children}
+          </StickyRow>
+        )}
+      />
     </>
   ) : null
 }

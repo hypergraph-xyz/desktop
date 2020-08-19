@@ -138,7 +138,7 @@ const Profile = ({ p2p }) => {
       profile.rawJSON.contents.map(url => {
         const [key, version] = url.split('+')
         const download = true
-        return p2p.clone(encode(key), version, download)
+        return p2p.clone(encode(key), Number(version), download)
       })
     )
     contents.sort(sort)
@@ -335,12 +335,12 @@ const Profile = ({ p2p }) => {
           {contents.map(content => {
             return (
               <ContentRow
-                key={content.rawJSON.url}
+                key={`${content.rawJSON.url}+${content.metadata.version}`}
                 p2p={p2p}
                 content={content}
                 to={`/profiles/${encode(profile.rawJSON.url)}/${encode(
                   content.rawJSON.url
-                )}`}
+                )}/${content.metadata.version}`}
               />
             )
           })}

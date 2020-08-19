@@ -93,20 +93,13 @@ const ExportZip = ({ directory }) => (
   </Button>
 )
 
-const getContentDirectory = async content => {
-  const directory = `${remote.app.getPath('home')}/.p2pcommons/${encode(
-    content.rawJSON.url
-  )}`
-  try {
-    const directoryWithVersion = `${directory}+${content.metadata.version}`
-    await fs.stat(directoryWithVersion)
-    return directoryWithVersion
-  } catch (_) {
-    return directory
-  }
+const getContentDirectory = async ({ key, version }) => {
+  const directory = `${remote.app.getPath('home')}/.p2pcommons/${key}`
+  return version ? `${directory}+${version}` : directory
 }
 
-const Content = ({ p2p, content, renderRow }) => {
+const Content = ({ p2p, contentKey: key, version, renderRow }) => {
+  const [content, setContent] = useState()
   const [directory, setDirectory] = useState()
   const [authors, setAuthors] = useState()
   const [parents, setParents] = useState()
@@ -121,11 +114,17 @@ const Content = ({ p2p, content, renderRow }) => {
 
   useEffect(() => {
     ;(async () => {
-      const directory = await getContentDirectory(content)
+      setContent(await p2p.clone(key, version, /* download */ true))
+    })()
+  }, [key, version])
+
+  useEffect(() => {
+    ;(async () => {
+      const directory = await getContentDirectory({ key, version })
       setDirectory(directory)
       await fetchFiles(directory)
     })()
-  }, [content.rawJSON.url])
+  }, [key, version])
 
   const fetchAuthors = async () => {
     const authors = await Promise.all(
@@ -164,19 +163,20 @@ const Content = ({ p2p, content, renderRow }) => {
   }
 
   useEffect(() => {
+    if (!content) return
     fetchAuthors()
     fetchParents()
-  }, [content.rawJSON.url])
+  }, [content])
 
   useEffect(() => {
-    if (authors) fetchCanRegisterOrDeregisterContent()
+    if (!authors) return
+    fetchCanRegisterOrDeregisterContent()
   }, [authors])
 
-  const supportingFiles = files
-    ? files.filter(file => file !== content.rawJSON.main)
-    : []
+  const supportingFiles =
+    files && content ? files.filter(file => file !== content.rawJSON.main) : []
 
-  return authors && parents ? (
+  return content && authors && parents ? (
     <>
       {isSharing && (
         <ShareModal
@@ -204,6 +204,21 @@ const Content = ({ p2p, content, renderRow }) => {
             Open folder
           </Button>
           <ExportZip directory={directory} />
+          {!canDeregisterContent && (
+            <Button
+              type='button'
+              color={green}
+              onClick={() => {
+                history.push(
+                  `/edit/${encode(content.rawJSON.url)}/${
+                    content.metadata.version
+                  }`
+                )
+              }}
+            >
+              Edit content
+            </Button>
+          )}
         </>
       )}
       <Container>
@@ -214,7 +229,7 @@ const Content = ({ p2p, content, renderRow }) => {
             key={`${parent.rawJSON.url}+${parent.rawJSON.version}`}
             to={`/profiles/${encode(parent.rawJSON.authors[0])}/${encode(
               parent.rawJSON.url
-            )}`}
+            )}/${parent.metadata.version}`}
           >
             {parent.rawJSON.title}
           </Link>

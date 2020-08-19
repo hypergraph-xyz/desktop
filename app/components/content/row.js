@@ -209,7 +209,7 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
           content={parent}
           to={`/profiles/${encode(parent.rawJSON.authors[0])}/${encode(
             parent.rawJSON.url
-          )}`}
+          )}/${parent.metadata.version}`}
           pad={isParent ? pad : 4}
           isParent
         />

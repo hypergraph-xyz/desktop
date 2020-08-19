@@ -7,6 +7,7 @@ import Welcome from './components/welcome/welcome'
 import Drafts from './components/drafts/drafts'
 import ShowDraft from './components/drafts/show'
 import CreateContent from './components/content/create'
+import EditContent from './components/content/edit'
 import Following from './components/profile/following'
 import ShowContent from './components/content/show'
 import Feed from './components/feed/feed'
@@ -175,14 +176,17 @@ const App = () => {
           <Route path='/create/:parentUrl?'>
             <CreateContent p2p={p2p} />
           </Route>
-          <Route path='/profiles/:profileKey/:contentKey'>
-            <ProfileContent p2p={p2p} />
+          <Route path='/edit/:key/:version'>
+            <EditContent p2p={p2p} />
           </Route>
-          <Route path='/following'>
-            <Following p2p={p2p} />
+          <Route path='/profiles/:profileKey/:contentKey/:version'>
+            <ProfileContent p2p={p2p} />
           </Route>
           <Route path='/profiles/:key'>
             <Profile p2p={p2p} />
+          </Route>
+          <Route path='/following'>
+            <Following p2p={p2p} />
           </Route>
           <Route path='/contents/:key/:version?'>
             <ShowContent p2p={p2p} />

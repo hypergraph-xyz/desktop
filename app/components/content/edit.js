@@ -1,0 +1,109 @@
+import React, { useEffect, useContext, useState } from 'react'
+import { TopRow, Title } from '../layout/grid'
+import { remote } from 'electron'
+import { promises as fs } from 'fs'
+import { encode } from 'dat-encoding'
+import { useHistory, useParams } from 'react-router-dom'
+import { ProfileContext } from '../../lib/context'
+import EditForm from './edit-form'
+
+const Edit = ({ p2p }) => {
+  const history = useHistory()
+  const { url: profileUrl } = useContext(ProfileContext)
+  const { key, version } = useParams()
+  const [content, setContent] = useState()
+  const [profile, setProfile] = useState()
+
+  useEffect(() => {
+    ;(async () => {
+      const download = false
+      const content = await p2p.clone(key, Number(version), download)
+      setContent(content)
+    })()
+  }, [key, version])
+
+  useEffect(() => {
+    ;(async () => {
+      setProfile(await p2p.get(profileUrl))
+    })()
+  }, [])
+
+  if (!content || !profile) return null
+
+  return (
+    <>
+      <TopRow>
+        <Title>Edit Content</Title>
+      </TopRow>
+      <EditForm
+        p2p={p2p}
+        url={content.rawJSON.url}
+        parentUrl={content.rawJSON.parents[0]}
+        title={content.rawJSON.title}
+        description={content.rawJSON.description}
+        subtype={content.rawJSON.subtype}
+        main={content.rawJSON.main}
+        onSubmit={async ({
+          subtype,
+          files,
+          main,
+          title,
+          description,
+          isRegister,
+          parent
+        }) => {
+          const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(
+            content.rawJSON.url
+          )}`
+          const filesByDestination = {}
+          for (const [source, destination] of Object.entries(files)) {
+            filesByDestination[destination] = source
+          }
+          for (const path of await fs.readdir(dir)) {
+            if (path !== 'index.json' && !filesByDestination[path]) {
+              await fs.unlink(`${dir}/${path}`)
+            }
+          }
+          for (const [source, destination] of Object.entries(files)) {
+            try {
+              await fs.stat(`${dir}/${destination}`)
+            } catch (_) {
+              await fs.copyFile(source, `${dir}/${destination}`)
+            }
+          }
+
+          await p2p.set({
+            url: content.rawJSON.url,
+            parents: undefined
+          })
+          const {
+            metadata: { version: newVersion }
+          } = await p2p.set({
+            url: content.rawJSON.url,
+            subtype,
+            title,
+            description,
+            main,
+            parents: [parent].filter(Boolean)
+          })
+
+          if (isRegister) {
+            await p2p.register(
+              `${encode(content.rawJSON.url)}+${newVersion}`,
+              profileUrl
+            )
+            history.push(
+              `/profiles/${encode(profileUrl)}/${encode(
+                content.rawJSON.url
+              )}/${newVersion}`
+            )
+          } else {
+            history.push(`/drafts/${encode(content.rawJSON.url)}`)
+          }
+        }}
+      />
+    </>
+  )
+}
+
+export default Edit
