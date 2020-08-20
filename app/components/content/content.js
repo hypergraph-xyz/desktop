@@ -237,17 +237,21 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
         <StyledHeading1>{content.rawJSON.title}</StyledHeading1>
         {authors.map(author => {
           return isContentRegistered(content, author) ? (
-            <Link
-              component={AuthorWithContentRegistration}
-              key={author.rawJSON.url}
-              to={`/profiles/${encode(author.rawJSON.url)}`}
-            >
-              {author.rawJSON.title}
-            </Link>
+            <>
+              <Link
+                component={AuthorWithContentRegistration}
+                key={author.rawJSON.url}
+                to={`/profiles/${encode(author.rawJSON.url)}`}
+              >
+                {author.rawJSON.title}
+              </Link>{' '}
+            </>
           ) : (
-            <AuthorWithoutContentRegistration key={author.rawJSON.url}>
-              {author.rawJSON.title}
-            </AuthorWithoutContentRegistration>
+            <>
+              <AuthorWithoutContentRegistration key={author.rawJSON.url}>
+                {author.rawJSON.title}
+              </AuthorWithoutContentRegistration>{' '}
+            </>
           )
         })}
         <Description>{newlinesToBr(content.rawJSON.description)}</Description>

@@ -159,18 +159,22 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
             const to = `/profiles/${encode(author.rawJSON.url)}`
             const shouldScroll = to === location.pathname
             return isContentRegistered(content, author) ? (
-              <Link
-                component={Anchor}
-                key={author.rawJSON.url}
-                to={to}
-                onClick={() => shouldScroll && window.scrollTo(0, 0)}
-              >
-                {author.rawJSON.title}
-              </Link>
+              <>
+                <Link
+                  component={Anchor}
+                  key={author.rawJSON.url}
+                  to={to}
+                  onClick={() => shouldScroll && window.scrollTo(0, 0)}
+                >
+                  {author.rawJSON.title}
+                </Link>{' '}
+              </>
             ) : (
-              <AuthorWithoutContentRegistration key={author.rawJSON.url}>
-                {author.rawJSON.title}
-              </AuthorWithoutContentRegistration>
+              <>
+                <AuthorWithoutContentRegistration key={author.rawJSON.url}>
+                  {author.rawJSON.title}
+                </AuthorWithoutContentRegistration>{' '}
+              </>
             )
           })}
           {!isParent && (
