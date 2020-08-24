@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import styled, { css } from 'styled-components'
 import { purple, black, white, gray } from '../../lib/colors'
 import isContentRegistered from '../../lib/is-content-registered'
@@ -159,16 +159,15 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
             const to = `/profiles/${encode(author.rawJSON.url)}`
             const shouldScroll = to === location.pathname
             return isContentRegistered(content, author) ? (
-              <>
+              <Fragment key={author.rawJSON.url}>
                 <Link
                   component={Anchor}
-                  key={author.rawJSON.url}
                   to={to}
                   onClick={() => shouldScroll && window.scrollTo(0, 0)}
                 >
                   {author.rawJSON.title}
                 </Link>{' '}
-              </>
+              </Fragment>
             ) : (
               <>
                 <AuthorWithoutContentRegistration key={author.rawJSON.url}>

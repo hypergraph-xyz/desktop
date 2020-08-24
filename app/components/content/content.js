@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, Fragment } from 'react'
 import styled from 'styled-components'
 import { green, yellow, red, gray } from '../../lib/colors'
 import { encode } from 'dat-encoding'
@@ -237,15 +237,14 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
         <StyledHeading1>{content.rawJSON.title}</StyledHeading1>
         {authors.map(author => {
           return isContentRegistered(content, author) ? (
-            <>
+            <Fragment key={author.rawJSON.url}>
               <Link
                 component={AuthorWithContentRegistration}
-                key={author.rawJSON.url}
                 to={`/profiles/${encode(author.rawJSON.url)}`}
               >
                 {author.rawJSON.title}
               </Link>{' '}
-            </>
+            </Fragment>
           ) : (
             <>
               <AuthorWithoutContentRegistration key={author.rawJSON.url}>
