@@ -105,7 +105,7 @@ const createMainWindow = async () => {
                 type: 'warning',
                 buttons: ['Restore database backup', 'Cancel'],
                 message:
-                  'Are you sure you want to restore your p2pcommons database from a backup? This will delete your current profile and content from your computer and cannot be undone.'
+                  'Are you sure you want to restore your p2pcommons database from a backup? This will delete your current profile and content from your computer and cannot be undone. Warning: You currently cannot use Hypergraph on multiple devices for the same profile and content. Please reset your database on any other device to prevent corrupt data.'
               })
               if (response === 1) return
 
