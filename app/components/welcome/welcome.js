@@ -82,8 +82,8 @@ const dialogs = [
       <Heading>As-you-go, not after-the-fact</Heading>
       <p>
         You are probably used to doing research, writing a full paper, and then
-        going through the laborious process of finding a journal. With
-        Hypergraph, you can publish each step of your research as-you-go.
+        going through the laborious process of getting accepted by a journal.
+        With Hypergraph, you can publish each step of your research as-you-go.
       </p>
       <p>
         As-you-go publishing increases the value of your work by making it
@@ -105,7 +105,7 @@ const dialogs = [
       </Illustration>
       <Heading>How Hypergraph works</Heading>
       <p>
-        Each part of your research is its own publication, whether it's a
+        Each step of your research is its own publication, whether it's a
         proposal, a literature study, a data set, or a conclusion. You link them
         together as you go along, to create a connected body of work.
       </p>
@@ -169,14 +169,14 @@ const dialogs = [
         </Illustration>
         <Heading>Introducing the Vault</Heading>
         <p>
-          We use peer-to-peer technology: Hypergraph is powered by the people
-          using it! Share your content as you'd like, without anybody getting in
-          between.
+          We do not want to be gatekeepers. We chose peer-to-peer technology so
+          you can be in control of your work. You help to power the network by
+          providing the content you have to other users.
         </p>
         <p>
-          Hypergraph Vault makes your work available even when your computer is
-          offline. Plus, we're working with libraries on archiving it for future
-          generations! 👵🏾👨🏻👶
+          Hypergraph Vault is our storage service that makes your work available
+          even when your computer is offline. Plus, we're working with libraries
+          to archive it for future generations! 👵🏾👨🏻👶
         </p>
         <p>
           Until January 1st, 2021, Hypergraph Vault is free, while we figure out

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { TopRow, Title } from '../layout/grid'
 import ContentRow from '../content/row'
 import { encode } from 'dat-encoding'
-import Footer from '../footer/footer'
+import Footer, { FooterAddContent, FooterSearch } from '../footer/footer'
 import { ProfileContext } from '../../lib/context'
 import sort from '../../lib/sort'
 
@@ -53,9 +53,14 @@ export default ({ p2p }) => {
           <Footer
             title={
               <>
-                {contents.length
-                  ? 'You’ve reached the end! ✌️'
-                  : 'Share content or follow someone to fill up your feed 🙌'}
+                {contents.length ? (
+                  'You’ve reached the end! ✌️'
+                ) : (
+                  <>
+                    Add content <FooterAddContent /> or <FooterSearch /> Find
+                    someone to follow
+                  </>
+                )}
               </>
             }
           />

@@ -6,7 +6,7 @@ import { Heading3 } from '../typography'
 import Avatar from '../avatar/avatar'
 import { useHistory } from 'react-router-dom'
 import { encode } from 'dat-encoding'
-import Footer from '../footer/footer'
+import Footer, { FooterSearch } from '../footer/footer'
 import Tabbable from '../accessibility/tabbable'
 
 const StyledButton = styled(Button)`
@@ -98,9 +98,16 @@ const Following = ({ p2p }) => {
           })}
           <Footer
             title={
-              following.length
-                ? 'You’ve reached the end! ✌️'
-                : 'You’re not following anybody yet 😅'
+              <>
+                {following.length ? (
+                  'You’ve reached the end! ✌️'
+                ) : (
+                  <>
+                    You’re not following anybody yet. Use <FooterSearch /> Find
+                    to look up a profile
+                  </>
+                )}
+              </>
             }
           />
         </>

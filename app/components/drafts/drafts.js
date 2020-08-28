@@ -2,19 +2,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { TopRow, Title } from '../layout/grid'
 import ContentRow from '../content/row'
 import { encode } from 'dat-encoding'
-import Footer from '../footer/footer'
-import AddContent from '../icons/add-content.svg'
-import styled from 'styled-components'
+import Footer, { FooterAddContent } from '../footer/footer'
 import isContentRegistered from '../../lib/is-content-registered'
 import { ProfileContext } from '../../lib/context'
 import sort from '../../lib/sort'
-
-const StyledAddContent = styled(AddContent)`
-  vertical-align: middle;
-  transform: scale(0.75);
-  position: relative;
-  top: -2px;
-`
 
 export default ({ p2p }) => {
   const [drafts, setDrafts] = useState()
@@ -61,7 +52,7 @@ export default ({ p2p }) => {
                   <>No drafts! All your work is now on your profile 😎</>
                 ) : (
                   <>
-                    Nothing here yet! Click <StyledAddContent /> to get started
+                    Nothing here yet! Click <FooterAddContent /> to get started
                   </>
                 )}
               </>

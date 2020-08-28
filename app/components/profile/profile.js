@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, Fragment, useContext } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import Avatar from '../avatar/avatar'
 import ContentRow from '../content/row'
-import Footer from '../footer/footer'
+import Footer, { FooterAddContent } from '../footer/footer'
 import { encode } from 'dat-encoding'
 import { Title, StickyRow, TopRow, Button } from '../layout/grid'
 import { green, red, yellow, gray } from '../../lib/colors'
@@ -346,9 +346,15 @@ const Profile = ({ p2p }) => {
           })}
           <Footer
             title={
-              contents.length
-                ? 'You’ve reached the end! ✌️'
-                : 'No content yet... 🤔'
+              <>
+                {contents.length ? (
+                  'You’ve reached the end! ✌️'
+                ) : (
+                  <>
+                    No content yet, use <FooterAddContent /> to add something!
+                  </>
+                )}
+              </>
             }
           />
         </>

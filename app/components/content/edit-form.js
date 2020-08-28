@@ -176,7 +176,7 @@ const EditForm = ({
           <>
             <Label htmlFor='parent'>Follows from</Label>
             <Select name='parent' defaultValue={parentUrl}>
-              <option />
+              <option value=''>None</option>
               {potentialParents.map(parent => {
                 const value = [
                   encode(parent.rawJSON.url),
@@ -257,7 +257,7 @@ const EditForm = ({
           value={main}
           onChange={ev => setMain(ev.target.value)}
         >
-          <option value=''>No main</option>
+          <option value=''>None</option>
           {Object.values(files)
             .filter(destination => destination.charAt(0) !== '.')
             .map(destination => (
