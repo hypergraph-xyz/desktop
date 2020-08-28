@@ -180,8 +180,9 @@ app.on('second-instance', (_, argv) => {
     mainWindow.webContents.send('open', url)
   }
 })
-app.on('open-url', (ev, url) => {
+app.on('open-url', async (ev, url) => {
   ev.preventDefault()
+  if (!mainWindow) mainWindow = await createMainWindow()
   mainWindow.webContents.send('open', url)
 })
 app.on('window-all-closed', () => {
