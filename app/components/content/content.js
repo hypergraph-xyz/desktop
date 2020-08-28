@@ -302,10 +302,14 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
                     ].join('+'),
                     profileUrl
                   )
+                  history.replace(
+                    `/profiles/${encode(profileUrl)}/${key}/${
+                      content.metadata.version
+                    }`
+                  )
                 } finally {
                   setIsUpdatingRegistration(false)
                 }
-                await fetchAuthors()
               }}
             >
               Add to profile
@@ -324,10 +328,10 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
                     ].join('+'),
                     profileUrl
                   )
+                  history.replace(`/drafts/${key}`)
                 } finally {
                   setIsUpdatingRegistration(false)
                 }
-                await fetchAuthors()
               }}
             >
               Remove from profile
