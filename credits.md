@@ -23,6 +23,10 @@ This project is made possible by the community surrounding it and especially the
   - Vinodh Ilangovan
   - Neha Moopen
   - Lisa Hehnke
+  - Esther Plomp
+  - Nami
+  - Sarahanne Field
+  - Simine Vazire
 
 ## Libraries
 
