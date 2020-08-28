@@ -19,7 +19,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@hypergraph-xyz/wikidata-identifiers": "^1.1.1",
+    "@hypergraph-xyz/wikidata-identifiers": "^1.2.0",
     "@p2pcommons/sdk-js": "github:p2pcommons/sdk-js",
     "adm-zip": "^0.4.16",
     "chmodr": "^1.2.0",

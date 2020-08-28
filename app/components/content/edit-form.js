@@ -192,7 +192,7 @@ const EditForm = ({
           </>
         )}
         <Label htmlFor='subtype'>Content type</Label>
-        <Select large name='subtype' defaultValue={subtype}>
+        <Select name='subtype' defaultValue={subtype}>
           {Object.entries(subtypes).map(([id, text]) => (
             <option value={id} key={id}>
               {text}

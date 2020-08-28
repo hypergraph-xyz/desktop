@@ -53,6 +53,7 @@ const Container = styled.div`
 const Attributes = styled.div`
   display: inline-block;
   font-family: 'Roboto Mono';
+  max-width: 8rem;
 `
 const Attribute = styled.div`
   margin-bottom: 0.5rem;
