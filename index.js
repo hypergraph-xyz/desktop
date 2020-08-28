@@ -6,6 +6,8 @@ const del = require('del')
 const { once } = require('events')
 const AdmZip = require('adm-zip')
 const { promises: fs } = require('fs')
+const { promisify } = require('util')
+const chmodr = require('chmodr')
 
 debug({ isEnabled: true, showDevTools: false })
 app.allowRendererProcessReuse = false
@@ -57,9 +59,11 @@ const createMainWindow = async () => {
               })
               if (response === 1) return
 
-              await withRestart(() =>
-                del(`${app.getPath('home')}/.p2pcommons`, { force: true })
-              )
+              await withRestart(async () => {
+                const dir = `${app.getPath('home')}/.p2pcommons`
+                await promisify(chmodr)(dir, 0o777)
+                await del(dir, { force: true })
+              })
             }
           },
           {
