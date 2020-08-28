@@ -204,7 +204,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
             Open folder
           </Button>
           <ExportZip directory={directory} />
-          {!canDeregisterContent && (
+          {canRegisterContent && content.metadata.isWritable && (
             <Button
               type='button'
               color={green}
