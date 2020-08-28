@@ -69,6 +69,7 @@ const Actions = styled.div`
   margin-top: 2rem;
 `
 const StyledHeading1 = styled(Heading1)`
+  font-size: 2rem;
   margin-top: 2rem;
 `
 

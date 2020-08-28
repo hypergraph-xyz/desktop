@@ -72,7 +72,7 @@ const Title = styled.div`
 `
 const AuthorWithoutContentRegistration = styled.span`
   color: ${gray};
-  margin: 1rem 0;
+  margin: 0;
   display: inline-block;
   padding-bottom: 2px;
 `
