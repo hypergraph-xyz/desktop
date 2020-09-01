@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import styled from 'styled-components'
 import { Button } from '../layout/grid'
 import Arrow from '../icons/arrow.svg'
@@ -16,6 +16,7 @@ import Store from 'electron-store'
 import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
 import Tabbable from '../accessibility/tabbable'
+import { ProfileContext } from '../../lib/context'
 
 const { FormData } = window
 
@@ -29,10 +30,10 @@ const BackArrow = styled(Arrow)`
 const Form = styled.form`
   margin-top: 2rem;
 `
-const Files = styled.div`
+const FileAuthorBlocks = styled.div`
   margin-bottom: 2rem;
 `
-const File = styled.div`
+const FileAuthorBlock = styled.div`
   width: 100%;
   border: 2px solid ${purple};
   line-height: 2;
@@ -45,7 +46,7 @@ const File = styled.div`
   white-space: nowrap;
   padding-right: 44px;
 `
-const RemoveFile = styled(X)`
+const RemoveFileAuthor = styled(X)`
   position: absolute;
   right: 14px;
   top: 8px;
@@ -76,6 +77,7 @@ const EditForm = ({
   description,
   subtype,
   main: defaultMain,
+  authors: defaultAuthors,
   onSubmit
 }) => {
   const history = useHistory()
@@ -85,6 +87,9 @@ const EditForm = ({
   const [files, setFiles] = useState({})
   const [main, setMain] = useState(defaultMain)
   const [potentialParents, setPotentialParents] = useState()
+  const [profiles, setProfiles] = useState()
+  const { url: profileUrl } = useContext(ProfileContext)
+  const [authors, setAuthors] = useState(defaultAuthors || [encode(profileUrl)])
   const formRef = useRef()
 
   useEffect(() => {
@@ -94,6 +99,7 @@ const EditForm = ({
   useEffect(() => {
     ;(async () => {
       const profiles = await p2p.listProfiles()
+      setProfiles(profiles)
       setPotentialParents(
         (
           await Promise.all(
@@ -158,7 +164,8 @@ const EditForm = ({
       parent: data.get('parent'),
       main,
       files,
-      isRegister
+      isRegister,
+      authors
     })
   }
 
@@ -236,11 +243,11 @@ const EditForm = ({
         >
           <AddFile />
         </Button>
-        <Files>
+        <FileAuthorBlocks>
           {Object.entries(files).map(([source, destination]) => (
-            <File key={source}>
+            <FileAuthorBlock key={source}>
               {destination}
-              <RemoveFile
+              <RemoveFileAuthor
                 onClick={() => {
                   const newFiles = { ...files }
                   delete newFiles[source]
@@ -248,9 +255,9 @@ const EditForm = ({
                   if (main === destination) setMain(null)
                 }}
               />
-            </File>
+            </FileAuthorBlock>
           ))}
-        </Files>
+        </FileAuthorBlocks>
         <Label htmlFor='main'>Main file</Label>
         <Select
           name='main'
@@ -272,6 +279,46 @@ const EditForm = ({
           onIsValid={setIsValidDraft}
           defaultValue={title}
         />
+        <Label htmlFor='authors'>Authors</Label>
+        <Select
+          onChange={ev => {
+            if (!ev.target.value) return
+            setAuthors([...authors, ev.target.value])
+            ev.target.value = ''
+          }}
+        >
+          <option value=''>Add author</option>
+          {profiles &&
+            profiles
+              .filter(profile => profile.rawJSON.url !== profileUrl)
+              .filter(profile => !authors.includes(encode(profile.rawJSON.url)))
+              .map(profile => (
+                <option
+                  key={profile.rawJSON.url}
+                  value={encode(profile.rawJSON.url)}
+                >
+                  {profile.rawJSON.title}
+                </option>
+              ))}
+        </Select>
+        <FileAuthorBlocks>
+          {authors.map(author => (
+            <FileAuthorBlock key={author}>
+              {profiles &&
+                profiles.find(profile => encode(profile.rawJSON.url) === author)
+                  .rawJSON.title}
+              {author !== encode(profileUrl) && (
+                <RemoveFileAuthor
+                  onClick={() => {
+                    const newAuthors = [...authors]
+                    newAuthors.splice(newAuthors.indexOf(author), 1)
+                    setAuthors(newAuthors)
+                  }}
+                />
+              )}
+            </FileAuthorBlock>
+          ))}
+        </FileAuthorBlocks>
         <Label htmlFor='description'>Description</Label>
         <Textarea name='description' defaultValue={description} />
         <ButtonGroup>

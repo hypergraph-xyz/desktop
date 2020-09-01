@@ -31,7 +31,8 @@ const Create = ({ p2p }) => {
           title,
           description,
           isRegister,
-          parent
+          parent,
+          authors
         }) => {
           let {
             rawJSON: { url },
@@ -41,7 +42,7 @@ const Create = ({ p2p }) => {
             subtype,
             title,
             description,
-            authors: [encode(profileUrl)],
+            authors,
             parents: [parent].filter(Boolean)
           })
 

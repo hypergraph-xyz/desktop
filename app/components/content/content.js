@@ -27,13 +27,12 @@ const BackArrow = styled(Arrow)`
   display: block;
   margin-bottom: 2rem;
 `
-const AuthorWithContentRegistration = styled(Anchor)`
+const Authors = styled.div`
   font-size: 1.5rem;
+  color: ${gray};
 `
 const AuthorWithoutContentRegistration = styled.span`
-  color: ${gray};
   display: inline-block;
-  font-size: 1.5rem;
   margin-bottom: 2px;
 `
 const Description = styled.div`
@@ -236,24 +235,25 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
           </Link>
         ))}
         <StyledHeading1>{content.rawJSON.title}</StyledHeading1>
-        {authors.map(author => {
-          return isContentRegistered(content, author) ? (
+        <Authors>
+          {authors.map((author, i) => (
             <Fragment key={author.rawJSON.url}>
-              <Link
-                component={AuthorWithContentRegistration}
-                to={`/profiles/${encode(author.rawJSON.url)}`}
-              >
-                {author.rawJSON.title}
-              </Link>{' '}
+              {i > 0 && ', '}
+              {isContentRegistered(content, author) ? (
+                <Link
+                  component={Anchor}
+                  to={`/profiles/${encode(author.rawJSON.url)}`}
+                >
+                  {author.rawJSON.title}
+                </Link>
+              ) : (
+                <AuthorWithoutContentRegistration key={author.rawJSON.url}>
+                  {author.rawJSON.title}
+                </AuthorWithoutContentRegistration>
+              )}
             </Fragment>
-          ) : (
-            <>
-              <AuthorWithoutContentRegistration key={author.rawJSON.url}>
-                {author.rawJSON.title}
-              </AuthorWithoutContentRegistration>{' '}
-            </>
-          )
-        })}
+          ))}
+        </Authors>
         <Description>{newlinesToBr(content.rawJSON.description)}</Description>
         <Label>Main file</Label>
         {content.rawJSON.main ? (

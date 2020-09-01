@@ -71,8 +71,10 @@ const Title = styled.div`
   line-height: 1.75rem;
   margin-bottom: 1rem;
 `
-const AuthorWithoutContentRegistration = styled.span`
+const Authors = styled.div`
   color: ${gray};
+`
+const AuthorWithoutContentRegistration = styled.span`
   margin: 0;
   display: inline-block;
   padding-bottom: 2px;
@@ -156,27 +158,30 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
         </Attributes>
         <Content pad={pad}>
           <Title>{content.rawJSON.title}</Title>
-          {authors.map(author => {
-            const to = `/profiles/${encode(author.rawJSON.url)}`
-            const shouldScroll = to === location.pathname
-            return isContentRegistered(content, author) ? (
-              <Fragment key={author.rawJSON.url}>
-                <Link
-                  component={Anchor}
-                  to={to}
-                  onClick={() => shouldScroll && window.scrollTo(0, 0)}
-                >
-                  {author.rawJSON.title}
-                </Link>{' '}
-              </Fragment>
-            ) : (
-              <>
-                <AuthorWithoutContentRegistration key={author.rawJSON.url}>
-                  {author.rawJSON.title}
-                </AuthorWithoutContentRegistration>{' '}
-              </>
-            )
-          })}
+          <Authors>
+            {authors.map((author, i) => {
+              const to = `/profiles/${encode(author.rawJSON.url)}`
+              const shouldScroll = to === location.pathname
+              return (
+                <Fragment key={author.rawJSON.url}>
+                  {i > 0 && ', '}
+                  {isContentRegistered(content, author) ? (
+                    <Link
+                      component={Anchor}
+                      to={to}
+                      onClick={() => shouldScroll && window.scrollTo(0, 0)}
+                    >
+                      {author.rawJSON.title}
+                    </Link>
+                  ) : (
+                    <AuthorWithoutContentRegistration key={author.rawJSON.url}>
+                      {author.rawJSON.title}
+                    </AuthorWithoutContentRegistration>
+                  )}
+                </Fragment>
+              )
+            })}
+          </Authors>
           {!isParent && (
             <Description>
               {newlinesToBr(content.rawJSON.description)}

@@ -43,6 +43,7 @@ const Edit = ({ p2p }) => {
         description={content.rawJSON.description}
         subtype={content.rawJSON.subtype}
         main={content.rawJSON.main}
+        authors={content.rawJSON.authors}
         onSubmit={async ({
           subtype,
           files,
@@ -50,7 +51,8 @@ const Edit = ({ p2p }) => {
           title,
           description,
           isRegister,
-          parent
+          parent,
+          authors
         }) => {
           const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(
             content.rawJSON.url
@@ -74,7 +76,8 @@ const Edit = ({ p2p }) => {
 
           await p2p.set({
             url: content.rawJSON.url,
-            parents: undefined
+            parents: undefined,
+            authors: undefined
           })
           const {
             metadata: { version: newVersion }
@@ -84,7 +87,8 @@ const Edit = ({ p2p }) => {
             title,
             description,
             main,
-            parents: [parent].filter(Boolean)
+            parents: [parent].filter(Boolean),
+            authors
           })
 
           if (isRegister) {
