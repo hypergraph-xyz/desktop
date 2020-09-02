@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Button } from '../layout/grid'
-import Arrow from '../icons/arrow.svg'
+import ArrowUp2Rem from '../icons/arrow-up-2rem.svg'
 import { Label, Select, Textarea } from '../forms/forms'
 import TitleInput from '../forms/title-input'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import AddFile from './add-file.svg'
 import { remote } from 'electron'
-import { purple, red, green, yellow } from '../../lib/colors'
+import { purple, red, green, yellow, gray, white } from '../../lib/colors'
 import { basename, extname } from 'path'
 import X from '../icons/x-1rem.svg'
 import { useHistory } from 'react-router-dom'
@@ -17,6 +17,7 @@ import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
 import Tabbable from '../accessibility/tabbable'
 import { ProfileContext } from '../../lib/context'
+import ArrowDown1Rem from '../icons/arrow-down-1rem.svg'
 
 const { FormData } = window
 
@@ -24,7 +25,7 @@ const Container = styled.div`
   margin: 2rem;
   max-width: 40rem;
 `
-const BackArrow = styled(Arrow)`
+const BackArrow = styled(ArrowUp2Rem)`
   transform: rotate(270deg);
 `
 const Form = styled.form`
@@ -44,12 +45,12 @@ const FileAuthorBlock = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-right: 44px;
+  padding-right: 14px;
+  display: flex;
+  align-items: center;
 `
 const RemoveFileAuthor = styled(X)`
-  position: absolute;
-  right: 14px;
-  top: 8px;
+  margin-left: auto;
 `
 const Info = styled.p`
   margin-bottom: 2rem;
@@ -58,6 +59,26 @@ const ButtonGroup = styled.div`
   display: flex;
   align-items: baseline;
 `
+const ReorderArrow = styled(({ isEnabled, ...rest }) => (
+  <ArrowDown1Rem {...rest} />
+))`
+  ${props =>
+    props.direction === 'up' &&
+    css`
+      transform: rotate(180deg);
+    `}
+  path {
+    fill: ${props => props => (props.isEnabled ? white : gray)};
+  }
+  margin-right: 0.5rem;
+`
+const ReorderAuthor = ({ direction, isEnabled, onClick }) => (
+  <ReorderArrow
+    direction={direction}
+    isEnabled={isEnabled}
+    onClick={() => isEnabled && onClick()}
+  />
+)
 
 const allIndexesOf = (arr, el) => {
   const indexes = []
@@ -302,8 +323,28 @@ const EditForm = ({
               ))}
         </Select>
         <FileAuthorBlocks>
-          {authors.map(author => (
+          {authors.map((author, i) => (
             <FileAuthorBlock key={author}>
+              <ReorderAuthor
+                direction='up'
+                isEnabled={i !== 0 || undefined}
+                onClick={ev => {
+                  const newAuthors = [...authors]
+                  newAuthors.splice(i, 1)
+                  newAuthors.splice(i - 1, 0, author)
+                  setAuthors(newAuthors)
+                }}
+              />
+              <ReorderAuthor
+                direction='down'
+                isEnabled={i !== authors.length - 1 || undefined}
+                onClick={ev => {
+                  const newAuthors = [...authors]
+                  newAuthors.splice(i, 1)
+                  newAuthors.splice(i + 1, 0, author)
+                  setAuthors(newAuthors)
+                }}
+              />
               {profiles &&
                 profiles.find(profile => encode(profile.rawJSON.url) === author)
                   .rawJSON.title}
