@@ -41,7 +41,7 @@ export default ({ p2p }) => {
           {contents.map(content => {
             return (
               <ContentRow
-                key={content.rawJSON.url}
+                key={`${content.rawJSON.url}+${content.metadata.version}`}
                 p2p={p2p}
                 content={content}
                 to={`/contents/${encode(content.rawJSON.url)}/${
