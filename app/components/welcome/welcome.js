@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { purple, green } from '../../lib/colors'
 import { rgba } from 'polished'
@@ -15,6 +15,8 @@ import IllustrationLibscie from './illustrations/libscie.svg'
 import Modal from '../modal/modal'
 import Avatar from '../avatar/avatar'
 import Anchor from '../anchor'
+import { ProfileContext } from '../../lib/context'
+import store from '../../lib/store'
 
 const Illustration = styled.div`
   margin-top: 22px;
@@ -190,7 +192,7 @@ const dialogs = [
       </>
     )
   },
-  ({ page, p2p, name, setProfileUrl, previous }) => {
+  ({ page, p2p, name, profileUrl, setProfileUrl, previous }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     return (
@@ -230,10 +232,20 @@ const dialogs = [
           onSubmit={async e => {
             e.preventDefault()
             setIsLoading(true)
-            console.time('init profile')
-            const profile = await p2p.init({ type: 'profile', title: name })
-            console.timeEnd('init profile')
-            setProfileUrl(profile.rawJSON.url)
+
+            if (profileUrl) {
+              await p2p.set({
+                url: profileUrl,
+                title: name
+              })
+            } else {
+              console.time('init profile')
+              const profile = await p2p.init({ type: 'profile', title: name })
+              console.timeEnd('init profile')
+              setProfileUrl(profile.rawJSON.url)
+            }
+
+            store.set('welcome', false)
           }}
         >
           <Button emphasis='top' autoFocus isLoading={isLoading}>
@@ -248,6 +260,16 @@ const dialogs = [
 const Welcome = ({ p2p, setProfileUrl }) => {
   const [page, setPage] = useState(0)
   const [name, setName] = useState()
+  const { url: profileUrl } = useContext(ProfileContext)
+
+  useEffect(() => {
+    ;(async () => {
+      if (profileUrl) {
+        const profile = await p2p.get(profileUrl)
+        setName(profile.rawJSON.title)
+      }
+    })()
+  }, [])
 
   const next = async e => {
     if (e) e.preventDefault()
@@ -266,6 +288,7 @@ const Welcome = ({ p2p, setProfileUrl }) => {
         name,
         setName,
         p2p,
+        profileUrl,
         setProfileUrl
       })}
     </Modal>

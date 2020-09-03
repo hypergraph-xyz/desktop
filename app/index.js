@@ -16,6 +16,7 @@ import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import { remote, ipcRenderer } from 'electron'
 import { ProfileContext } from './lib/context'
 import FindModal from './components/modal/find-modal'
+import store from './lib/store'
 
 const showError = err => {
   window.alert(
@@ -102,12 +103,14 @@ ipcRenderer.on('export graph', async () => {
   ipcRenderer.send('export graph', graph)
 })
 
-const Container = ({ children, onFind }) => (
-  <Router>
-    <Layout onFind={onFind} p2p={p2p}>
-      {children}
-    </Layout>
-  </Router>
+const Container = ({ children, onFind, profileUrl }) => (
+  <ProfileContext.Provider value={{ url: profileUrl }}>
+    <Router>
+      <Layout onFind={onFind} p2p={p2p}>
+        {children}
+      </Layout>
+    </Router>
+  </ProfileContext.Provider>
 )
 
 const lastArg = remote.process.argv[remote.process.argv.length - 1]
@@ -119,6 +122,7 @@ const App = () => {
     /^hypergraph:\/\//.test(lastArg) ? lastArg : null
   )
   const [isFinding, setIsFinding] = useState(Boolean(findModalUrl))
+  const [showWelcome, setShowWelcome] = useState(store.get('welcome'))
 
   useEffect(() => {
     ;(async () => {
@@ -129,6 +133,8 @@ const App = () => {
         window.Chatra('updateIntegrationData', {
           name: profile.rawJSON.title
         })
+      } else {
+        setShowWelcome(true)
       }
       setLoading(false)
     })()
@@ -141,59 +147,63 @@ const App = () => {
     })
   }, [])
 
+  useEffect(() => {
+    store.onDidChange('welcome', showWelcome => {
+      setShowWelcome(showWelcome)
+    })
+  }, [])
+
   if (loading) return <Container />
-  if (!profileUrl) {
+  if (!profileUrl || showWelcome) {
     return (
-      <Container>
+      <Container profileUrl={profileUrl}>
         <Welcome p2p={p2p} setProfileUrl={setProfileUrl} />
       </Container>
     )
   }
 
   return (
-    <ProfileContext.Provider value={{ url: profileUrl }}>
-      <Container onFind={() => setIsFinding(true)}>
-        {isFinding && (
-          <FindModal
-            p2p={p2p}
-            onClose={() => {
-              setIsFinding(false)
-              setFindModalUrl()
-            }}
-            prefilledUrl={findModalUrl}
-          />
-        )}
-        <Switch>
-          <Route path='/' exact>
-            <Feed p2p={p2p} />
-          </Route>
-          <Route path='/drafts' exact>
-            <Drafts p2p={p2p} />
-          </Route>
-          <Route path='/drafts/:key'>
-            <ShowDraft p2p={p2p} />
-          </Route>
-          <Route path='/create/:parentUrl?'>
-            <CreateContent p2p={p2p} />
-          </Route>
-          <Route path='/edit/:key/:version'>
-            <EditContent p2p={p2p} />
-          </Route>
-          <Route path='/profiles/:profileKey/:contentKey/:version'>
-            <ProfileContent p2p={p2p} />
-          </Route>
-          <Route path='/profiles/:key'>
-            <Profile p2p={p2p} />
-          </Route>
-          <Route path='/following'>
-            <Following p2p={p2p} />
-          </Route>
-          <Route path='/contents/:key/:version?'>
-            <ShowContent p2p={p2p} />
-          </Route>
-        </Switch>
-      </Container>
-    </ProfileContext.Provider>
+    <Container profileUrl={profileUrl} onFind={() => setIsFinding(true)}>
+      {isFinding && (
+        <FindModal
+          p2p={p2p}
+          onClose={() => {
+            setIsFinding(false)
+            setFindModalUrl()
+          }}
+          prefilledUrl={findModalUrl}
+        />
+      )}
+      <Switch>
+        <Route path='/' exact>
+          <Feed p2p={p2p} />
+        </Route>
+        <Route path='/drafts' exact>
+          <Drafts p2p={p2p} />
+        </Route>
+        <Route path='/drafts/:key'>
+          <ShowDraft p2p={p2p} />
+        </Route>
+        <Route path='/create/:parentUrl?'>
+          <CreateContent p2p={p2p} />
+        </Route>
+        <Route path='/edit/:key/:version'>
+          <EditContent p2p={p2p} />
+        </Route>
+        <Route path='/profiles/:profileKey/:contentKey/:version'>
+          <ProfileContent p2p={p2p} />
+        </Route>
+        <Route path='/profiles/:key'>
+          <Profile p2p={p2p} />
+        </Route>
+        <Route path='/following'>
+          <Following p2p={p2p} />
+        </Route>
+        <Route path='/contents/:key/:version?'>
+          <ShowContent p2p={p2p} />
+        </Route>
+      </Switch>
+    </Container>
   )
 }
 

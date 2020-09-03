@@ -12,7 +12,7 @@ import { basename, extname } from 'path'
 import X from '../icons/x-1rem.svg'
 import { useHistory } from 'react-router-dom'
 import Anchor from '../anchor'
-import Store from 'electron-store'
+import store from '../../lib/store'
 import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
 import Tabbable from '../accessibility/tabbable'
@@ -87,8 +87,6 @@ const allIndexesOf = (arr, el) => {
   }
   return indexes
 }
-
-const store = new Store()
 
 const EditForm = ({
   p2p,

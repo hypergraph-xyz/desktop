@@ -8,6 +8,7 @@ const AdmZip = require('adm-zip')
 const { promises: fs } = require('fs')
 const { promisify } = require('util')
 const chmodr = require('chmodr')
+const Store = require('electron-store')
 
 debug({ isEnabled: true, showDevTools: false })
 app.allowRendererProcessReuse = false
@@ -15,6 +16,7 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
 let mainWindow
 let restarting = false
+const store = new Store()
 
 const withRestart = async cb => {
   restarting = true
@@ -144,6 +146,10 @@ const createMainWindow = async () => {
       {
         role: 'help',
         submenu: [
+          {
+            label: 'Reopen welcome screens',
+            click: () => store.set('welcome', true)
+          },
           {
             label: 'Credits',
             click: () =>
