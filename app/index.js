@@ -133,8 +133,6 @@ const App = () => {
         window.Chatra('updateIntegrationData', {
           name: profile.rawJSON.title
         })
-      } else {
-        setShowWelcome(true)
       }
       setLoading(false)
     })()
