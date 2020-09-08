@@ -16,7 +16,7 @@ import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import { remote, ipcRenderer } from 'electron'
 import { ProfileContext } from './lib/context'
 import FindModal from './components/modal/find-modal'
-import store from './lib/store'
+import { archiveModule } from './lib/vault'
 
 const showError = err => {
   window.alert(
@@ -122,7 +122,13 @@ const App = () => {
     /^hypergraph:\/\//.test(lastArg) ? lastArg : null
   )
   const [isFinding, setIsFinding] = useState(Boolean(findModalUrl))
-  const [showWelcome, setShowWelcome] = useState(store.get('welcome'))
+  const [showWelcome, setShowWelcome] = useState()
+
+  useEffect(() => {
+    ;(async () => {
+      setShowWelcome(await ipcRenderer.invoke('getStoreValue', 'welcome'))
+    })()
+  }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -146,7 +152,24 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    store.onDidChange('welcome', showWelcome => {
+    const onChange = async (_, isEnabled) => {
+      if (!isEnabled || !profileUrl) return
+      const profile = await p2p.get(profileUrl)
+      const urls = [
+        profile.rawJSON.url,
+        ...profile.rawJSON.contents.map(url => `hyper://${url}`)
+      ]
+      console.log(`archiving ${urls.length} modules`)
+      for (const url of urls) await archiveModule(url)
+    }
+    ipcRenderer.on('vault', onChange)
+    return () => {
+      ipcRenderer.removeListener('vault', onChange)
+    }
+  }, [profileUrl])
+
+  useEffect(() => {
+    ipcRenderer.on('welcome', (_, showWelcome) => {
       setShowWelcome(showWelcome)
     })
   }, [])

@@ -1,11 +1,12 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { TopRow, Title } from '../layout/grid'
-import { remote } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
 import { useHistory, useParams } from 'react-router-dom'
 import { ProfileContext } from '../../lib/context'
 import EditForm from './edit-form'
+import { archiveModule } from '../../lib/vault'
 
 const Edit = ({ p2p }) => {
   const history = useHistory()
@@ -96,6 +97,9 @@ const Edit = ({ p2p }) => {
               `${encode(content.rawJSON.url)}+${newVersion}`,
               profileUrl
             )
+            if (await ipcRenderer.invoke('getStoreValue', 'vault')) {
+              await archiveModule(`${content.rawJSON.url}+${newVersion}`)
+            }
             history.push(
               `/profiles/${encode(profileUrl)}/${encode(
                 content.rawJSON.url

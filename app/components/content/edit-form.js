@@ -6,13 +6,12 @@ import { Label, Select, Textarea } from '../forms/forms'
 import TitleInput from '../forms/title-input'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import AddFile from './add-file.svg'
-import { remote } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import { purple, red, green, yellow, gray, white } from '../../lib/colors'
 import { basename, extname } from 'path'
 import X from '../icons/x-1rem.svg'
 import { useHistory } from 'react-router-dom'
 import Anchor from '../anchor'
-import store from '../../lib/store'
 import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
 import Tabbable from '../accessibility/tabbable'
@@ -238,11 +237,20 @@ const EditForm = ({
             const opts = {
               properties: ['multiSelections', 'openFile']
             }
-            if (!store.get('create open dialog displayed')) {
+            if (
+              !(await ipcRenderer.invoke(
+                'getStoreValue',
+                'create open dialog displayed'
+              ))
+            ) {
               // set the default path on first launch, so it's not the
               // app's directory
               opts.defaultPath = remote.app.getPath('documents')
-              store.set('create open dialog displayed', true)
+              await ipcRenderer.invoke(
+                'setStoreValue',
+                'create open dialog displayed',
+                true
+              )
             }
             const {
               filePaths: newSources

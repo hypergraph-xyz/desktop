@@ -14,9 +14,10 @@ import IllustrationVault from './illustrations/vault.svg'
 import IllustrationLibscie from './illustrations/libscie.svg'
 import Modal from '../modal/modal'
 import Avatar from '../avatar/avatar'
+import { archiveModule } from '../../lib/vault'
 import Anchor from '../anchor'
 import { ProfileContext } from '../../lib/context'
-import store from '../../lib/store'
+import { ipcRenderer } from 'electron'
 
 const Illustration = styled.div`
   margin-top: 22px;
@@ -35,7 +36,10 @@ const Heading = styled.div`
 `
 const Back = styled(Arrow)`
   transform: rotate(270deg);
-  filter: brightness(${props => (props.page === 0 ? 0 : 100)}%);
+  filter: brightness(
+    ${props =>
+      props.page === 0 || props.page === dialogs.length - 1 ? 0 : 100}%
+  );
 `
 const Form = styled.form`
   position: absolute;
@@ -48,6 +52,10 @@ const StyledAvatar = styled(Avatar)`
   svg {
     transform: scale(0.78);
   }
+`
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: baseline;
 `
 
 const dialogs = [
@@ -184,10 +192,26 @@ const dialogs = [
           Until January 1st, 2021, Hypergraph Vault is free, while we figure out
           the costs.
         </p>
-        <Form onSubmit={next}>
-          <Button emphasis='top' autoFocus>
-            Next
-          </Button>
+        <Form
+          onSubmit={async ev => {
+            ev.preventDefault()
+            await ipcRenderer.invoke('setStoreValue', 'vault', true)
+            next()
+          }}
+        >
+          <ButtonGroup>
+            <Button emphasis='top' autoFocus>
+              Enable Hypergraph Vault
+            </Button>
+            <Anchor
+              onClick={async () => {
+                await ipcRenderer.invoke('setStoreValue', 'vault', false)
+                next()
+              }}
+            >
+              Skip for now...
+            </Anchor>
+          </ButtonGroup>
         </Form>
       </>
     )
@@ -197,7 +221,7 @@ const dialogs = [
 
     return (
       <>
-        <Back page={page} onClick={() => !isLoading && previous()} />
+        <Back page={page} />
         <Illustration>
           <IllustrationLibscie />
         </Illustration>
@@ -242,10 +266,13 @@ const dialogs = [
               console.time('init profile')
               const profile = await p2p.init({ type: 'profile', title: name })
               console.timeEnd('init profile')
+              if (await ipcRenderer.invoke('getStoreValue', 'vault')) {
+                await archiveModule(profile.rawJSON.url)
+              }
               setProfileUrl(profile.rawJSON.url)
             }
 
-            store.set('welcome', false)
+            await ipcRenderer.invoke('setStoreValue', 'welcome', false)
           }}
         >
           <Button emphasis='top' autoFocus isLoading={isLoading}>

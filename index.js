@@ -18,6 +18,19 @@ let mainWindow
 let restarting = false
 const store = new Store()
 
+ipcMain.handle('getStoreValue', (_, key, defaultValue) =>
+  store.get(key, defaultValue)
+)
+ipcMain.handle('setStoreValue', (_, key, value) => store.set(key, value))
+store.onDidChange(
+  'vault',
+  vault => mainWindow && mainWindow.webContents.send('vault', vault)
+)
+store.onDidChange(
+  'welcome',
+  welcome => mainWindow && mainWindow.webContents.send('welcome', welcome)
+)
+
 const withRestart = async cb => {
   restarting = true
   mainWindow.close()
@@ -27,20 +40,9 @@ const withRestart = async cb => {
   restarting = false
 }
 
-const createMainWindow = async () => {
-  const win = new BrowserWindow({
-    title: app.name,
-    show: false,
-    width: 1440,
-    height: 920,
-    minWidth: 820,
-    minHeight: 764,
-    webPreferences: {
-      nodeIntegration: true
-    },
-    titleBarStyle: 'hiddenInset'
-  })
+const updateMenu = () => {
   const isMac = process.platform === 'darwin'
+  const isVaultEnabled = store.get('vault', false)
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
       ...(isMac ? [{ role: 'appMenu' }] : []),
@@ -53,7 +55,7 @@ const createMainWindow = async () => {
           {
             label: 'Reset database',
             click: async () => {
-              const { response } = await dialog.showMessageBox(win, {
+              const { response } = await dialog.showMessageBox(mainWindow, {
                 type: 'warning',
                 buttons: ['Reset database', 'Cancel'],
                 message:
@@ -71,7 +73,7 @@ const createMainWindow = async () => {
           {
             label: 'Back up database',
             click: async () => {
-              const { filePath } = await dialog.showSaveDialog(win, {
+              const { filePath } = await dialog.showSaveDialog(mainWindow, {
                 defaultPath: 'p2pcommons.zip'
               })
               if (!filePath) return
@@ -86,7 +88,7 @@ const createMainWindow = async () => {
           {
             label: 'Restore database backup',
             click: async () => {
-              const { filePaths } = await dialog.showOpenDialog(win, {
+              const { filePaths } = await dialog.showOpenDialog(mainWindow, {
                 defaultPath: 'p2pcommons.zip',
                 filters: [{ name: 'ZIP', extensions: ['zip'] }]
               })
@@ -107,7 +109,7 @@ const createMainWindow = async () => {
                 return
               }
 
-              const { response } = await dialog.showMessageBox(win, {
+              const { response } = await dialog.showMessageBox(mainWindow, {
                 type: 'warning',
                 buttons: ['Restore database backup', 'Cancel'],
                 message:
@@ -130,14 +132,35 @@ const createMainWindow = async () => {
           {
             label: 'Export module graph',
             click: async () => {
-              const { filePath } = await dialog.showSaveDialog(win, {
+              const { filePath } = await dialog.showSaveDialog(mainWindow, {
                 defaultPath: 'p2pcommons.json'
               })
               if (!filePath) return
 
-              win.webContents.send('export graph')
+              mainWindow.webContents.send('export graph')
               const [, graph] = await once(ipcMain, 'export graph')
               await fs.writeFile(filePath, JSON.stringify(graph, null, 2))
+            }
+          }
+        ]
+      },
+      {
+        label: 'Vault',
+        submenu: [
+          {
+            label: `${isVaultEnabled ? 'Disable' : 'Enable'} Vault`,
+            click: async () => {
+              if (!isVaultEnabled) {
+                const { response } = await dialog.showMessageBox(mainWindow, {
+                  type: 'warning',
+                  buttons: ['Enable Vault', 'Cancel'],
+                  message:
+                    'Are you sure you want to enable the Hypergraph Vault? This will add all existing content to it, to be stored indefinitely.'
+                })
+                if (response === 1) return
+              }
+              store.set('vault', !isVaultEnabled)
+              updateMenu()
             }
           }
         ]
@@ -166,6 +189,23 @@ const createMainWindow = async () => {
       }
     ])
   )
+}
+store.onDidChange('vault', updateMenu)
+
+const createMainWindow = async () => {
+  const win = new BrowserWindow({
+    title: app.name,
+    show: false,
+    width: 1440,
+    height: 920,
+    minWidth: 820,
+    minHeight: 764,
+    webPreferences: {
+      nodeIntegration: true
+    },
+    titleBarStyle: 'hiddenInset'
+  })
+  updateMenu()
 
   win.on('ready-to-show', () => win.show())
   win.on('closed', () => (mainWindow = undefined))

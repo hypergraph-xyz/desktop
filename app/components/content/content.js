@@ -6,7 +6,7 @@ import { Button, Title } from '../layout/grid'
 import { useHistory, Link } from 'react-router-dom'
 import Anchor from '../anchor'
 import Arrow from '../icons/arrow-up-2rem.svg'
-import { remote } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import { promises as fs } from 'fs'
 import AdmZip from 'adm-zip'
 import { Label } from '../forms/forms'
@@ -17,6 +17,7 @@ import isContentRegistered from '../../lib/is-content-registered'
 import Share from '../icons/share.svg'
 import ShareModal from './share-modal'
 import Tabbable from '../accessibility/tabbable'
+import { archiveModule } from '../../lib/vault'
 import { Heading1 } from '../typography'
 
 const Container = styled.div`
@@ -302,6 +303,11 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
                     ].join('+'),
                     profileUrl
                   )
+                  if (await ipcRenderer.invoke('getStoreValue', 'vault')) {
+                    await archiveModule(
+                      `${content.rawJSON.url}+${content.metadata.version}`
+                    )
+                  }
                   history.replace(
                     `/profiles/${encode(profileUrl)}/${key}/${
                       content.metadata.version

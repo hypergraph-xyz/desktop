@@ -1,10 +1,11 @@
 import React, { useEffect, useContext } from 'react'
 import { TopRow, Title } from '../layout/grid'
-import { remote } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
 import { useHistory, useParams } from 'react-router-dom'
 import { ProfileContext } from '../../lib/context'
+import { archiveModule } from '../../lib/vault'
 import EditForm from './edit-form'
 
 const Create = ({ p2p }) => {
@@ -57,6 +58,9 @@ const Create = ({ p2p }) => {
           }
           if (isRegister) {
             await p2p.register(`${encode(url)}+${version}`, profileUrl)
+            if (await ipcRenderer.invoke('getStoreValue', 'vault')) {
+              await archiveModule(`${url}+${version}`)
+            }
             history.push(
               `/profiles/${encode(profileUrl)}/${encode(url)}/${version}`
             )
