@@ -18,6 +18,8 @@ const AddContentWithParent = styled(Plus)`
   display: none;
   border-left: 2px solid ${purple};
   padding: 123px 41px;
+  z-index: 1;
+  background-color: ${black};
 
   :hover {
     background-color: ${purple};
@@ -35,7 +37,6 @@ const AddContentWithParent = styled(Plus)`
 `
 const Container = styled.div`
   border-bottom: 2px solid ${purple};
-  padding: 2rem ${props => props.pad || 2}rem;
   position: relative;
   height: ${props => (props.isParent ? 136 : 296)}px;
   box-sizing: border-box;
@@ -49,6 +50,22 @@ const Container = styled.div`
         }
       }
     `}
+`
+const Hover = styled.div`
+  padding: 2rem ${props => props.pad || 2}rem;
+  height: 100%;
+  :hover {
+    :before {
+      content: '';
+      width: 100%;
+      height: ${props => props.isParent ? 5 : 10}rem;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background: linear-gradient(transparent, ${purple});
+      z-index: 1;
+    }
+  }
 `
 const Attributes = styled.div`
   display: inline-block;
@@ -83,14 +100,16 @@ const Description = styled.div`
   overflow: hidden;
   max-height: 9em;
   margin-top: 1rem;
-  :before {
-    content: '';
-    width: 100%;
-    height: 74px;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    background: linear-gradient(transparent, ${black});
+  ${Container}:not(:hover) & {
+    :before {
+      content: '';
+      width: 100%;
+      height: 74px;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background: linear-gradient(transparent, ${black});
+    }
   }
 `
 const ToggleParent = styled.p`
@@ -99,6 +118,7 @@ const ToggleParent = styled.p`
   margin: 0;
   padding-bottom: 2px;
   -webkit-app-region: no-drag;
+  z-index: 1;
 
   :hover {
     padding-bottom: 0;
@@ -146,59 +166,63 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
         }}
         isParent={isParent}
       >
-        <Attributes>
-          <Attribute>
-            {subtypes[content.rawJSON.subtype] || 'Unknown'}
-          </Attribute>
-          {parent && (
-            <Attribute title={`Follows from "${parent.rawJSON.title}"`}>
-              <OneParent />
+        <Hover isParent={isParent}>
+          <Attributes>
+            <Attribute>
+              {subtypes[content.rawJSON.subtype] || 'Unknown'}
             </Attribute>
-          )}
-        </Attributes>
-        <Content pad={pad}>
-          <Title>{content.rawJSON.title}</Title>
-          <Authors>
-            {authors.map((author, i) => {
-              const to = `/profiles/${encode(author.rawJSON.url)}`
-              const shouldScroll = to === location.pathname
-              return (
-                <Fragment key={author.rawJSON.url}>
-                  {i > 0 && ', '}
-                  {isContentRegistered(content, author) ? (
-                    <Link
-                      component={Anchor}
-                      to={to}
-                      onClick={() => shouldScroll && window.scrollTo(0, 0)}
-                    >
-                      {author.rawJSON.title}
-                    </Link>
-                  ) : (
-                    <AuthorWithoutContentRegistration key={author.rawJSON.url}>
-                      {author.rawJSON.title}
-                    </AuthorWithoutContentRegistration>
-                  )}
-                </Fragment>
-              )
-            })}
-          </Authors>
-          {!isParent && (
-            <Description>
-              {newlinesToBr(content.rawJSON.description)}
-            </Description>
-          )}
-          {!isParent && content.rawJSON.parents[0] && (
-            <ToggleParent
-              onClick={e => {
-                e.stopPropagation()
-                setShowParent(!showParent)
-              }}
-            >
-              <ToggleParentArrow>{showParent ? '▾' : '▸'}</ToggleParentArrow>
-              Follows from
-            </ToggleParent>
-          )}
-        </Content>
+            {parent && (
+              <Attribute title={`Follows from "${parent.rawJSON.title}"`}>
+                <OneParent />
+              </Attribute>
+            )}
+          </Attributes>
+          <Content pad={pad}>
+            <Title>{content.rawJSON.title}</Title>
+            <Authors>
+              {authors.map((author, i) => {
+                const to = `/profiles/${encode(author.rawJSON.url)}`
+                const shouldScroll = to === location.pathname
+                return (
+                  <Fragment key={author.rawJSON.url}>
+                    {i > 0 && ', '}
+                    {isContentRegistered(content, author) ? (
+                      <Link
+                        component={Anchor}
+                        to={to}
+                        onClick={() => shouldScroll && window.scrollTo(0, 0)}
+                      >
+                        {author.rawJSON.title}
+                      </Link>
+                    ) : (
+                      <AuthorWithoutContentRegistration
+                        key={author.rawJSON.url}
+                      >
+                        {author.rawJSON.title}
+                      </AuthorWithoutContentRegistration>
+                    )}
+                  </Fragment>
+                )
+              })}
+            </Authors>
+            {!isParent && (
+              <Description>
+                {newlinesToBr(content.rawJSON.description)}
+              </Description>
+            )}
+            {!isParent && content.rawJSON.parents[0] && (
+              <ToggleParent
+                onClick={e => {
+                  e.stopPropagation()
+                  setShowParent(!showParent)
+                }}
+              >
+                <ToggleParentArrow>{showParent ? '▾' : '▸'}</ToggleParentArrow>
+                Follows from
+              </ToggleParent>
+            )}
+          </Content>
+        </Hover>
         {authors.find(author => isContentRegistered(content, author)) && (
           <AddContentWithParent
             onClick={e => {
