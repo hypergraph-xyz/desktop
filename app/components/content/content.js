@@ -138,9 +138,10 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
 
   const fetchParents = async () => {
     const parents = await Promise.all(
-      content.rawJSON.parents.map(url =>
-        p2p.clone(encode(url.split('+')[0]), null, /* download */ false)
-      )
+      content.rawJSON.parents.map(url => {
+        const [key, version] = url.split('+')
+        return p2p.clone(encode(key), version, /* download */ false)
+      })
     )
     setParents(parents)
   }
