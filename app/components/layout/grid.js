@@ -132,7 +132,7 @@ export const StickyRow = styled(Row)`
   position: sticky;
   top: ${props => props.top};
   background-color: ${black};
-  z-index: 1;
+  z-index: 2;
 `
 export const TopRow = styled(StickyRow).attrs({
   top: '3rem'
