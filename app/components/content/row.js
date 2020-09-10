@@ -58,7 +58,7 @@ const Hover = styled.div`
     :before {
       content: '';
       width: 100%;
-      height: ${props => props.isParent ? 5 : 10}rem;
+      height: ${props => (props.isParent ? 5 : 10)}rem;
       position: absolute;
       left: 0;
       bottom: 0;
