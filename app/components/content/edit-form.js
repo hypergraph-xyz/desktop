@@ -209,6 +209,14 @@ const EditForm = ({
                 ].join('+')
                 return (
                   <option value={value} key={value}>
+                    {
+                      profiles.find(
+                        profile =>
+                          encode(profile.rawJSON.url) ===
+                          parent.rawJSON.authors[0]
+                      ).rawJSON.title
+                    }
+                    {parent.rawJSON.authors.length > 1 ? ' et. al' : null}.{' '}
                     {parent.rawJSON.title}
                   </option>
                 )
