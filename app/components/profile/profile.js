@@ -274,6 +274,8 @@ const Profile = ({ p2p }) => {
               <Button
                 color={red}
                 onClick={() => {
+                  setNameForAvatar(profile.rawJSON.title)
+                  setIsTitleInvalid(false)
                   setIsEditing(false)
                   setIsTitleInvalid(false)
                 }}

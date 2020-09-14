@@ -1,12 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
-import Background from './background.svg'
+import { purple, blue, green, yellow, red } from '../../lib/colors'
+
+const colors = [purple, blue, green, yellow, red]
 
 const Container = styled.div`
   position: relative;
-  width: ${props => props.size};
+  width: calc(${props => props.size} * 0.86);
   height: ${props => props.size};
   text-align: center;
+  background: linear-gradient(
+    120deg,
+    ${props => props.colors[0]} 0%,
+    ${props => props.colors[1]} 100%
+  );
+  clip-path: polygon(0% 21%, 50% 0%, 100% 21%, 100% 79%, 50% 100%, 0% 79%);
 `
 Container.defaultProps = {
   size: '8rem'
@@ -20,10 +28,6 @@ const StyledInitials = styled.div`
   font-size: 2.5rem;
   font-family: 'Roboto Mono';
 `
-const StyledBackground = styled(Background)`
-  width: 100%;
-  height: 100%;
-`
 
 const getInitials = name => {
   if (!name || !name.length) return '?'
@@ -34,11 +38,24 @@ const getInitials = name => {
   return [initials.shift(), initials.pop()].filter(Boolean).join('')
 }
 
-const Avatar = ({ name, ...props }) => (
-  <Container {...props}>
-    <StyledBackground viewBox='0 0 112 128' />
-    <StyledInitials>{getInitials(name)}</StyledInitials>
-  </Container>
-)
+const Avatar = ({ name, ...props }) => {
+  const initials = getInitials(name)
+  const colorIndexes = [
+    initials[0].charCodeAt(0) % colors.length,
+    initials[initials.length - 1].charCodeAt(0) % colors.length
+  ]
+  if (colorIndexes[1] === colorIndexes[0]) {
+    colorIndexes[1] = (colorIndexes[1] + 1) % colors.length
+  }
+
+  return (
+    <Container
+      colors={[colors[colorIndexes[0]], colors[colorIndexes[1]]]}
+      {...props}
+    >
+      <StyledInitials>{initials}</StyledInitials>
+    </Container>
+  )
+}
 
 export default Avatar
