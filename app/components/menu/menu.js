@@ -110,7 +110,9 @@ const ButtonNavLink = ({ history, to, ...props }) => (
   />
 )
 const getNetworkStatus = async p2p => {
-  if (!p2p.networker || !(await isOnline())) return 'red'
+  if (!p2p.networker || !p2p.networker.swarm || !(await isOnline())) {
+    return 'red'
+  }
   if (!p2p.networker.swarm.holepunchable()) return 'yellow'
   return 'green'
 }

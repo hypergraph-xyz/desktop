@@ -18,6 +18,7 @@ import { archiveModule } from '../../lib/vault'
 import Anchor from '../anchor'
 import { ProfileContext } from '../../lib/context'
 import { ipcRenderer } from 'electron'
+import TermsOfUse from './terms-of-use'
 
 const Illustration = styled.div`
   margin-top: 22px;
@@ -36,10 +37,7 @@ const Heading = styled.div`
 `
 const Back = styled(Arrow)`
   transform: rotate(270deg);
-  filter: brightness(
-    ${props =>
-      props.page === 0 || props.page === dialogs.length - 1 ? 0 : 100}%
-  );
+  filter: brightness(${props => (props.onClick ? 100 : 0)}%);
 `
 const Form = styled.form`
   position: absolute;
@@ -59,9 +57,19 @@ const ButtonGroup = styled.div`
 `
 
 const dialogs = [
+  ({ next }) => (
+    <>
+      <TermsOfUse />
+      <Form onSubmit={next}>
+        <Button emphasis='top' autoFocus>
+          Agree
+        </Button>
+      </Form>
+    </>
+  ),
   ({ page, next }) => (
     <>
-      <Back page={page} />
+      <Back />
       <Illustration>
         <IllustrationWelcome />
       </Illustration>
@@ -85,7 +93,7 @@ const dialogs = [
   ),
   ({ page, next, previous }) => (
     <>
-      <Back page={page} onClick={previous} />
+      <Back onClick={previous} />
       <Illustration>
         <IllustrationAsYouGo />
       </Illustration>
@@ -109,7 +117,7 @@ const dialogs = [
   ),
   ({ page, next, previous }) => (
     <>
-      <Back page={page} onClick={previous} />
+      <Back onClick={previous} />
       <Illustration>
         <IllustrationAsYouGo2 />
       </Illustration>
@@ -136,7 +144,7 @@ const dialogs = [
     const [nameForAvatar, setNameForAvatar] = useState(name)
     return (
       <>
-        <Back page={page} onClick={previous} />
+        <Back onClick={previous} />
         <Illustration>
           <IllustrationProfileCreation />
           <StyledAvatar name={nameForAvatar} />
@@ -173,7 +181,7 @@ const dialogs = [
   ({ page, next, previous }) => {
     return (
       <>
-        <Back page={page} onClick={previous} />
+        <Back onClick={previous} />
         <Illustration>
           <IllustrationVault />
         </Illustration>
@@ -221,7 +229,7 @@ const dialogs = [
 
     return (
       <>
-        <Back page={page} />
+        <Back />
         <Illustration>
           <IllustrationLibscie />
         </Illustration>
@@ -285,9 +293,9 @@ const dialogs = [
 ]
 
 const Welcome = ({ p2p, setProfileUrl }) => {
-  const [page, setPage] = useState(0)
-  const [name, setName] = useState()
   const { url: profileUrl } = useContext(ProfileContext)
+  const [page, setPage] = useState(profileUrl ? 1 : 0)
+  const [name, setName] = useState()
 
   useEffect(() => {
     ;(async () => {
