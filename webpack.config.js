@@ -4,7 +4,7 @@ const { spawn } = require('child_process')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
 
-module.exports = (_, { mode }) => {
+module.exports = (_, { mode = 'development' }) => {
   const port = 1212
   const publicPath =
     mode === 'production' ? './' : `http://localhost:${port}/dist`
@@ -63,6 +63,8 @@ module.exports = (_, { mode }) => {
     target: 'electron-renderer',
 
     entry: `${__dirname}/app/index.js`,
+
+    mode,
 
     node: {
       __dirname: false,
