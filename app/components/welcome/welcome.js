@@ -19,6 +19,7 @@ import Anchor from '../anchor'
 import { ProfileContext } from '../../lib/context'
 import { ipcRenderer } from 'electron'
 import TermsOfUse from './terms-of-use'
+import { productName } from '../../../package'
 
 const Illustration = styled.div`
   margin-top: 22px;
@@ -73,7 +74,7 @@ const dialogs = [
       <Illustration>
         <IllustrationWelcome />
       </Illustration>
-      <Heading>Welcome to Hypergraph</Heading>
+      <Heading>Welcome to {productName}</Heading>
       <p>
         At <Anchor href='https://libscie.org'>Liberate Science</Anchor>, we
         reinvent the publication process in a way that empowers you to do better

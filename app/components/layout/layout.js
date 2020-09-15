@@ -3,6 +3,8 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { black, white } from '../../lib/colors'
 import Menu from '../menu/menu'
 import 'focus-visible'
+import { Helmet } from 'react-helmet'
+import { productName } from '../../../package'
 
 import RobotoRegular from './fonts/Roboto/Roboto-Regular.ttf'
 import RobotoLight from './fonts/Roboto/Roboto-Light.ttf'
@@ -60,6 +62,9 @@ const Layout = ({ children, p2p, onFind }) => {
   return (
     <>
       <GlobalStyle />
+      <Helmet>
+        <title>{productName}</title>
+      </Helmet>
       <Menu p2p={p2p} onFind={onFind} />
       <Content>{children}</Content>
     </>

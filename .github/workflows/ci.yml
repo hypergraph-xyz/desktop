@@ -66,21 +66,27 @@ jobs:
         with:
           json: ${{ steps.package.outputs.content }}
           version: 'version'
+      - name: get product name
+        id: productName
+        uses: gr2m/get-json-paths-action@v1.0.2
+        with:
+          json: ${{ steps.package.outputs.content }}
+          productName: 'productName'
       - name: archive mac dmg
         if: startsWith(matrix.os, 'macos')
         uses: actions/upload-artifact@v1
         with:
           name: mac
-          path: dist/Hypergraph-${{ steps.version.outputs.version }}.dmg
+          path: dist/${{ steps.productName.outputs.productName }}-${{ steps.version.outputs.version }}.dmg
       - name: archive linux appimage
         if: startsWith(matrix.os, 'ubuntu')
         uses: actions/upload-artifact@v1
         with:
           name: linux
-          path: dist/Hypergraph-${{ steps.version.outputs.version }}.AppImage
+          path: dist/${{ steps.productName.outputs.productName }}-${{ steps.version.outputs.version }}.AppImage
       - name: archive windows setup
         if: startsWith(matrix.os, 'windows')
         uses: actions/upload-artifact@v1
         with:
           name: windows
-          path: dist/Hypergraph Setup ${{ steps.version.outputs.version }}.exe
+          path: dist/${{ steps.productName.outputs.productName }} Setup ${{ steps.version.outputs.version }}.exe
