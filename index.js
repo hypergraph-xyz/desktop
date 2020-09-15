@@ -22,14 +22,12 @@ ipcMain.handle('getStoreValue', (_, key, defaultValue) =>
   store.get(key, defaultValue)
 )
 ipcMain.handle('setStoreValue', (_, key, value) => store.set(key, value))
-store.onDidChange(
-  'vault',
-  vault => mainWindow && mainWindow.webContents.send('vault', vault)
-)
-store.onDidChange(
-  'welcome',
-  welcome => mainWindow && mainWindow.webContents.send('welcome', welcome)
-)
+;['vault', 'welcome', 'analytics'].forEach(key => {
+  store.onDidChange(
+    key,
+    value => mainWindow && mainWindow.webContents.send(key, value)
+  )
+})
 
 const withRestart = async cb => {
   restarting = true
@@ -67,6 +65,7 @@ const updateMenu = () => {
                 const dir = `${app.getPath('home')}/.p2pcommons`
                 await promisify(chmodr)(dir, 0o777)
                 await del(dir, { force: true })
+                store.clear()
               })
             }
           },

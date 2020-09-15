@@ -4,7 +4,7 @@ import { purple, green } from '../../lib/colors'
 import { rgba } from 'polished'
 import { Button } from '../layout/grid'
 import Arrow from '../icons/arrow-up-2rem.svg'
-import { Label } from '../forms/forms'
+import { Label, Checkbox } from '../forms/forms'
 import TitleInput from '../forms/title-input'
 import IllustrationWelcome from './illustrations/welcome.svg'
 import IllustrationAsYouGo from './illustrations/as-you-go.svg'
@@ -20,6 +20,8 @@ import { ProfileContext } from '../../lib/context'
 import { ipcRenderer } from 'electron'
 import TermsOfUse from './terms-of-use'
 import { productName } from '../../../package'
+
+const { FormData } = window
 
 const Illustration = styled.div`
   margin-top: 22px;
@@ -61,10 +63,25 @@ const dialogs = [
   ({ next }) => (
     <>
       <TermsOfUse />
-      <Form onSubmit={next}>
-        <Button emphasis='top' autoFocus>
-          Agree
-        </Button>
+      <Form
+        onSubmit={async ev => {
+          ev.preventDefault()
+          const data = new FormData(ev.target)
+          await ipcRenderer.invoke(
+            'setStoreValue',
+            'analytics',
+            Boolean(data.get('analytics'))
+          )
+          next()
+        }}
+      >
+        <ButtonGroup>
+          <Button emphasis='top' autoFocus>
+            Agree
+          </Button>
+          <Checkbox name='analytics' />
+          Allow analytics to be sent to Liberate Science GmbH
+        </ButtonGroup>
       </Form>
     </>
   ),

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { black, white } from '../../lib/colors'
 import Menu from '../menu/menu'
 import 'focus-visible'
 import { Helmet } from 'react-helmet'
+import { ipcRenderer } from 'electron'
 import { productName } from '../../../package'
 
 import RobotoRegular from './fonts/Roboto/Roboto-Regular.ttf'
@@ -59,11 +60,41 @@ const Content = styled.div`
 `
 
 const Layout = ({ children, p2p, onFind }) => {
+  const [useAnalytics, setUseAnalytics] = useState()
+
+  useEffect(() => {
+    ;(async () => {
+      setUseAnalytics(await ipcRenderer.invoke('getStoreValue', 'analytics'))
+      ipcRenderer.on('analytics', (_, useAnalytics) => {
+        setUseAnalytics(useAnalytics)
+      })
+    })()
+  }, [])
+
   return (
     <>
       <GlobalStyle />
       <Helmet>
         <title>{productName}</title>
+        {useAnalytics && (
+          <script type='text/javascript'>
+            {`
+              var _paq = window._paq = window._paq || [];
+              /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+              _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+              _paq.push(['disableCookies']);
+              _paq.push(['trackPageView']);
+              _paq.push(['enableLinkTracking']);
+              (function() {
+                var u="https://analytics.libscie.org/";
+                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setSiteId', '4']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+              })();
+            `}
+          </script>
+        )}
       </Helmet>
       <Menu p2p={p2p} onFind={onFind} />
       <Content>{children}</Content>

@@ -75,3 +75,10 @@ export const Textarea = styled.textarea`
   letter-spacing: inherit;
   line-height: inherit;
 `
+
+export const Checkbox = styled.input.attrs({
+  type: 'checkbox',
+  defaultChecked: true
+})`
+  margin-right: 0.5rem;
+`
