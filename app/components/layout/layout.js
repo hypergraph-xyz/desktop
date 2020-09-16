@@ -6,6 +6,7 @@ import 'focus-visible'
 import { Helmet } from 'react-helmet'
 import { ipcRenderer } from 'electron'
 import { productName } from '../../../package'
+import { useLocation } from 'react-router-dom'
 
 import RobotoRegular from './fonts/Roboto/Roboto-Regular.ttf'
 import RobotoLight from './fonts/Roboto/Roboto-Light.ttf'
@@ -62,6 +63,7 @@ const Content = styled.div`
 const Layout = ({ children, p2p, onFind }) => {
   const [useAnalytics, setUseAnalytics] = useState()
   const [useChatra, setUseChatra] = useState()
+  const location = useLocation()
 
   useEffect(() => {
     ;(async () => {
@@ -71,6 +73,12 @@ const Layout = ({ children, p2p, onFind }) => {
       })
     })()
   }, [])
+
+  useEffect(() => {
+    if (!window._paq) return
+    window._paq.push(['setCustomUrl', location.pathname])
+    window._paq.push(['trackPageView'])
+  }, [location, window._paq])
 
   useEffect(() => {
     ;(async () => {
@@ -90,10 +98,8 @@ const Layout = ({ children, p2p, onFind }) => {
           <script type='text/javascript'>
             {`
               var _paq = window._paq = window._paq || [];
-              /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-              _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+              _paq.push(["setDocumentTitle", document.title]);
               _paq.push(['disableCookies']);
-              _paq.push(['trackPageView']);
               _paq.push(['enableLinkTracking']);
               (function() {
                 var u="https://analytics.libscie.org/";
