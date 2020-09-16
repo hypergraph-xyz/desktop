@@ -22,7 +22,7 @@ ipcMain.handle('getStoreValue', (_, key, defaultValue) =>
   store.get(key, defaultValue)
 )
 ipcMain.handle('setStoreValue', (_, key, value) => store.set(key, value))
-;['vault', 'welcome', 'analytics'].forEach(key => {
+;['vault', 'welcome', 'analytics', 'chatra'].forEach(key => {
   store.onDidChange(
     key,
     value => mainWindow && mainWindow.webContents.send(key, value)

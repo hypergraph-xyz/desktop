@@ -61,12 +61,22 @@ const Content = styled.div`
 
 const Layout = ({ children, p2p, onFind }) => {
   const [useAnalytics, setUseAnalytics] = useState()
+  const [useChatra, setUseChatra] = useState()
 
   useEffect(() => {
     ;(async () => {
       setUseAnalytics(await ipcRenderer.invoke('getStoreValue', 'analytics'))
       ipcRenderer.on('analytics', (_, useAnalytics) => {
         setUseAnalytics(useAnalytics)
+      })
+    })()
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      setUseChatra(await ipcRenderer.invoke('getStoreValue', 'chatra'))
+      ipcRenderer.on('chatra', (_, useChatra) => {
+        setUseChatra(useChatra)
       })
     })()
   }, [])
@@ -92,6 +102,31 @@ const Layout = ({ children, p2p, onFind }) => {
                 var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
                 g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
               })();
+            `}
+          </script>
+        )}
+        {useChatra && (
+          <script>
+            {`
+              ;(function (d, w, c) {
+                window.ChatraSetup = {
+                  colors: {
+                    buttonText: '#FFFFFF' /* chat button text color */,
+                    buttonBg: '#574cfa' /* chat button background color */
+                  }
+                }
+        
+                w.ChatraID = 'vZo7KBf3WqmQPPasZ'
+                var s = d.createElement('script')
+                w[c] =
+                  w[c] ||
+                  function () {
+                    ;(w[c].q = w[c].q || []).push(arguments)
+                  }
+                s.async = true
+                s.src = 'https://call.chatra.io/chatra.js'
+                if (d.head) d.head.appendChild(s)
+              })(document, window, 'Chatra')
             `}
           </script>
         )}

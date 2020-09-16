@@ -72,6 +72,7 @@ const dialogs = [
             'analytics',
             Boolean(data.get('analytics'))
           )
+          await ipcRenderer.invoke('setStoreValue', 'chatra', true)
           next()
         }}
       >
