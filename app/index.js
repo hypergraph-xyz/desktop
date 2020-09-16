@@ -217,6 +217,9 @@ const App = () => {
         <Route path='/profiles/:key'>
           <Profile p2p={p2p} />
         </Route>
+        <Route path='/profile'>
+          <Profile p2p={p2p} />
+        </Route>
         <Route path='/following'>
           <Following p2p={p2p} />
         </Route>

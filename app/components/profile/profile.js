@@ -118,7 +118,8 @@ const StyledInput = styled(Input)`
 `
 
 const Profile = ({ p2p }) => {
-  const { key } = useParams()
+  const { url: ownProfileUrl } = useContext(ProfileContext)
+  const { key = ownProfileUrl } = useParams()
   const [profile, setProfile] = useState()
   const [contents, setContents] = useState()
   const [isEditing, setIsEditing] = useState()
@@ -129,7 +130,6 @@ const Profile = ({ p2p }) => {
   const [isSharing, setIsSharing] = useState()
   const [nameForAvatar, setNameForAvatar] = useState()
   const [ownProfile, setOwnProfile] = useState()
-  const { url: ownProfileUrl } = useContext(ProfileContext)
   const titleRef = useRef()
   const descriptionRef = useRef()
 
