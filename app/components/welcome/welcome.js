@@ -258,8 +258,11 @@ const dialogs = [
           it if you'd join us! 💜
         </p>
         <p>
-          Read our manifesto. Check out our{' '}
-          <Anchor href='https://libscie.org'>website</Anchor>,{' '}
+          Read our{' '}
+          <Anchor href='https://blog.libscie.org/liberate-science-manifesto/'>
+            manifesto
+          </Anchor>
+          . Check out our <Anchor href='https://libscie.org'>website</Anchor>,{' '}
           <Anchor href='https://blog.libscie.org'>blog</Anchor>,{' '}
           <Anchor href='https://twitter.com/libscie'>Twitter</Anchor>, or{' '}
           <Anchor href='https://github.com/hypergraph-xyz/desktop'>
