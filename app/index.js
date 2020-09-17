@@ -136,9 +136,11 @@ const App = () => {
       const profile = profiles.find(profile => profile.metadata.isWritable)
       if (profile) {
         setProfileUrl(profile.rawJSON.url)
-        window.Chatra('updateIntegrationData', {
-          name: profile.rawJSON.title
-        })
+        if (window.Chatra) {
+          window.Chatra('updateIntegrationData', {
+            name: profile.rawJSON.title
+          })
+        }
       }
       setLoading(false)
     })()
