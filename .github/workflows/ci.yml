@@ -50,6 +50,8 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
           mac_certs: ${{ secrets.mac_certs }}
           mac_certs_password: ${{ secrets.mac_certs_password }}
+          windows_certs: ${{ secrets.windows_certs }}
+          windows_certs_password: ${{ secrets.windows_certs_password }}
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
           max_attempts: 5
         env:
