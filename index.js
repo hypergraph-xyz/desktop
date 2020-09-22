@@ -9,6 +9,8 @@ const { promises: fs } = require('fs')
 const { promisify } = require('util')
 const chmodr = require('chmodr')
 const Store = require('electron-store')
+const { autoUpdater } = require('electron-updater')
+const log = require('electron-log')
 
 debug({ isEnabled: true, showDevTools: false })
 app.allowRendererProcessReuse = false
@@ -17,6 +19,8 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 let mainWindow
 let restarting = false
 const store = new Store()
+log.transports.file.level = 'debug'
+log.transports.ipc.level = 'debug'
 
 ipcMain.handle('getStoreValue', (_, key, defaultValue) =>
   store.get(key, defaultValue)
@@ -247,6 +251,8 @@ const main = async () => {
   await app.whenReady()
   mainWindow = await createMainWindow()
   app.setAsDefaultProtocolClient('hypergraph')
+  autoUpdater.checkForUpdatesAndNotify()
+  autoUpdater.logger = log
 }
 
 main()
