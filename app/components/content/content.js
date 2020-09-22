@@ -297,22 +297,19 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
               onClick={async () => {
                 setIsUpdatingRegistration(true)
                 try {
+                  await p2p.refreshDrive(encode(content.rawJSON.url))
+                  const {
+                    metadata: { version }
+                  } = await p2p.get(encode(content.rawJSON.url))
                   await p2p.register(
-                    [
-                      encode(content.rawJSON.url),
-                      content.metadata.version
-                    ].join('+'),
+                    [encode(content.rawJSON.url), version].join('+'),
                     profileUrl
                   )
                   if (await ipcRenderer.invoke('getStoreValue', 'vault')) {
-                    await archiveModule(
-                      `${content.rawJSON.url}+${content.metadata.version}`
-                    )
+                    await archiveModule(`${content.rawJSON.url}+${version}`)
                   }
                   history.replace(
-                    `/profiles/${encode(profileUrl)}/${key}/${
-                      content.metadata.version
-                    }`
+                    `/profiles/${encode(profileUrl)}/${key}/${version}`
                   )
                 } finally {
                   setIsUpdatingRegistration(false)
