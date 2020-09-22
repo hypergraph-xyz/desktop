@@ -2,7 +2,7 @@
   "name": "hypergraph-desktop",
   "productName": "Hypergraph (Beta)",
   "author": "Liberate Science GmbH",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Hypergraph Desktop app",
   "license": "MIT",
   "repository": "hypergraph-xyz/desktop",
