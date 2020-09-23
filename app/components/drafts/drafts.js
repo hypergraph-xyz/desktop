@@ -20,6 +20,7 @@ export default ({ p2p }) => {
       ])
       setHasRegisteredContent(profile.rawJSON.contents.length)
       const drafts = contents
+        .filter(content => content.rawJSON.authors.includes(encode(profileUrl)))
         .filter(content => !isContentRegistered(content, profile))
         .sort(sort)
       setDrafts(drafts)
