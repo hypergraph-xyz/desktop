@@ -363,7 +363,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
                 history.push('/')
               }}
             >
-              Delete content
+              Delete
             </Button>
           )}
         </Actions>
