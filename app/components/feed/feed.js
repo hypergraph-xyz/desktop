@@ -17,15 +17,14 @@ export default ({ p2p }) => {
         profile.rawJSON.follows.map(url => p2p.clone(encode(url)))
       )
       const profiles = [profile, ...follows]
+      const contentUrls = [
+        ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
+      ]
       const contents = await Promise.all(
-        profiles.map(profile =>
-          Promise.all(
-            profile.rawJSON.contents.map(url => {
-              const [key, version] = url.split('+')
-              return p2p.clone(encode(key), version)
-            })
-          )
-        )
+        contentUrls.map(url => {
+          const [key, version] = url.split('+')
+          return p2p.clone(encode(key), version)
+        })
       )
       setContents(contents.flat().sort(sort))
     })()
