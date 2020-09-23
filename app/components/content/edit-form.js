@@ -8,7 +8,7 @@ import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import AddFile from './add-file.svg'
 import { remote, ipcRenderer } from 'electron'
 import { purple, red, green, yellow, gray, white } from '../../lib/colors'
-import { basename, extname } from 'path'
+import { basename, dirname, extname, join } from 'path'
 import X from '../icons/x-1rem.svg'
 import { useHistory } from 'react-router-dom'
 import Anchor from '../anchor'
@@ -17,6 +17,7 @@ import { encode } from 'dat-encoding'
 import Tabbable from '../accessibility/tabbable'
 import { ProfileContext } from '../../lib/context'
 import ArrowDown1Rem from '../icons/arrow-down-1rem.svg'
+import { validations } from '@p2pcommons/sdk-js'
 
 const { FormData } = window
 
@@ -267,6 +268,43 @@ const EditForm = ({
               opts
             )
 
+            const invalidSources = []
+            for (let i = newSources.length - 1; i >= 0; i--) {
+              const source = newSources[i]
+              try {
+                await validations.validateMain({
+                  indexMetadata: {
+                    main: basename(source)
+                  },
+                  key: basename(dirname(source)),
+                  p2pcommonsDir: join(source, '..', '..')
+                })
+              } catch (_) {
+                invalidSources.push(source)
+                newSources.splice(i, 1)
+              }
+            }
+            if (invalidSources.length) {
+              await remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+                type: 'warning',
+                title: 'Open file formats',
+                message:
+                  'The following files will not be added as they ' +
+                  'are not stored in open file formats:\n\n' +
+                  invalidSources
+                    .map((source, i) => {
+                      if (i < 5) {
+                        return `- ${source}\n`
+                      }
+                      if (i === 5) {
+                        return `(and ${invalidSources.length - 5} more)`
+                      }
+                      return ''
+                    })
+                    .join('')
+              })
+            }
+
             const newFiles = { ...files }
             for (const source of newSources) {
               const destination = basename(source)
@@ -300,13 +338,11 @@ const EditForm = ({
           onChange={ev => setMain(ev.target.value)}
         >
           <option value=''>None</option>
-          {Object.values(files)
-            .filter(destination => destination.charAt(0) !== '.')
-            .map(destination => (
-              <option value={destination} key={destination}>
-                {destination}
-              </option>
-            ))}
+          {Object.values(files).map(destination => (
+            <option value={destination} key={destination}>
+              {destination}
+            </option>
+          ))}
         </Select>
         <Label htmlFor='title'>Title</Label>
         <TitleInput
