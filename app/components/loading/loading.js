@@ -9,5 +9,9 @@ const Loading = styled(LoadingAnimation)`
   height: 100%;
   width: 60px;
 `
+export const LoadingFlex = styled.div`
+  flex: 1 1 auto;
+  position: relative;
+`
 
 export default Loading

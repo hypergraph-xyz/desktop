@@ -31,6 +31,7 @@ const GlobalStyle = createGlobalStyle`
   html {
     -webkit-user-select: none;
     -webkit-app-region: drag;
+    height: 100%;
   }
   body {
     background-color: ${black};
@@ -41,6 +42,10 @@ const GlobalStyle = createGlobalStyle`
     letter-spacing: 0.05em;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    height: 100%;
+  }
+  #root {
+    height: 100%;
   }
   button, svg, input, textarea {
     -webkit-app-region: no-drag;
@@ -56,8 +61,12 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 const Content = styled.div`
-  margin-left: 8rem;
-  margin-top: 3rem;
+  padding-left: 8rem;
+  padding-top: 3rem;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  box-sizing: border-box;
 `
 
 const Layout = ({ children, p2p, onFind }) => {

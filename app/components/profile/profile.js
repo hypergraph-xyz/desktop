@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom'
 import ShareModal from './share-modal'
 import sort from '../../lib/sort'
 import { ProfileContext } from '../../lib/context'
+import Loading, { LoadingFlex } from '../loading/loading'
 
 const Header = styled.div`
   position: relative;
@@ -332,7 +333,7 @@ const Profile = ({ p2p }) => {
       <StickyRow top='114px'>
         <Title>Content</Title>
       </StickyRow>
-      {contents && (
+      {contents ? (
         <>
           {contents.map(content => {
             return (
@@ -361,6 +362,10 @@ const Profile = ({ p2p }) => {
             }
           />
         </>
+      ) : (
+        <LoadingFlex>
+          <Loading />
+        </LoadingFlex>
       )}
     </>
   )

@@ -5,6 +5,7 @@ import { encode } from 'dat-encoding'
 import Footer, { FooterAddContent, FooterSearch } from '../footer/footer'
 import { ProfileContext } from '../../lib/context'
 import sort from '../../lib/sort'
+import Loading, { LoadingFlex } from '../loading/loading'
 import Tour from '../tour/tour'
 import { ipcRenderer } from 'electron'
 
@@ -50,7 +51,7 @@ export default ({ p2p }) => {
       <TopRow>
         <Title>Feed</Title>
       </TopRow>
-      {contents && (
+      {contents ? (
         <>
           {contents.map(content => {
             return (
@@ -80,6 +81,10 @@ export default ({ p2p }) => {
             }
           />
         </>
+      ) : (
+        <LoadingFlex>
+          <Loading />
+        </LoadingFlex>
       )}
       {isTourOpen && (
         <Tour
