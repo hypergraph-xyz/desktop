@@ -89,50 +89,6 @@ const updateMenu = () => {
             }
           },
           {
-            label: 'Restore database backup',
-            click: async () => {
-              const { filePaths } = await dialog.showOpenDialog(mainWindow, {
-                defaultPath: 'p2pcommons.zip',
-                filters: [{ name: 'ZIP', extensions: ['zip'] }]
-              })
-              const filePath = filePaths && filePaths[0]
-              if (!filePath) return
-
-              let zip
-
-              try {
-                zip = new AdmZip(filePath)
-                if (!zip.getEntry('db/LOG')) throw new Error('no db')
-              } catch (err) {
-                dialog.showErrorBox(
-                  'Invalid database backup',
-                  "The database couldn't be restored from the backup file provided"
-                )
-                console.error(err)
-                return
-              }
-
-              const { response } = await dialog.showMessageBox(mainWindow, {
-                type: 'warning',
-                buttons: ['Restore database backup', 'Cancel'],
-                message:
-                  'Are you sure you want to restore your p2pcommons database from a backup? This will delete your current profile and content from your computer and cannot be undone. Warning: You currently cannot use Hypergraph on multiple devices for the same profile and content. Please reset your database on any other device to prevent corrupt data.'
-              })
-              if (response === 1) return
-
-              await withRestart(async () => {
-                try {
-                  await del(`${app.getPath('home')}/.p2pcommons`, {
-                    force: true
-                  })
-                  zip.extractAllTo(`${app.getPath('home')}/.p2pcommons`)
-                } catch (err) {
-                  console.error(err)
-                }
-              })
-            }
-          },
-          {
             label: 'Export module graph',
             click: async () => {
               const { filePath } = await dialog.showSaveDialog(mainWindow, {
