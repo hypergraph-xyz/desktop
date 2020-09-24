@@ -6,7 +6,7 @@ import 'focus-visible'
 import { Helmet } from 'react-helmet'
 import { ipcRenderer } from 'electron'
 import { productName } from '../../../package'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 
 import RobotoRegular from './fonts/Roboto/Roboto-Regular.ttf'
 import RobotoLight from './fonts/Roboto/Roboto-Light.ttf'
@@ -64,6 +64,7 @@ const Layout = ({ children, p2p, onFind }) => {
   const [useAnalytics, setUseAnalytics] = useState()
   const [useChatra, setUseChatra] = useState()
   const location = useLocation()
+  const history = useHistory()
 
   useEffect(() => {
     ;(async () => {
@@ -82,11 +83,17 @@ const Layout = ({ children, p2p, onFind }) => {
 
   useEffect(() => {
     ;(async () => {
-      setUseChatra(await ipcRenderer.invoke('getStoreValue', 'chatra'))
       ipcRenderer.on('chatra', (_, useChatra) => {
         setUseChatra(useChatra)
       })
+      setUseChatra(await ipcRenderer.invoke('getStoreValue', 'chatra'))
     })()
+  }, [])
+
+  useEffect(() => {
+    ipcRenderer.on('tour', (_, isTourOpen) => {
+      if (isTourOpen) history.push('/')
+    })
   }, [])
 
   return (

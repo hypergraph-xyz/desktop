@@ -26,7 +26,7 @@ ipcMain.handle('getStoreValue', (_, key, defaultValue) =>
   store.get(key, defaultValue)
 )
 ipcMain.handle('setStoreValue', (_, key, value) => store.set(key, value))
-;['vault', 'welcome', 'analytics', 'chatra'].forEach(key => {
+;['vault', 'welcome', 'tour', 'analytics', 'chatra'].forEach(key => {
   store.onDidChange(
     key,
     value => mainWindow && mainWindow.webContents.send(key, value)
@@ -131,6 +131,10 @@ const updateMenu = () => {
           {
             label: 'Reopen welcome screens',
             click: () => store.set('welcome', true)
+          },
+          {
+            label: 'Reopen tour',
+            click: () => store.set('tour', true)
           },
           {
             label: 'Credits',

@@ -5,9 +5,12 @@ import { encode } from 'dat-encoding'
 import Footer, { FooterAddContent, FooterSearch } from '../footer/footer'
 import { ProfileContext } from '../../lib/context'
 import sort from '../../lib/sort'
+import Tour from '../tour/tour'
+import { ipcRenderer } from 'electron'
 
 export default ({ p2p }) => {
   const [contents, setContents] = useState()
+  const [isTourOpen, setIsTourOpen] = useState()
   const { url: profileUrl } = useContext(ProfileContext)
 
   useEffect(() => {
@@ -28,6 +31,18 @@ export default ({ p2p }) => {
       )
       setContents(contents.flat().sort(sort))
     })()
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      setIsTourOpen(await ipcRenderer.invoke('getStoreValue', 'tour', true))
+    })()
+  }, [])
+
+  useEffect(() => {
+    const onTour = (_, isTourOpen) => setIsTourOpen(isTourOpen)
+    ipcRenderer.on('tour', onTour)
+    return () => ipcRenderer.removeListener('tour', onTour)
   }, [])
 
   return (
@@ -65,6 +80,12 @@ export default ({ p2p }) => {
             }
           />
         </>
+      )}
+      {isTourOpen && (
+        <Tour
+          isOpen={isTourOpen}
+          onClose={() => ipcRenderer.invoke('setStoreValue', 'tour', false)}
+        />
       )}
     </>
   )
