@@ -343,6 +343,7 @@ const Profile = ({ p2p }) => {
                 to={`/profiles/${encode(profile.rawJSON.url)}/${encode(
                   content.rawJSON.url
                 )}/${content.metadata.version}`}
+                isRegistered
               />
             )
           })}

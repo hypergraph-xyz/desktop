@@ -1,15 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import styled, { css } from 'styled-components'
 import { purple, black, white, gray } from '../../lib/colors'
-import isContentRegistered from '../../lib/is-content-registered'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
-import { useHistory, useLocation, Link } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import Plus from './plus.svg'
 import { encode } from 'dat-encoding'
-import Anchor from '../anchor'
 import newlinesToBr from '../../lib/newlines-to-br'
 import OneParent from './1-parent.svg'
 import Tabbable from '../accessibility/tabbable'
+import Author from '../author/author'
+import ContentBlockSpinner from './content-block-spinner.svg'
 
 const AddContentWithParent = styled(Plus)`
   position: absolute;
@@ -91,11 +91,6 @@ const Title = styled.div`
 const Authors = styled.div`
   color: ${gray};
 `
-const AuthorWithoutContentRegistration = styled.span`
-  margin: 0;
-  display: inline-block;
-  padding-bottom: 2px;
-`
 const Description = styled.div`
   overflow: hidden;
   max-height: 9em;
@@ -130,23 +125,11 @@ const ToggleParentArrow = styled.span`
   display: inline-block;
 `
 
-const Row = ({ p2p, content, pad, to, isParent }) => {
+const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
   const history = useHistory()
   const location = useLocation()
-  const [authors, setAuthors] = useState([])
   const [showParent, setShowParent] = useState(false)
   const [parent, setParent] = useState()
-
-  useEffect(() => {
-    ;(async () => {
-      const authors = await Promise.all(
-        content.rawJSON.authors.map(key =>
-          p2p.clone(encode(key), null, /* download */ false)
-        )
-      )
-      setAuthors(authors)
-    })()
-  }, [content])
 
   if (content.rawJSON.parents[0]) {
     useEffect(() => {
@@ -181,27 +164,19 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
           <Content pad={pad}>
             <Title>{content.rawJSON.title}</Title>
             <Authors>
-              {authors.map((author, i) => {
-                const to = `/profiles/${encode(author.rawJSON.url)}`
+              {content.rawJSON.authors.map((authorUrl, i) => {
+                const to = `/profiles/${encode(authorUrl)}`
                 const shouldScroll = to === location.pathname
                 return (
-                  <Fragment key={author.rawJSON.url}>
+                  <Fragment key={authorUrl}>
                     {i > 0 && ', '}
-                    {isContentRegistered(content, author) ? (
-                      <Link
-                        component={Anchor}
-                        to={to}
-                        onClick={() => shouldScroll && window.scrollTo(0, 0)}
-                      >
-                        {author.rawJSON.title}
-                      </Link>
-                    ) : (
-                      <AuthorWithoutContentRegistration
-                        key={author.rawJSON.url}
-                      >
-                        {author.rawJSON.title}
-                      </AuthorWithoutContentRegistration>
-                    )}
+                    <Author
+                      p2p={p2p}
+                      url={authorUrl}
+                      content={content}
+                      onClick={() => shouldScroll && window.scrollTo(0, 0)}
+                      Loading={ContentBlockSpinner}
+                    />
                   </Fragment>
                 )
               })}
@@ -224,7 +199,7 @@ const Row = ({ p2p, content, pad, to, isParent }) => {
             )}
           </Content>
         </Hover>
-        {authors.find(author => isContentRegistered(content, author)) && (
+        {isRegistered && (
           <AddContentWithParent
             onClick={e => {
               e.stopPropagation()

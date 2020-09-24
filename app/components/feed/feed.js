@@ -46,6 +46,7 @@ export default ({ p2p }) => {
                 to={`/contents/${encode(content.rawJSON.url)}/${
                   content.metadata.version
                 }`}
+                isRegistered
               />
             )
           })}

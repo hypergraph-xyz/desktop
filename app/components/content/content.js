@@ -19,6 +19,8 @@ import ShareModal from './share-modal'
 import Tabbable from '../accessibility/tabbable'
 import { archiveModule } from '../../lib/vault'
 import { Heading1 } from '../typography'
+import Author from '../author/author'
+import ContentPageSpinner from './content-page-spinner.svg'
 
 const Container = styled.div`
   margin: 2rem;
@@ -31,10 +33,6 @@ const BackArrow = styled(Arrow)`
 const Authors = styled.div`
   font-size: 1.5rem;
   color: ${gray};
-`
-const AuthorWithoutContentRegistration = styled.span`
-  display: inline-block;
-  margin-bottom: 2px;
 `
 const Description = styled.div`
   margin-top: 2rem;
@@ -238,21 +236,15 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
         ))}
         <StyledHeading1>{content.rawJSON.title}</StyledHeading1>
         <Authors>
-          {authors.map((author, i) => (
-            <Fragment key={author.rawJSON.url}>
+          {content.rawJSON.authors.map((authorUrl, i) => (
+            <Fragment key={authorUrl}>
               {i > 0 && ', '}
-              {isContentRegistered(content, author) ? (
-                <Link
-                  component={Anchor}
-                  to={`/profiles/${encode(author.rawJSON.url)}`}
-                >
-                  {author.rawJSON.title}
-                </Link>
-              ) : (
-                <AuthorWithoutContentRegistration key={author.rawJSON.url}>
-                  {author.rawJSON.title}
-                </AuthorWithoutContentRegistration>
-              )}
+              <Author
+                p2p={p2p}
+                url={authorUrl}
+                content={content}
+                Loading={ContentPageSpinner}
+              />
             </Fragment>
           ))}
         </Authors>
