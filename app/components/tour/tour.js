@@ -47,8 +47,8 @@ const Tour = ({ onClose, ...props }) => {
           content: (
             <div>
               <p>
-                Create a backup by opening <i>Database → Back up database</i>{' '}
-                in the menu bar (at the top).
+                Create a backup by opening <i>Database → Back up database</i> in
+                the menu bar (at the top).
               </p>
               <p>
                 We cannot help you recover these, so store them safely! Maybe
@@ -70,11 +70,7 @@ const Tour = ({ onClose, ...props }) => {
         },
         {
           selector: '#menu-drafts',
-          content: (
-            <div>
-              The drafts tab shows your unfinished work.
-            </div>
-          )
+          content: <div>The drafts tab shows your unfinished work.</div>
         },
         {
           selector: '#menu-profile',

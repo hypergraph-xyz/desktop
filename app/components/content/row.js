@@ -23,9 +23,6 @@ const AddContentWithParent = styled(Plus)`
 
   :hover {
     background-color: ${purple};
-    path {
-      fill: ${white};
-    }
   }
 
   :active {
