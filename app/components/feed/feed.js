@@ -24,12 +24,18 @@ export default ({ p2p }) => {
       const contentUrls = [
         ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
       ]
-      const contents = await Promise.all(
-        contentUrls.map(url => {
+
+      const contents = []
+      for (const url of contentUrls) {
+        try {
           const [key, version] = url.split('+')
-          return p2p.clone(encode(key), version)
-        })
-      )
+          const content = await p2p.clone(encode(key), version)
+          contents.push(content)
+        } catch (err) {
+          console.error(err)
+        }
+      }
+
       setContents(contents.flat().sort(sort))
     })()
   }, [])
