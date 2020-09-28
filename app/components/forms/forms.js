@@ -52,6 +52,7 @@ const SelectCaret = styled(CaretDown)`
   position: absolute;
   right: 16.37px;
   top: 5px;
+  pointer-events: none;
 `
 export const Select = ({ ...props }) => (
   <SelectContainer>
