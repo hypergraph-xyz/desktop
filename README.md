@@ -14,6 +14,19 @@ With Hypergraph, we aim to reinvent the publication process in a way that empowe
 
 Right now, Hypergraph is in active development. The current version supports an offline _as-you-go_ workflow and demonstrates some of Hypergraph's core concepts.
 
+## Installation
+
+To install Hypergraph, please [download the most recent release](https://github.com/hypergraph-xyz/desktop/releases).
+
+To develop and test Hypergraph, please build from source. This will automatically enter development mode for the application, which is separate from the production environment from the packaged installs/releases. You can build from source by running the following commands:
+
+```bash
+git clone https://github.com/hypergraph-xyz/desktop
+cd desktop
+npm install
+npm start
+```
+
 ## Glossary
 
 If you're interested in learning more about our terminology, the [Hypergraph glossary](https://www.notion.so/Glossary-d4bdf18fb4624c049c7a2663559ef5ad) explains many of the terms we use across Hypergraph products and documentation.
