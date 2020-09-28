@@ -33,10 +33,13 @@ const AddContentWithParent = styled(Plus)`
   }
 `
 const Container = styled.div`
+  padding: ${props => props.pad || 0}rem;
   border-bottom: 2px solid ${purple};
   position: relative;
-  height: ${props => (props.isParent ? 136 : 296)}px;
+  height: ${props =>
+    props.isParent ? 8.5 : props.isUnavailable ? 8 : 18.5}rem;
   box-sizing: border-box;
+  ${props => props.isUnavailable && `color: ${gray};`}
 
   ${props =>
     !props.isParent &&
@@ -49,25 +52,30 @@ const Container = styled.div`
     `}
 `
 const Hover = styled.div`
-  padding: 2rem ${props => props.pad || 2}rem;
   height: 100%;
-  :hover {
-    :before {
-      content: '';
-      width: 100%;
-      height: ${props => (props.isParent ? 5 : 10)}rem;
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      background: linear-gradient(transparent, ${purple});
-      z-index: 1;
-    }
-  }
+  ${props =>
+    !props.isUnavailable &&
+    css`
+      :hover {
+        :before {
+          content: '';
+          width: 100%;
+          height: ${props => (props.isParent ? 5 : 10)}rem;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          background: linear-gradient(transparent, ${purple});
+          z-index: 1;
+        }
+      }
+    `}
 `
 const Attributes = styled.div`
   display: inline-block;
   font-family: 'Roboto Mono';
   max-width: 8rem;
+  padding-left: 2rem;
+  padding-top: ${props => props.pad || 2}rem;
 `
 const Attribute = styled.div`
   margin-bottom: 0.5rem;
@@ -122,13 +130,21 @@ const ToggleParentArrow = styled.span`
   display: inline-block;
 `
 
-const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
+const Row = ({
+  isUnavailable,
+  p2p,
+  content,
+  pad,
+  to,
+  isParent,
+  isRegistered
+}) => {
   const history = useHistory()
   const location = useLocation()
   const [showParent, setShowParent] = useState(false)
   const [parent, setParent] = useState()
 
-  if (content.rawJSON.parents[0]) {
+  if (content && content.rawJSON.parents[0]) {
     useEffect(() => {
       ;(async () => {
         const [key, version] = content.rawJSON.parents[0].split('+')
@@ -137,18 +153,17 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
     }, [content])
   }
 
-  return (
+  return content ? (
     <>
       <Tabbable
         component={Container}
-        pad={pad}
         onClick={e => {
           if (!e || e.target.tagName !== 'A') history.push(to)
         }}
         isParent={isParent}
       >
         <Hover isParent={isParent}>
-          <Attributes>
+          <Attributes pad={pad}>
             <Attribute>
               {subtypes[content.rawJSON.subtype] || 'Unknown'}
             </Attribute>
@@ -220,6 +235,23 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
           isParent
         />
       )}
+    </>
+  ) : (
+    <>
+      <Container isUnavailable>
+        <Hover isUnavailable>
+          <Attributes pad={pad}>
+            <Attribute>Unknown</Attribute>
+          </Attributes>
+          <Content pad={pad}>
+            <Title>Content (temporarily) unavailable</Title>
+            <Authors>
+              There is nobody to download this content from at the moment.
+              Please try again later.
+            </Authors>
+          </Content>
+        </Hover>
+      </Container>
     </>
   )
 }

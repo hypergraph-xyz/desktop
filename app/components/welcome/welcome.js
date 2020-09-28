@@ -277,7 +277,8 @@ const dialogs = [
           . Want to financially support us? Become a{' '}
           <Anchor href='https://blog.libscie.org/p/6569c48c-7f53-4c63-ab68-e654a54abe96/'>
             supporting member
-          </Anchor>.
+          </Anchor>
+          .
         </p>
         <p>We're in the chat any time if you'd like to talk! 💬</p>
         <Form

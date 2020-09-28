@@ -13,6 +13,7 @@ import ShareModal from './share-modal'
 import sort from '../../lib/sort'
 import { ProfileContext } from '../../lib/context'
 import Loading, { LoadingFlex } from '../loading/loading'
+import pTimeout from 'p-timeout'
 
 const Header = styled.div`
   position: relative;
@@ -136,10 +137,17 @@ const Profile = ({ p2p }) => {
 
   const fetchContents = async profile => {
     const contents = await Promise.all(
-      profile.rawJSON.contents.map(url => {
+      profile.rawJSON.contents.map(async url => {
         const [key, version] = url.split('+')
         const download = true
-        return p2p.clone(encode(key), Number(version), download)
+        try {
+          return await pTimeout(
+            p2p.clone(encode(key), Number(version), download),
+            3000
+          )
+        } catch (_) {
+          return { rawJSON: { url: `hyper://${key}` }, metadata: { version } }
+        }
       })
     )
     contents.sort(sort)
@@ -336,7 +344,7 @@ const Profile = ({ p2p }) => {
       {contents ? (
         <>
           {contents.map(content => {
-            return (
+            return content.rawJSON.title ? (
               <ContentRow
                 key={`${content.rawJSON.url}+${content.metadata.version}`}
                 p2p={p2p}
@@ -345,6 +353,11 @@ const Profile = ({ p2p }) => {
                   content.rawJSON.url
                 )}/${content.metadata.version}`}
                 isRegistered
+              />
+            ) : (
+              <ContentRow
+                key={`${content.rawJSON.url}+${content.metadata.version}`}
+                isUnavailable
               />
             )
           })}
