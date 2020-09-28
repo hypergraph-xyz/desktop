@@ -21,6 +21,7 @@ let restarting = false
 const store = new Store()
 log.transports.file.level = 'debug'
 log.transports.ipc.level = 'debug'
+autoUpdater.logger = log
 
 ipcMain.handle('getStoreValue', (_, key, defaultValue) =>
   store.get(key, defaultValue)
@@ -211,8 +212,7 @@ const main = async () => {
   await app.whenReady()
   mainWindow = await createMainWindow()
   app.setAsDefaultProtocolClient('hypergraph')
-  autoUpdater.checkForUpdatesAndNotify()
-  autoUpdater.logger = log
+  if (app.isPackaged) autoUpdater.checkForUpdatesAndNotify()
 }
 
 main()
