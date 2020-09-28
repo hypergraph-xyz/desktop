@@ -6,16 +6,14 @@ import Search from '../icons/search-icon-1rem.svg'
 
 const Container = styled.div`
   text-align: center;
-  padding-top: 6rem;
-  padding-bottom: 2rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: 6rem 0;
   font-weight: 300;
   position: relative;
+  height: 100%;
 `
 const Title = styled.div`
   font-size: 2em;
-  margin-bottom: 77px; /* TODO */
+  padding: 0 2rem;
 `
 export const FooterAddContent = styled(AddContent)`
   vertical-align: middle;
@@ -33,12 +31,19 @@ export const FooterSearch = styled(Search)`
   margin-left: 4px;
   margin-right: 6px;
 `
+const Credits = styled.div`
+  position: absolute;
+  bottom: 2rem;
+  width: 100%;
+`
 
 const Footer = ({ title }) => (
   <Container>
     <Title>{title}</Title>
-    Cooperatively made with 💜 in Berlin by{' '}
-    <Anchor href='https://libscie.org'>Liberate Science GmbH</Anchor>
+    <Credits>
+      Cooperatively made with 💜 in Berlin by{' '}
+      <Anchor href='https://libscie.org'>Liberate Science GmbH</Anchor>
+    </Credits>
   </Container>
 )
 

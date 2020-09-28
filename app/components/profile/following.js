@@ -48,7 +48,7 @@ const Following = ({ p2p }) => {
   }, [])
 
   return (
-    <div>
+    <>
       <TopRow>
         <Title>Following</Title>
       </TopRow>
@@ -112,7 +112,7 @@ const Following = ({ p2p }) => {
           />
         </>
       )}
-    </div>
+    </>
   )
 }
 
