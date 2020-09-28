@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import { TopRow, Title } from '../layout/grid'
-import { remote, ipcRenderer } from 'electron'
+import { ipcRenderer } from 'electron'
 import { promises as fs } from 'fs'
 import { encode } from 'dat-encoding'
 import { useHistory, useParams } from 'react-router-dom'
@@ -47,7 +47,7 @@ const Create = ({ p2p }) => {
             parents: [parent].filter(Boolean)
           })
 
-          const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(url)}`
+          const dir = `${p2p.baseDir}/${encode(url)}`
           for (const [source, destination] of Object.entries(files)) {
             await fs.copyFile(source, `${dir}/${destination}`)
           }

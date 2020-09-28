@@ -32,7 +32,11 @@ if (remote.app.isPackaged) {
   window.onunhandledrejection = ev => showError(ev.reason)
 }
 
-const p2p = new P2P()
+const p2p = new P2P({
+  baseDir: !remote.app.isPackaged
+    ? `${remote.app.getPath('home')}/.p2pcommons-dev`
+    : undefined
+})
 window.addEventListener('beforeunload', () => p2p.destroy())
 
 ipcRenderer.on('export graph', async () => {

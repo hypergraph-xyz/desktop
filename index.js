@@ -19,6 +19,10 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 let mainWindow
 let restarting = false
 const store = new Store()
+const p2pcommonsDir = `${app.getPath('home')}/.p2pcommons${
+  !app.isPackaged ? '-dev' : ''
+}`
+
 log.transports.file.level = 'debug'
 log.transports.ipc.level = 'debug'
 autoUpdater.logger = log
@@ -67,9 +71,8 @@ const updateMenu = () => {
               if (response === 1) return
 
               await withRestart(async () => {
-                const dir = `${app.getPath('home')}/.p2pcommons`
-                await promisify(chmodr)(dir, 0o777)
-                await del(dir, { force: true })
+                await promisify(chmodr)(p2pcommonsDir, 0o777)
+                await del(p2pcommonsDir, { force: true })
                 store.clear()
               })
             }
@@ -84,7 +87,7 @@ const updateMenu = () => {
 
               await withRestart(async () => {
                 const zip = new AdmZip()
-                zip.addLocalFolder(`${app.getPath('home')}/.p2pcommons`)
+                zip.addLocalFolder(p2pcommonsDir)
                 zip.writeZip(filePath)
               })
             }

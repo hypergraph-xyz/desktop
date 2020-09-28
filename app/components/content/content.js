@@ -92,8 +92,8 @@ const ExportZip = ({ directory }) => (
   </Button>
 )
 
-const getContentDirectory = async ({ key, version }) => {
-  const directory = `${remote.app.getPath('home')}/.p2pcommons/${key}`
+const getContentDirectory = async ({ p2p, key, version }) => {
+  const directory = `${p2p.baseDir}/${key}`
   return version ? `${directory}+${version}` : directory
 }
 
@@ -119,7 +119,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
 
   useEffect(() => {
     ;(async () => {
-      const directory = await getContentDirectory({ key, version })
+      const directory = await getContentDirectory({ p2p, key, version })
       setDirectory(directory)
       await fetchFiles(directory)
     })()

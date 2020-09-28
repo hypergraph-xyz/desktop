@@ -143,7 +143,7 @@ const EditForm = ({
   if (url) {
     useEffect(() => {
       ;(async () => {
-        const dir = `${remote.app.getPath('home')}/.p2pcommons/${encode(url)}`
+        const dir = `${p2p.baseDir}/${encode(url)}`
         const paths = await fs.readdir(dir)
         const files = {}
         for (const path of paths) {
