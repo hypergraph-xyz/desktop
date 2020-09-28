@@ -274,12 +274,10 @@ const dialogs = [
           <Anchor href='https://chrishartgerink.typeform.com/to/VNfDMq'>
             testing
           </Anchor>
-          . If you're interested in becoming a supporting member, get in touch
-          at{' '}
-          <Anchor href='mailto:community@libscie.org'>
-            community@libscie.org
-          </Anchor>
-          .
+          . Want to financially support us? Become a{' '}
+          <Anchor href='https://blog.libscie.org/p/6569c48c-7f53-4c63-ab68-e654a54abe96/'>
+            supporting member
+          </Anchor>.
         </p>
         <p>We're in the chat any time if you'd like to talk! 💬</p>
         <Form
