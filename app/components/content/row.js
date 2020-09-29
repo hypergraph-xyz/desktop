@@ -234,7 +234,7 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
         <Content pad={pad}>
           <Title>Content temporarily unavailable</Title>
           <Authors>
-            Author(s) Unavailable
+            Author(s) unavailable
           </Authors>
         </Content>
       </Container>
