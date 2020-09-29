@@ -26,26 +26,22 @@ export default ({ p2p }) => {
         ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
       ]
 
-      const contents = []
-      for (const url of contentUrls) {
-        const [key, version] = url.split('+')
-        const download = true
-        try {
-          contents.push(
-            await pTimeout(
+      const contents = await Promise.all(
+        contentUrls.map(async url => {
+          const [key, version] = url.split('+')
+          const download = true
+          try {
+            return await pTimeout(
               p2p.clone(encode(key), Number(version), download),
               3000
             )
-          )
-        } catch (_) {
-          contents.push({
-            rawJSON: { url: `hyper://${key}` },
-            metadata: { version }
-          })
-        }
-      }
-
-      setContents(contents.sort(sort))
+          } catch (_) {
+            return { rawJSON: { url: `hyper://${key}` }, metadata: { version } }
+          }
+        })
+      )
+      contents.sort(sort)
+      setContents(contents)
     })()
   }, [])
 
