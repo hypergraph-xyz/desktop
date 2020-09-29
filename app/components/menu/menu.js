@@ -169,6 +169,9 @@ const Menu = ({ p2p, onFind }) => {
         <ButtonNavLink to='/following' history={history} id='menu-following'>
           Following
         </ButtonNavLink>
+        <ButtonNavLink to='/discover' history={history} id='menu-discover'>
+          Discover
+        </ButtonNavLink>
       </StyledRow>
       <FindButton onClick={onFind} id='menu-find'>
         <StyledSearch />

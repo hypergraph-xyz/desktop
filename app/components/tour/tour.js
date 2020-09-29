@@ -90,6 +90,10 @@ const Tour = ({ onClose, ...props }) => {
           )
         },
         {
+          selector: '#menu-discover',
+          content: <div>Discover content stored in the Hypergraph Vault.</div>
+        },
+        {
           selector: '#menu-find',
           content: <div>You can open Hypergraph links here.</div>
         },

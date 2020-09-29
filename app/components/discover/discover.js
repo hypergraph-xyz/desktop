@@ -1,55 +1,39 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TopRow, Title } from '../layout/grid'
 import ContentRow from '../content/row'
 import { encode } from 'dat-encoding'
 import Footer, { FooterAddContent, FooterSearch } from '../footer/footer'
-import { ProfileContext } from '../../lib/context'
-import sort from '../../lib/sort'
+import fetch from 'node-fetch'
 import Loading, { LoadingFlex } from '../loading/loading'
-import Tour from '../tour/tour'
-import { ipcRenderer } from 'electron'
 import cloneContents from '../../lib/clone-contents'
 
 export default ({ p2p }) => {
   const [contents, setContents] = useState()
-  const [isTourOpen, setIsTourOpen] = useState()
-  const { url: profileUrl } = useContext(ProfileContext)
+  const [isOffline, setIsOffline] = useState(false)
 
   useEffect(() => {
     ;(async () => {
-      const profile = await p2p.get(profileUrl)
-      const follows = await Promise.all(
-        profile.rawJSON.follows.map(url => p2p.clone(encode(url)))
-      )
-      const profiles = [profile, ...follows]
-      const contentUrls = [
-        ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
-      ]
-
-      const contents = await cloneContents({ p2p, urls: contentUrls })
-      contents.sort(sort)
+      let res
+      try {
+        res = await fetch('https://vault.hypergraph.xyz/api/discover')
+      } catch (_) {
+        setIsOffline(true)
+        return
+      }
+      const urls = (await res.json()).filter(url => Boolean(url.split('+')[1]))
+      const contents = await cloneContents({ p2p, urls })
       setContents(contents)
     })()
-  }, [])
-
-  useEffect(() => {
-    ;(async () => {
-      setIsTourOpen(await ipcRenderer.invoke('getStoreValue', 'tour', true))
-    })()
-  }, [])
-
-  useEffect(() => {
-    const onTour = (_, isTourOpen) => setIsTourOpen(isTourOpen)
-    ipcRenderer.on('tour', onTour)
-    return () => ipcRenderer.removeListener('tour', onTour)
   }, [])
 
   return (
     <>
       <TopRow>
-        <Title>Feed</Title>
+        <Title>Discover</Title>
       </TopRow>
-      {contents ? (
+      {isOffline ? (
+        <Footer title='Only available when connected to the Internet ☝' />
+      ) : contents ? (
         <>
           {contents.map(content => {
             return content.rawJSON.title ? (
@@ -87,12 +71,6 @@ export default ({ p2p }) => {
         <LoadingFlex>
           <Loading />
         </LoadingFlex>
-      )}
-      {isTourOpen && (
-        <Tour
-          isOpen={isTourOpen}
-          onClose={() => ipcRenderer.invoke('setStoreValue', 'tour', false)}
-        />
       )}
     </>
   )

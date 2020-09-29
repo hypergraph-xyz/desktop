@@ -13,7 +13,7 @@ import ShareModal from './share-modal'
 import sort from '../../lib/sort'
 import { ProfileContext } from '../../lib/context'
 import Loading, { LoadingFlex } from '../loading/loading'
-import pTimeout from 'p-timeout'
+import cloneContents from '../../lib/clone-contents'
 
 const Header = styled.div`
   position: relative;
@@ -136,20 +136,10 @@ const Profile = ({ p2p }) => {
   const descriptionRef = useRef()
 
   const fetchContents = async profile => {
-    const contents = await Promise.all(
-      profile.rawJSON.contents.map(async url => {
-        const [key, version] = url.split('+')
-        const download = true
-        try {
-          return await pTimeout(
-            p2p.clone(encode(key), Number(version), download),
-            3000
-          )
-        } catch (_) {
-          return { rawJSON: { url: `hyper://${key}` }, metadata: { version } }
-        }
-      })
-    )
+    const contents = await cloneContents({
+      p2p,
+      urls: profile.rawJSON.contents
+    })
     contents.sort(sort)
     setContents(contents)
   }
