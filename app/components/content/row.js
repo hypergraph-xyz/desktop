@@ -71,8 +71,8 @@ const Attributes = styled.div`
   display: inline-block;
   font-family: 'Roboto Mono';
   max-width: 8rem;
-  padding-left: 2rem;
-  padding-top: ${props => props.pad || 2}rem;
+  padding-left: ${props => props.pad || 2}rem;
+  padding-top: 2rem;
 `
 const Attribute = styled.div`
   margin-bottom: 0.5rem;
