@@ -119,23 +119,21 @@ const EditForm = ({
     ;(async () => {
       const profiles = await p2p.listProfiles()
       setProfiles(profiles)
+
+      const contentUrls = [
+        ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
+      ]
       setPotentialParents(
-        (
-          await Promise.all(
-            profiles.map(profile =>
-              Promise.all(
-                profile.rawJSON.contents
-                  .map(url => url.split('+'))
-                  .filter(
-                    ([key]) => !url || encode(key) !== encode(url.split('+')[0])
-                  )
-                  .map(([key, version]) =>
-                    p2p.clone(encode(key), version, /* download */ false)
-                  )
-              )
+        await Promise.all(
+          contentUrls
+            .map(url => url.split('+'))
+            .filter(
+              ([key]) => !url || encode(key) !== encode(url.split('+')[0])
             )
-          )
-        ).flat()
+            .map(([key, version]) =>
+              p2p.clone(encode(key), version, /* download */ false)
+            )
+        )
       )
     })()
   }, [])
