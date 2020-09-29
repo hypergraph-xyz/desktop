@@ -127,15 +127,7 @@ const ToggleParentArrow = styled.span`
   display: inline-block;
 `
 
-const Row = ({
-  isUnavailable,
-  p2p,
-  content,
-  pad,
-  to,
-  isParent,
-  isRegistered
-}) => {
+const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
   const history = useHistory()
   const location = useLocation()
   const [showParent, setShowParent] = useState(false)

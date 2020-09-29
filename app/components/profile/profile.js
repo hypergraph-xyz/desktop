@@ -357,7 +357,6 @@ const Profile = ({ p2p }) => {
             ) : (
               <ContentRow
                 key={`${content.rawJSON.url}+${content.metadata.version}`}
-                isUnavailable
               />
             )
           })}

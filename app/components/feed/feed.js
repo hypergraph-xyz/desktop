@@ -78,7 +78,6 @@ export default ({ p2p }) => {
             ) : (
               <ContentRow
                 key={`${content.rawJSON.url}+${content.metadata.version}`}
-                isUnavailable
               />
             )
           })}
