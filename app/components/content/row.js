@@ -40,6 +40,7 @@ const Container = styled.div`
     props.isParent ? 8.5 : props.isUnavailable ? 8 : 18.5}rem;
   box-sizing: border-box;
   ${props => props.isUnavailable && `color: ${gray};`}
+  flex-shrink: 0;
 
   ${props =>
     !props.isParent &&
@@ -53,22 +54,18 @@ const Container = styled.div`
 `
 const Hover = styled.div`
   height: 100%;
-  ${props =>
-    !props.isUnavailable &&
-    css`
-      :hover {
-        :before {
-          content: '';
-          width: 100%;
-          height: ${props => (props.isParent ? 5 : 10)}rem;
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          background: linear-gradient(transparent, ${purple});
-          z-index: 1;
-        }
-      }
-    `}
+  :hover {
+    :before {
+      content: '';
+      width: 100%;
+      height: ${props => (props.isParent ? 5 : 10)}rem;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background: linear-gradient(transparent, ${purple});
+      z-index: 1;
+    }
+  }
 `
 const Attributes = styled.div`
   display: inline-block;
@@ -239,18 +236,16 @@ const Row = ({
   ) : (
     <>
       <Container isUnavailable>
-        <Hover isUnavailable>
-          <Attributes pad={pad}>
-            <Attribute>Unknown</Attribute>
-          </Attributes>
-          <Content pad={pad}>
-            <Title>Content (temporarily) unavailable</Title>
-            <Authors>
-              There is nobody to download this content from at the moment.
-              Please try again later.
-            </Authors>
-          </Content>
-        </Hover>
+        <Attributes pad={pad}>
+          <Attribute>Unknown</Attribute>
+        </Attributes>
+        <Content pad={pad}>
+          <Title>Content (temporarily) unavailable</Title>
+          <Authors>
+            There is nobody to download this content from at the moment. Please
+            try again later.
+          </Authors>
+        </Content>
       </Container>
     </>
   )
