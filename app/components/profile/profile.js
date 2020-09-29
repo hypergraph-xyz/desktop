@@ -174,7 +174,7 @@ const Profile = ({ p2p }) => {
   useEffect(() => {
     ;(async () => {
       setContents(null)
-      const profile = await p2p.clone(encode(key), null, false /* download */)
+      const profile = await p2p.clone(encode(key), null)
       setProfile(profile)
       setNameForAvatar(profile.rawJSON.title)
       await fetchContents(profile)

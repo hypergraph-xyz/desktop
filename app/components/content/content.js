@@ -113,7 +113,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
 
   useEffect(() => {
     ;(async () => {
-      setContent(await p2p.clone(key, version, /* download */ true))
+      setContent(await p2p.clone(key, version))
     })()
   }, [key, version])
 
@@ -127,9 +127,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
 
   const fetchAuthors = async () => {
     const authors = await Promise.all(
-      content.rawJSON.authors.map(key =>
-        p2p.clone(encode(key), null, /* download */ false)
-      )
+      content.rawJSON.authors.map(key => p2p.clone(encode(key)))
     )
     setAuthors(authors)
   }
@@ -138,7 +136,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
     const parents = await Promise.all(
       content.rawJSON.parents.map(url => {
         const [key, version] = url.split('+')
-        return p2p.clone(encode(key), version, /* download */ false)
+        return p2p.clone(encode(key), version)
       })
     )
     setParents(parents)

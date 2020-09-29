@@ -17,8 +17,7 @@ const Edit = ({ p2p }) => {
 
   useEffect(() => {
     ;(async () => {
-      const download = false
-      const content = await p2p.clone(key, Number(version), download)
+      const content = await p2p.clone(key, Number(version))
       setContent(content)
     })()
   }, [key, version])

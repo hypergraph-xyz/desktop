@@ -94,7 +94,7 @@ ipcRenderer.on('export graph', async () => {
     for (const url of urls) {
       if (!nodesByUrl[url]) {
         const [key, version] = url.split('+')
-        const module = await p2p.clone(key, version, /* download */ false)
+        const module = await p2p.clone(key, version)
         const node = {
           url,
           type: module.rawJSON.type,

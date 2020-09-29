@@ -130,9 +130,7 @@ const EditForm = ({
             .filter(
               ([key]) => !url || encode(key) !== encode(url.split('+')[0])
             )
-            .map(([key, version]) =>
-              p2p.clone(encode(key), version, /* download */ false)
-            )
+            .map(([key, version]) => p2p.clone(encode(key), version))
         )
       )
     })()

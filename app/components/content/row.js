@@ -137,7 +137,7 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
     useEffect(() => {
       ;(async () => {
         const [key, version] = content.rawJSON.parents[0].split('+')
-        setParent(await p2p.clone(encode(key), version, /* download */ false))
+        setParent(await p2p.clone(encode(key), version))
       })()
     }, [content])
   }
