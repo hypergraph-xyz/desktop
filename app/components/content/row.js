@@ -232,10 +232,9 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
           <Attribute>Unknown</Attribute>
         </Attributes>
         <Content pad={pad}>
-          <Title>Content (temporarily) unavailable</Title>
+          <Title>Content temporarily unavailable</Title>
           <Authors>
-            There is nobody to download this content from at the moment. Please
-            try again later.
+            Author(s) Unavailable
           </Authors>
         </Content>
       </Container>
