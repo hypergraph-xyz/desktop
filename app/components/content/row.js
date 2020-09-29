@@ -33,10 +33,14 @@ const AddContentWithParent = styled(Plus)`
   }
 `
 const Container = styled.div`
+  padding: ${props => props.pad || 0}rem;
   border-bottom: 2px solid ${purple};
   position: relative;
-  height: ${props => (props.isParent ? 136 : 296)}px;
+  height: ${props =>
+    props.isParent ? 8.5 : props.isUnavailable ? 8 : 18.5}rem;
   box-sizing: border-box;
+  ${props => props.isUnavailable && `color: ${gray};`}
+  flex-shrink: 0;
 
   ${props =>
     !props.isParent &&
@@ -49,7 +53,6 @@ const Container = styled.div`
     `}
 `
 const Hover = styled.div`
-  padding: 2rem ${props => props.pad || 2}rem;
   height: 100%;
   :hover {
     :before {
@@ -68,6 +71,8 @@ const Attributes = styled.div`
   display: inline-block;
   font-family: 'Roboto Mono';
   max-width: 8rem;
+  padding-left: ${props => props.pad || 2}rem;
+  padding-top: 2rem;
 `
 const Attribute = styled.div`
   margin-bottom: 0.5rem;
@@ -128,7 +133,7 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
   const [showParent, setShowParent] = useState(false)
   const [parent, setParent] = useState()
 
-  if (content.rawJSON.parents[0]) {
+  if (content && content.rawJSON.parents[0]) {
     useEffect(() => {
       ;(async () => {
         const [key, version] = content.rawJSON.parents[0].split('+')
@@ -137,18 +142,17 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
     }, [content])
   }
 
-  return (
+  return content ? (
     <>
       <Tabbable
         component={Container}
-        pad={pad}
         onClick={e => {
           if (!e || e.target.tagName !== 'A') history.push(to)
         }}
         isParent={isParent}
       >
         <Hover isParent={isParent}>
-          <Attributes>
+          <Attributes pad={pad}>
             <Attribute>
               {subtypes[content.rawJSON.subtype] || 'Unknown'}
             </Attribute>
@@ -220,6 +224,20 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
           isParent
         />
       )}
+    </>
+  ) : (
+    <>
+      <Container isUnavailable>
+        <Attributes pad={pad}>
+          <Attribute>Unknown</Attribute>
+        </Attributes>
+        <Content pad={pad}>
+          <Title>Content temporarily unavailable</Title>
+          <Authors>
+            Author(s) unavailable
+          </Authors>
+        </Content>
+      </Container>
     </>
   )
 }

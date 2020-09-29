@@ -8,6 +8,7 @@ import sort from '../../lib/sort'
 import Loading, { LoadingFlex } from '../loading/loading'
 import Tour from '../tour/tour'
 import { ipcRenderer } from 'electron'
+import pTimeout from 'p-timeout'
 
 export default ({ p2p }) => {
   const [contents, setContents] = useState()
@@ -25,18 +26,22 @@ export default ({ p2p }) => {
         ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
       ]
 
-      const contents = []
-      for (const url of contentUrls) {
-        try {
+      const contents = await Promise.all(
+        contentUrls.map(async url => {
           const [key, version] = url.split('+')
-          const content = await p2p.clone(encode(key), version)
-          contents.push(content)
-        } catch (err) {
-          console.error(err)
-        }
-      }
-
-      setContents(contents.flat().sort(sort))
+          const download = true
+          try {
+            return await pTimeout(
+              p2p.clone(encode(key), Number(version), download),
+              3000
+            )
+          } catch (_) {
+            return { rawJSON: { url: `hyper://${key}` }, metadata: { version } }
+          }
+        })
+      )
+      contents.sort(sort)
+      setContents(contents)
     })()
   }, [])
 
@@ -60,7 +65,7 @@ export default ({ p2p }) => {
       {contents ? (
         <>
           {contents.map(content => {
-            return (
+            return content.rawJSON.title ? (
               <ContentRow
                 key={`${content.rawJSON.url}+${content.metadata.version}`}
                 p2p={p2p}
@@ -69,6 +74,10 @@ export default ({ p2p }) => {
                   content.metadata.version
                 }`}
                 isRegistered
+              />
+            ) : (
+              <ContentRow
+                key={`${content.rawJSON.url}+${content.metadata.version}`}
               />
             )
           })}

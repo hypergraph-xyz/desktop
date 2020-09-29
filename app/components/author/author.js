@@ -38,7 +38,7 @@ const Author = ({ p2p, url, content, Loading }) => {
   }, [url])
 
   return isUnavailable ? (
-    'Author Unavailable'
+    'Author unavailable'
   ) : !name ? (
     <Loading style={{ display: 'inline', verticalAlign: 'top' }} />
   ) : isRegistered ? (
