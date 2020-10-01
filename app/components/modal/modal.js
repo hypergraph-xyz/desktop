@@ -12,7 +12,7 @@ const Overlay = styled.div`
   top: 0;
   bottom: 0;
   background-color: ${props => props.color};
-  z-index: 2;
+  z-index: 3;
 `
 const StyledModal = styled.div`
   position: fixed;
@@ -26,7 +26,7 @@ const StyledModal = styled.div`
   padding: 2rem;
   box-sizing: border-box;
   border: ${props => props.border && `2px solid ${purple}`};
-  z-index: 3;
+  z-index: 4;
 `
 const Modal = ({ height, width, overlay, border, onClose, children }) => (
   <>
