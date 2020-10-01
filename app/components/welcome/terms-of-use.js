@@ -306,7 +306,7 @@ export default () => (
           Formal takedown notices can be sent to{' '}
           <a href='mailto:copyright@libscie.org'>copyright@libscie.org</a> and
           must enumerate all claims as exactly as possible. By sending a
-          takedown notice, ou agree to public disclosure of the takedown notice
+          takedown notice, you agree to public disclosure of the takedown notice
           (we will redact any information regarding natural persons). We will
           not take into account any claims that do not have a{' '}
           <a href='https://en.wikipedia.org/wiki/Burden_of_proof_(law)#Preponderance_of_the_evidence'>
@@ -327,9 +327,10 @@ export default () => (
           10365 Berlin (DEU)
         </p>
         <p id='40cb04cf-561d-4b56-9af8-67f7996dde81' className=''>
-          If we assess a takedown claim as valid (or are court ordered), we will
-          check our servers for copies of the relevant content and add it to our
-          block-list for any services related to Hypergraph.
+          If we assess a takedown claim as valid (or are court ordered to take
+          down information), we will check our servers for copies of the
+          relevant content, remove those copies, and add it to our block-list
+          for any services related to Hypergraph.
         </p>
         <h1 id='c638a5ae-e935-41b9-be94-d8d0793ccf34' className=''>
           Data policy
@@ -386,8 +387,8 @@ export default () => (
         </ul>
         <p id='16163bd7-8e3c-422b-8f29-6dc958e9ffb5' className=''>
           Please see their respective privacy policies to understand what
-          information they store and how. We do not actively share any of the
-          collected information outside Liberate Science GmbH.
+          information they may store and how. We do not actively share any of
+          the collected information outside Liberate Science GmbH.
         </p>
         <h2 id='427cd77a-a43c-4c69-bfff-d0bda1c55b75' className=''>
           Information collected
@@ -433,8 +434,8 @@ export default () => (
           </li>
         </ul>
         <p id='1912e12a-d359-44c2-b412-54cc3626082a' className=''>
-          Note that the services we use have passive data collection in place
-          that we might have access to as well. Most notably is our Chatra
+          Note that the services we use may have passive data collection in
+          place that we might have access to as well. Most notably is our Chatra
           integration, which provides us with real-time access on:
         </p>
         <ul id='84f5676e-064f-4fde-a72d-8d37240637b9' className='bulleted-list'>
@@ -457,8 +458,8 @@ export default () => (
         </h2>
         <p id='654f61ff-f038-4dd5-ac1f-1f84eced0447' className=''>
           To protect your data and give you full control over the information we
-          collect from you, we explicitly do not integrate the following on our
-          Pages:
+          collect from you, we explicitly do not integrate the following in
+          Hypergraph:
         </p>
         <ul id='e045ef65-9a9b-4e23-a747-701e613eb172' className='bulleted-list'>
           <li>...analytics cookies</li>

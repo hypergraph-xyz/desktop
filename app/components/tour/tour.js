@@ -25,9 +25,14 @@ const Tour = ({ onClose, ...props }) => {
         {
           content: (
             <div>
+              <p>Welcome to Hypergraph (Beta) 🥳</p>
               <p>
-                Welcome to Hypergraph (Beta) 🥳 We'll get you started with a
-                quick tour of the most important things.
+                The beta has some rough edges, so please be patient and kind to
+                it (especially when downloading files).
+              </p>
+              <p>
+                We'll get you started with a quick tour of the most important
+                things.
               </p>
             </div>
           )
