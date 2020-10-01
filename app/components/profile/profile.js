@@ -68,7 +68,7 @@ const Indicator = styled.div`
 const Description = styled.div`
   position: absolute;
   left: 11rem;
-  top: calc(2rem - 4px);
+  top: calc(4rem - 4px);
   right: 146px;
   overflow: hidden;
   text-overflow: ellipsis;
