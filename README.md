@@ -27,6 +27,14 @@ npm install
 npm start
 ```
 
+## Releasing
+
+```bash
+$ npm run release
+$ # save the draft and wait for the commit builds to complete
+$ # hit publish draft once done
+```
+
 ## Glossary
 
 If you're interested in learning more about our terminology, the [Hypergraph glossary](https://www.notion.so/Glossary-d4bdf18fb4624c049c7a2663559ef5ad) explains many of the terms we use across Hypergraph products and documentation.
