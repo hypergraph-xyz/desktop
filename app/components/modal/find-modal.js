@@ -11,6 +11,7 @@ import { gray, red, yellow } from '../../lib/colors'
 import { useHistory } from 'react-router-dom'
 import { encode } from 'dat-encoding'
 import { decode } from '../../lib/hypergraph-url'
+import { cloneOne } from '../../lib/clone-contents'
 
 const StyledButton = styled(Button)`
   margin-right: 0;
@@ -48,8 +49,8 @@ const FindModal = ({ onClose, prefilledUrl, p2p }) => {
   const [isLoading, setIsLoading] = useState()
   const [url, setUrl] = useState(prefilledUrl)
   const [isUnavailable, setIsUnavailable] = useState()
+  const [isCanceled, setIsCanceled] = useState()
   const inputEl = useRef()
-  const clonePromise = useRef()
   const history = useHistory()
 
   let isValid = false
@@ -59,9 +60,7 @@ const FindModal = ({ onClose, prefilledUrl, p2p }) => {
   } catch (_) {}
 
   const onCloseWithCleanup = () => {
-    if (clonePromise.current) {
-      clonePromise.current.cancel()
-    }
+    setIsCanceled(true)
     onClose()
   }
 
@@ -79,27 +78,26 @@ const FindModal = ({ onClose, prefilledUrl, p2p }) => {
           ev.preventDefault()
 
           if (isLoading) {
-            clonePromise.current.cancel()
+            setIsCanceled(true)
             setIsLoading(false)
           } else {
             setIsUnavailable(false)
             const [, key, version] = /([^+]+)\+?([^/+]+)?/.exec(
               inputEl.current.value
             )
-            clonePromise.current = p2p.clone(decode(key), version)
             setIsLoading(true)
             let module
 
             try {
-              module = await clonePromise.current
+              module = await cloneOne({ p2p, key: decode(key), version })
             } catch (err) {
-              if (clonePromise.current.isCanceled) return
               console.error(err)
               setIsUnavailable(true)
               setIsLoading(false)
               return
             }
 
+            if (isCanceled) return
             setIsLoading(false)
             onClose()
             if (module.rawJSON.type === 'profile') {

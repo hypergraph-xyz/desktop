@@ -8,7 +8,7 @@ import sort from '../../lib/sort'
 import Loading, { LoadingFlex } from '../loading/loading'
 import Tour from '../tour/tour'
 import { ipcRenderer } from 'electron'
-import cloneContents from '../../lib/clone-contents'
+import { cloneMany } from '../../lib/clone-contents'
 
 export default ({ p2p }) => {
   const [contents, setContents] = useState()
@@ -26,7 +26,7 @@ export default ({ p2p }) => {
         ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
       ]
 
-      const contents = await cloneContents({ p2p, urls: contentUrls })
+      const contents = await cloneMany({ p2p, urls: contentUrls })
       contents.sort(sort)
       setContents(contents)
     })()

@@ -5,7 +5,7 @@ import { encode } from 'dat-encoding'
 import Footer, { FooterAddContent, FooterSearch } from '../footer/footer'
 import fetch from 'node-fetch'
 import Loading, { LoadingFlex } from '../loading/loading'
-import cloneContents from '../../lib/clone-contents'
+import { cloneMany } from '../../lib/clone-contents'
 
 export default ({ p2p }) => {
   const [contents, setContents] = useState()
@@ -21,7 +21,7 @@ export default ({ p2p }) => {
         return
       }
       const urls = (await res.json()).filter(url => Boolean(url.split('+')[1]))
-      const contents = await cloneContents({ p2p, urls })
+      const contents = await cloneMany({ p2p, urls })
       setContents(contents)
     })()
   }, [])

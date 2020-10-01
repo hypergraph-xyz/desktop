@@ -13,7 +13,7 @@ import ShareModal from './share-modal'
 import sort from '../../lib/sort'
 import { ProfileContext } from '../../lib/context'
 import Loading, { LoadingFlex } from '../loading/loading'
-import cloneContents from '../../lib/clone-contents'
+import { cloneMany } from '../../lib/clone-contents'
 
 const Header = styled.div`
   position: relative;
@@ -136,7 +136,7 @@ const Profile = ({ p2p }) => {
   const descriptionRef = useRef()
 
   const fetchContents = async profile => {
-    const contents = await cloneContents({
+    const contents = await cloneMany({
       p2p,
       urls: profile.rawJSON.contents
     })
