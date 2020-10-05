@@ -6,6 +6,7 @@ import Footer, { FooterAddContent, FooterSearch } from '../footer/footer'
 import fetch from 'node-fetch'
 import Loading, { LoadingFlex } from '../loading/loading'
 import { cloneMany } from '../../lib/clone-contents'
+import { vaultUrl } from '../../lib/vault'
 
 export default ({ p2p }) => {
   const [contents, setContents] = useState()
@@ -15,7 +16,7 @@ export default ({ p2p }) => {
     ;(async () => {
       let res
       try {
-        res = await fetch('https://vault.hypergraph.xyz/api/discover')
+        res = await fetch(`${vaultUrl}/api/discover`)
       } catch (_) {
         setIsOffline(true)
         return

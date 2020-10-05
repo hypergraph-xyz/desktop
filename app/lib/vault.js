@@ -1,5 +1,9 @@
 import fetch from 'node-fetch'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
+
+export const vaultUrl = remote.app.isPackaged
+  ? 'https://vault.hypergraph.xyz'
+  : 'https://dev.vault.hypergraph.xyz'
 
 export const archiveModule = async (url, { queue = true } = {}) => {
   console.time('archive')
@@ -12,7 +16,7 @@ export const archiveModule = async (url, { queue = true } = {}) => {
     res = await fetch('http://localhost:8080/api/modules', opts)
   } catch (_) {
     try {
-      res = await fetch('https://vault.hypergraph.xyz/api/modules', opts)
+      res = await fetch(`${vaultUrl}/api/modules`, opts)
     } catch (err) {
       console.error(err)
       console.timeEnd('archive')
