@@ -4,9 +4,10 @@ import { black, white } from '../../lib/colors'
 import Menu from '../menu/menu'
 import 'focus-visible'
 import { Helmet } from 'react-helmet'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 import { productName } from '../../../package'
 import { useLocation, useHistory } from 'react-router-dom'
+import analytics from '../../lib/analytics'
 
 import RobotoRegular from './fonts/Roboto/Roboto-Regular.ttf'
 import RobotoLight from './fonts/Roboto/Roboto-Light.ttf'
@@ -85,10 +86,9 @@ const Layout = ({ children, p2p, onFind }) => {
   }, [])
 
   useEffect(() => {
-    if (!window._paq) return
-    window._paq.push(['setCustomUrl', location.pathname])
-    window._paq.push(['trackPageView'])
-  }, [location, window._paq])
+    analytics.setCustomUrl(location.pathname)
+    analytics.trackPageView()
+  }, [location, analytics.available()])
 
   useEffect(() => {
     ;(async () => {
@@ -120,7 +120,7 @@ const Layout = ({ children, p2p, onFind }) => {
               (function() {
                 var u="https://analytics.libscie.org/";
                 _paq.push(['setTrackerUrl', u+'matomo.php']);
-                _paq.push(['setSiteId', '4']);
+                _paq.push(['setSiteId', '${remote.app.isPackaged ? 4 : 5}']);
                 var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
                 g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
               })();

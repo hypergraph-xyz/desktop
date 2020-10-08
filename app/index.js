@@ -18,8 +18,10 @@ import { remote, ipcRenderer } from 'electron'
 import { ProfileContext } from './lib/context'
 import FindModal from './components/modal/find-modal'
 import { archiveModule } from './lib/vault'
+import analytics from './lib/analytics'
 
-const showError = err => {
+const handleError = err => {
+  analytics.trackEvent('Error', err.message, err.stack)
   window.alert(
     'An unknown error has happened.\n\n' +
       'Please send a screenshot of this window alongside a description of what ' +
@@ -29,8 +31,8 @@ const showError = err => {
 }
 
 if (remote.app.isPackaged) {
-  window.onerror = (_, __, ___, ____, err) => showError(err)
-  window.onunhandledrejection = ev => showError(ev.reason)
+  window.onerror = (_, __, ___, ____, err) => handleError(err)
+  window.onunhandledrejection = ev => handleError(ev.reason)
 }
 
 const p2p = new P2P({
