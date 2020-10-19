@@ -229,7 +229,7 @@ const EditForm = ({
             </option>
           ))}
         </Select>
-        <Label htmlFor='files'>Upload files</Label>
+        <Label htmlFor='files'>Add files</Label>
         <Info>
           These files are copied to Hypergraph. If you want to work on them
           further, you can choose to work using Hypergraph’s copies or reimport
