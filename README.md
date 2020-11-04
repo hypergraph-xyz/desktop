@@ -6,13 +6,13 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Hypergraph is a tool for creating and publishing research projects _as-you-go_, built upon the [p2pcommons](https://p2pcommons.com).
+Hypergraph is a tool for publishing research step by step, built upon the [p2pcommons](https://p2pcommons.com), a distributed information layer.
 
 <img src="/docs/screenshots/screenshot-content.png" align="right" height="300" />
 
 With Hypergraph, we aim to reinvent the publication process in a way that empowers researchers to do better science. Science that is transparent, accessible to everyone and free from publication bias, time-consuming bureaucracy and centralized control.
 
-Right now, Hypergraph is in active development. The current version supports an offline _as-you-go_ workflow and demonstrates some of Hypergraph's core concepts.
+Right now, Hypergraph is in active development. [Hypergraph (Beta) was released on Oct 1, 2020](https://blog.libscie.org/introducing-hypergraph-beta/).
 
 ## Installation
 
