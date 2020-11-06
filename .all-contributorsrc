@@ -58,7 +58,12 @@
       "contributions": [
         "ideas",
         "bug",
-        "userTesting"
+        "userTesting",
+        "maintenance",
+        "code",
+        "financial",
+        "business",
+        "fundingFinding"
       ]
     },
     {
