@@ -32,47 +32,55 @@ export default ({ p2p }) => {
       <TopRow>
         <Title>Discover</Title>
       </TopRow>
-      {isOffline ? (
-        <Footer title='Only available when connected to the Internet ☝' />
-      ) : contents ? (
-        <>
-          {contents.map(content => {
-            return content.rawJSON.title ? (
-              <ContentRow
-                key={`${content.rawJSON.url}+${content.metadata.version}`}
-                p2p={p2p}
-                content={content}
-                to={`/contents/${encode(content.rawJSON.url)}/${
+      {isOffline
+        ? (
+          <Footer title='Only available when connected to the Internet ☝' />
+          )
+        : contents
+          ? (
+            <>
+              {contents.map(content => {
+                return content.rawJSON.title
+                  ? (
+                    <ContentRow
+                      key={`${content.rawJSON.url}+${content.metadata.version}`}
+                      p2p={p2p}
+                      content={content}
+                      to={`/contents/${encode(content.rawJSON.url)}/${
                   content.metadata.version
-                }`}
-                isRegistered
-              />
-            ) : (
-              <ContentRow
-                key={`${content.rawJSON.url}+${content.metadata.version}`}
-              />
-            )
-          })}
-          <Footer
-            title={
-              <>
-                {contents.length ? (
-                  'You’ve reached the end! ✌️'
-                ) : (
+                      }`}
+                      isRegistered
+                    />
+                    )
+                  : (
+                    <ContentRow
+                      key={`${content.rawJSON.url}+${content.metadata.version}`}
+                    />
+                    )
+              })}
+              <Footer
+                title={
                   <>
-                    Add content <FooterAddContent /> or <FooterSearch /> Find
-                    someone to follow
+                    {contents.length
+                      ? (
+                          'You’ve reached the end! ✌️'
+                        )
+                      : (
+                        <>
+                          Add content <FooterAddContent /> or <FooterSearch /> Find
+                          someone to follow
+                        </>
+                        )}
                   </>
-                )}
-              </>
-            }
-          />
-        </>
-      ) : (
-        <LoadingFlex>
-          <Loading />
-        </LoadingFlex>
-      )}
+                }
+              />
+            </>
+            )
+          : (
+            <LoadingFlex>
+              <Loading />
+            </LoadingFlex>
+            )}
     </>
   )
 }

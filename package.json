@@ -13,7 +13,7 @@
     "release": "np --no-publish --no-yarn --no-cleanup --any-branch",
     "start": "webpack-dev-server",
     "start:main": "electron .",
-    "test": "prettier-standard && standard && npm run test:integration",
+    "test": "standard && npm run test:integration",
     "test:integration": "tap --no-cov",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -61,7 +61,6 @@
     "electron-builder-notarize": "^1.2.0",
     "file-loader": "^6.0.0",
     "np": "^6.3.2",
-    "prettier-standard": "^16.4.1",
     "spectron": "^11.1.0",
     "standard": "^14.3.4",
     "tap": "^14.9.2",

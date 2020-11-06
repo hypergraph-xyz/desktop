@@ -148,13 +148,17 @@ const Menu = ({ p2p, onFind }) => {
           }[networkStatus]
         }
       >
-        {networkStatus === 'green' ? (
-          <NetworkStatusGreen />
-        ) : networkStatus === 'yellow' ? (
-          <NetworkStatusYellow />
-        ) : (
-          <NetworkStatusRed />
-        )}
+        {networkStatus === 'green'
+          ? (
+            <NetworkStatusGreen />
+            )
+          : networkStatus === 'yellow'
+            ? (
+              <NetworkStatusYellow />
+              )
+            : (
+              <NetworkStatusRed />
+              )}
       </NetworkStatusContainer>
       <StyledRow>
         <ButtonNavLink to='/' exact history={history} id='menu-feed'>

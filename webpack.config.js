@@ -3,6 +3,7 @@
 const { spawn } = require('child_process')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
+const path = require('path')
 
 module.exports = (_, { mode = 'development' }) => {
   const port = 1212
@@ -38,7 +39,7 @@ module.exports = (_, { mode = 'development' }) => {
     },
 
     output: {
-      path: `${__dirname}/build`,
+      path: path.join(__dirname, 'build'),
       publicPath,
       filename: 'bundle.js'
     },
@@ -46,7 +47,7 @@ module.exports = (_, { mode = 'development' }) => {
     plugins: [
       new HtmlWebpackPlugin({
         inject: true,
-        template: `${__dirname}/static/index.html`
+        template: path.join(__dirname, 'static/index.html')
       })
     ],
 
@@ -62,7 +63,7 @@ module.exports = (_, { mode = 'development' }) => {
 
     target: 'electron-renderer',
 
-    entry: `${__dirname}/app/index.js`,
+    entry: path.join(__dirname, 'app/index.js'),
 
     mode,
 
@@ -75,7 +76,7 @@ module.exports = (_, { mode = 'development' }) => {
       port,
       publicPath,
       noInfo: true,
-      contentBase: `${__dirname}/static`,
+      contentBase: path.join(__dirname, 'static'),
       watchOptions: {
         aggregateTimeout: 300,
         ignored: /node_modules/,

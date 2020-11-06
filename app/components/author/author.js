@@ -37,19 +37,21 @@ const Author = ({ p2p, url, content, Loading }) => {
     })()
   }, [url])
 
-  return isUnavailable ? (
-    'Author unavailable'
-  ) : !name ? (
-    <Loading style={{ display: 'inline', verticalAlign: 'top' }} />
-  ) : isRegistered ? (
-    <Link component={Anchor} to={`/profiles/${encode(url)}`}>
-      {name}
-    </Link>
-  ) : (
-    <AuthorWithoutContentRegistration key={url}>
-      {name}
-    </AuthorWithoutContentRegistration>
-  )
+  return isUnavailable
+    ? 'Author unavailable'
+    : !name
+        ? (<Loading style={{ display: 'inline', verticalAlign: 'top' }} />)
+        : isRegistered
+          ? (
+            <Link component={Anchor} to={`/profiles/${encode(url)}`}>
+              {name}
+            </Link>
+            )
+          : (
+            <AuthorWithoutContentRegistration key={url}>
+              {name}
+            </AuthorWithoutContentRegistration>
+            )
 }
 
 export default Author
