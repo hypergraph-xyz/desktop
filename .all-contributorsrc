@@ -74,6 +74,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "dpaez",
+      "name": "Diego",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/837500?v=4",
+      "profile": "http://dpaez.github.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
