@@ -12,6 +12,7 @@ This project is made possible by the community surrounding it and especially the
   - [Gabriel Basilio Brito](https://github.com/GabrielBB)
   - [Chris Hartgerink](https://github.com/chartgerink)
   - [Lisa Hehnke](https://github.com/lhehnke)
+  - [Diego](https://github.com/dpaez)
 
 ## Testers
 
