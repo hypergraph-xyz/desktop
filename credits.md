@@ -13,6 +13,7 @@ This project is made possible by the community surrounding it and especially the
   - [Chris Hartgerink](https://github.com/chartgerink)
   - [Lisa Hehnke](https://github.com/lhehnke)
   - [Diego](https://github.com/dpaez)
+  - [Nami Sunami](https://github.com/nsunami)
 
 ## Testers
 
