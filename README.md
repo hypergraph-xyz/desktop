@@ -1,7 +1,7 @@
 # Hypergraph Desktop <img src="https://raw.githubusercontent.com/hypergraph-xyz/design/main/hypergraph-logomark-1024-square.png" align="right" height="64" />
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Hypergraph is a tool for publishing research step by step, built upon the [p2pcommons](https://p2pcommons.com), a distributed information layer.
@@ -53,6 +53,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://chjh.nl"><img src="https://avatars0.githubusercontent.com/u/2946344?v=4" width="100px;" alt=""/><br /><sub><b>Chris Hartgerink</b></sub></a><br /><a href="#ideas-chartgerink" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/hypergraph-xyz/desktop/issues?q=author%3Achartgerink" title="Bug reports">🐛</a> <a href="#userTesting-chartgerink" title="User Testing">📓</a> <a href="#maintenance-chartgerink" title="Maintenance">🚧</a> <a href="https://github.com/hypergraph-xyz/desktop/commits?author=chartgerink" title="Code">💻</a> <a href="#financial-chartgerink" title="Financial">💵</a> <a href="#business-chartgerink" title="Business development">💼</a> <a href="#fundingFinding-chartgerink" title="Funding Finding">🔍</a></td>
     <td align="center"><a href="https://dataplanes.org"><img src="https://avatars1.githubusercontent.com/u/18530815?v=4" width="100px;" alt=""/><br /><sub><b>Lisa Hehnke</b></sub></a><br /><a href="https://github.com/hypergraph-xyz/desktop/commits?author=lhehnke" title="Documentation">📖</a></td>
     <td align="center"><a href="http://dpaez.github.io/"><img src="https://avatars0.githubusercontent.com/u/837500?v=4" width="100px;" alt=""/><br /><sub><b>Diego</b></sub></a><br /><a href="https://github.com/hypergraph-xyz/desktop/commits?author=dpaez" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://naoyukisunami.com"><img src="https://avatars2.githubusercontent.com/u/17035406?v=4" width="100px;" alt=""/><br /><sub><b>Nami Sunami</b></sub></a><br /><a href="#ideas-nsunami" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
