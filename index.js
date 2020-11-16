@@ -150,7 +150,12 @@ const updateMenu = () => {
           {
             label: 'Learn More',
             click: () =>
-              shell.openExternal('https://github.com/hypergraph-xyz/desktop')
+              shell.openExternal('https://hypegraph.xyz')
+          },
+          {
+            label: 'Community chat',
+            click: () =>
+              shell.openExternal('https://chat.libscie.org')
           }
         ]
       }
