@@ -114,6 +114,10 @@ ipcRenderer.on('export graph', async () => {
   ipcRenderer.send('export graph', graph)
 })
 
+ipcRenderer.on('goto-create', () => {
+  window.location = '#/create'
+})
+
 const Container = ({ children, onFind, profileUrl }) => (
   <ProfileContext.Provider value={{ url: profileUrl }}>
     <Router>

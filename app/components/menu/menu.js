@@ -10,6 +10,8 @@ import NetworkStatusRed from './network-status-red.svg'
 import NetworkStatusYellow from './network-status-yellow.svg'
 import NetworkStatusGreen from './network-status-green.svg'
 import isOnline from 'is-online'
+import DevMode from '../icons/dev-mode.svg'
+import { remote } from 'electron'
 
 const Container = styled.div`
   width: 8rem;
@@ -20,6 +22,9 @@ const Container = styled.div`
   top: 0;
   text-align: center;
   box-sizing: border-box;
+`
+const StyledDevMode = styled(DevMode)`
+  position: relative;
 `
 const StyledLogo = styled(Logo)`
   margin-bottom: 2rem;
@@ -99,6 +104,18 @@ const NetworkStatusContainer = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
 `
+const DevModeContainer = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 9.5rem;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+`
 const ButtonNavLink = ({ history, to, ...props }) => (
   <NavLink
     to={to}
@@ -138,6 +155,9 @@ const Menu = ({ p2p, onFind }) => {
 
   return (
     <Container>
+      <DevModeContainer>
+        {!remote.app.isPackaged ? <StyledDevMode /> : ''}
+      </DevModeContainer>
       <StyledLogo onClick={() => history.push('/')} />
       <NetworkStatusContainer
         title={

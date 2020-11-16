@@ -53,7 +53,18 @@ const updateMenu = () => {
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
       ...(isMac ? [{ role: 'appMenu' }] : []),
-      { role: 'fileMenu' },
+      {
+        role: 'fileMenu',
+        submenu: [
+          {
+            label: 'Add content',
+            accelerator: 'CmdOrCtrl+N',
+            click: () => {
+              mainWindow.webContents.send('goto-create')
+            }
+          }
+        ]
+      },
       { role: 'editMenu' },
       { role: 'viewMenu' },
       {
