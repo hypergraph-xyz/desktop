@@ -4,12 +4,35 @@ import styled from 'styled-components'
 import { purple } from '../../lib/colors'
 
 const StyledTour = styled(Reactour)`
-  color: black;
-  font-size: 0.9em;
+  color: #ffffff;
+  font-size: 1rem;
+  background-color: #090909;
+  box-shadow: 0px 0px 50px 2px #574cfa;
   transition: none;
   -webkit-transition: none;
   button:focus {
     outline: 0;
+  }
+  [data-tour-elem="badge"] {
+    font-size: 1rem;
+  }
+  [data-tour-elem="left-arrow"] {
+  color: #848484;
+  }
+  [data-tour-elem="left-arrow"]:hover {
+    color: #ffffff;
+  }
+  [data-tour-elem="right-arrow"] {
+  color: #848484;
+  }
+  [data-tour-elem="right-arrow"]:hover {
+    color: #ffffff;
+  }
+  .reactour__close {
+  color: #848484;
+  }
+  .reactour__close:hover {
+    color: #ffffff;
   }
 `
 
