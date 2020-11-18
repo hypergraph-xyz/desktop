@@ -18,8 +18,12 @@ import Tabbable from '../accessibility/tabbable'
 import { ProfileContext } from '../../lib/context'
 import ArrowDown1Rem from '../icons/arrow-down-1rem.svg'
 import { validations } from '@p2pcommons/sdk-js'
+import NewSelect from 'react-select'
 
 const { FormData } = window
+const options = Object.keys(subtypes).map(key => {
+  return { value: key, label: subtypes[key] }
+})
 
 const Container = styled.div`
   margin: 2rem;
@@ -222,13 +226,20 @@ const EditForm = ({
           </>
         )}
         <Label htmlFor='subtype'>Content type</Label>
-        <Select name='subtype' defaultValue={subtype}>
+        <NewSelect
+          className="basic-single"
+          classNamePrefix="select"
+          defaultValue={options[0]}
+          name="subtype"
+          options={options}
+        />
+        {/* <Select name='subtype' defaultValue={subtype}>
           {Object.entries(subtypes).map(([id, text]) => (
             <option value={id} key={id}>
               {text}
             </option>
           ))}
-        </Select>
+        </Select> */}
         <Label htmlFor='files'>Add files</Label>
         <Info>
           These files are copied to Hypergraph. If you want to work on them
