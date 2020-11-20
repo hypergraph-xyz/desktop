@@ -22,6 +22,7 @@ const Container = styled.div`
   top: 0;
   text-align: center;
   box-sizing: border-box;
+  -webkit-app-region: drag;
 `
 const StyledDevMode = styled(DevMode)`
   position: relative;
@@ -103,6 +104,7 @@ const NetworkStatusContainer = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+  -webkit-app-region: drag;
 `
 const DevModeContainer = styled.div`
   position: absolute;

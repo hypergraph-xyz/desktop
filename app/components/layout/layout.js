@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
   }
   html {
     -webkit-user-select: none;
-    -webkit-app-region: drag;
+    -webkit-app-region: no-drag;
     height: 100%;
   }
   body {
@@ -68,6 +68,7 @@ const Content = styled.div`
   flex-flow: column;
   height: 100%;
   box-sizing: border-box;
+  -webkit-user-select: text;
 `
 
 const Layout = ({ children, p2p, onFind }) => {
