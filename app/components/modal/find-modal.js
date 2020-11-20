@@ -119,22 +119,20 @@ const FindModal = ({ onClose, prefilledUrl, p2p }) => {
           )}
         </Label>
 
-        {isLoading
-          ? (
-            <LoadingContainer>
-              <Loading />
-            </LoadingContainer>
-            )
-          : (
-            <StyledInput
-              ref={inputEl}
-              isValid={isValid}
-              defaultValue={url}
-              onChange={ev => {
-                setUrl(ev.target.value)
-              }}
-            />
-            )}
+        {isLoading ? (
+          <LoadingContainer>
+            <Loading />
+          </LoadingContainer>
+        ) : (
+          <StyledInput
+            ref={inputEl}
+            isValid={isValid}
+            defaultValue={url}
+            onChange={ev => {
+              setUrl(ev.target.value)
+            }}
+          />
+        )}
         <StyledButton content='icon' disabled={!isValid}>
           {isLoading ? <X /> : <ArrowRight />}
         </StyledButton>

@@ -13,23 +13,23 @@ const StyledTour = styled(Reactour)`
   button:focus {
     outline: 0;
   }
-  [data-tour-elem="badge"] {
+  [data-tour-elem='badge'] {
     font-size: 1rem;
   }
-  [data-tour-elem="left-arrow"] {
-  color: #848484;
+  [data-tour-elem='left-arrow'] {
+    color: #848484;
   }
-  [data-tour-elem="left-arrow"]:hover {
+  [data-tour-elem='left-arrow']:hover {
     color: #ffffff;
   }
-  [data-tour-elem="right-arrow"] {
-  color: #848484;
+  [data-tour-elem='right-arrow'] {
+    color: #848484;
   }
-  [data-tour-elem="right-arrow"]:hover {
+  [data-tour-elem='right-arrow']:hover {
     color: #ffffff;
   }
   .reactour__close {
-  color: #848484;
+    color: #848484;
   }
   .reactour__close:hover {
     color: #ffffff;

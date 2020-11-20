@@ -13,25 +13,23 @@ const ProfileContent = ({ p2p }) => {
     })()
   }, [profileKey])
 
-  return profile
-    ? (
-      <>
-        <TopRow>
-          <Title>{profile.rawJSON.title}</Title>
-        </TopRow>
-        <Content
-          p2p={p2p}
-          contentKey={contentKey}
-          version={version}
-          renderRow={children => (
-            <StickyRow top='116px' noBorderTop>
-              {children}
-            </StickyRow>
-          )}
-        />
-      </>
-      )
-    : null
+  return profile ? (
+    <>
+      <TopRow>
+        <Title>{profile.rawJSON.title}</Title>
+      </TopRow>
+      <Content
+        p2p={p2p}
+        contentKey={contentKey}
+        version={version}
+        renderRow={children => (
+          <StickyRow top='116px' noBorderTop>
+            {children}
+          </StickyRow>
+        )}
+      />
+    </>
+  ) : null
 }
 
 export default ProfileContent

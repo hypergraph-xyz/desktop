@@ -174,200 +174,192 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
   const supportingFiles =
     files && content ? files.filter(file => file !== content.rawJSON.main) : []
 
-  return content && authors && parents
-    ? (
-      <>
-        {isSharing && (
-          <ShareModal
-            url={
-              authors.find(author => isContentRegistered(content, author))
-                ? `${content.rawJSON.url}+${content.metadata.version}`
-                : content.rawJSON.url
-            }
-            onClose={() => setIsSharing(false)}
-          />
-        )}
-        {renderRow(
-          <>
-            <Title>{subtypes[content.rawJSON.subtype] || 'Content'}</Title>
-            {content.rawJSON.main && (
-              <Button
-                content='icon'
-                type='button'
-                onClick={() => setIsSharing(true)}
-              >
-                <Share />
-              </Button>
-            )}
-            <Button onClick={() => remote.shell.openPath(directory)}>
-              Open folder
-            </Button>
-            <ExportZip directory={directory} />
-            {canRegisterContent && content.metadata.isWritable && (
-              <Button
-                type='button'
-                color={green}
-                onClick={() => {
-                  history.push(
-                    `/edit/${encode(content.rawJSON.url)}/${
-                      content.metadata.version
-                    }`
-                  )
-                }}
-              >
-                Edit content
-              </Button>
-            )}
-          </>
-        )}
-        <Container>
-          <Tabbable component={BackArrow} onClick={() => history.go(-1)} />
-          {parents.map(parent => (
-            <Link
-              component={Anchor}
-              key={`${parent.rawJSON.url}+${parent.rawJSON.version}`}
-              to={`/profiles/${encode(parent.rawJSON.authors[0])}/${encode(
-                parent.rawJSON.url
-              )}/${parent.metadata.version}`}
+  return content && authors && parents ? (
+    <>
+      {isSharing && (
+        <ShareModal
+          url={
+            authors.find(author => isContentRegistered(content, author))
+              ? `${content.rawJSON.url}+${content.metadata.version}`
+              : content.rawJSON.url
+          }
+          onClose={() => setIsSharing(false)}
+        />
+      )}
+      {renderRow(
+        <>
+          <Title>{subtypes[content.rawJSON.subtype] || 'Content'}</Title>
+          {content.rawJSON.main && (
+            <Button
+              content='icon'
+              type='button'
+              onClick={() => setIsSharing(true)}
             >
-              {parent.rawJSON.title}
-            </Link>
-          ))}
-          <StyledHeading1>{content.rawJSON.title}</StyledHeading1>
-          <Authors>
-            {content.rawJSON.authors.map((authorUrl, i) => (
-              <Fragment key={authorUrl}>
-                {i > 0 && ', '}
-                <Author
-                  p2p={p2p}
-                  url={authorUrl}
-                  content={content}
-                  Loading={ContentPageSpinner}
-                />
-              </Fragment>
-            ))}
-          </Authors>
-          <Description>{newlinesToBr(content.rawJSON.description)}</Description>
-          <Label>Main file</Label>
-          {content.rawJSON.main
-            ? (
-              <Tabbable
-                component={File}
-                onClick={() => {
-                  remote.shell.openPath(`${directory}/${content.rawJSON.main}`)
-                }}
-              >
-                {content.rawJSON.main}
-              </Tabbable>
-              )
-            : (
-              <NoMain>Required for adding to profile and sharing</NoMain>
-              )}
-          {supportingFiles.length > 0 && (
-            <>
-              <Label>Supporting Files</Label>
-              <div>
-                {supportingFiles.map(path => (
-                  <Tabbable
-                    component={File}
-                    key={path}
-                    onClick={() => {
-                      remote.shell.openPath(`${directory}/${path}`)
-                    }}
-                  >
-                    {path}
-                  </Tabbable>
-                ))}
-              </div>
-            </>
+              <Share />
+            </Button>
           )}
-          <Actions>
-            {canRegisterContent
-              ? (
-                <Button
-                  color={green}
-                  isLoading={isUpdatingRegistration}
-                  disabled={!content.rawJSON.main}
-                  onClick={async () => {
-                    setIsUpdatingRegistration(true)
-                    try {
-                      await p2p.refreshDrive(encode(content.rawJSON.url))
-                      const {
-                        metadata: { version }
-                      } = await p2p.get(encode(content.rawJSON.url))
-                      await p2p.register(
-                        [encode(content.rawJSON.url), version].join('+'),
-                        profileUrl
-                      )
-                      if (await ipcRenderer.invoke('getStoreValue', 'vault')) {
-                        await archiveModule(`${content.rawJSON.url}+${version}`)
-                      }
-                      history.replace(
-                      `/profiles/${encode(profileUrl)}/${key}/${version}`
-                      )
-                    } finally {
-                      setIsUpdatingRegistration(false)
-                    }
+          <Button onClick={() => remote.shell.openPath(directory)}>
+            Open folder
+          </Button>
+          <ExportZip directory={directory} />
+          {canRegisterContent && content.metadata.isWritable && (
+            <Button
+              type='button'
+              color={green}
+              onClick={() => {
+                history.push(
+                  `/edit/${encode(content.rawJSON.url)}/${
+                    content.metadata.version
+                  }`
+                )
+              }}
+            >
+              Edit content
+            </Button>
+          )}
+        </>
+      )}
+      <Container>
+        <Tabbable component={BackArrow} onClick={() => history.go(-1)} />
+        {parents.map(parent => (
+          <Link
+            component={Anchor}
+            key={`${parent.rawJSON.url}+${parent.rawJSON.version}`}
+            to={`/profiles/${encode(parent.rawJSON.authors[0])}/${encode(
+              parent.rawJSON.url
+            )}/${parent.metadata.version}`}
+          >
+            {parent.rawJSON.title}
+          </Link>
+        ))}
+        <StyledHeading1>{content.rawJSON.title}</StyledHeading1>
+        <Authors>
+          {content.rawJSON.authors.map((authorUrl, i) => (
+            <Fragment key={authorUrl}>
+              {i > 0 && ', '}
+              <Author
+                p2p={p2p}
+                url={authorUrl}
+                content={content}
+                Loading={ContentPageSpinner}
+              />
+            </Fragment>
+          ))}
+        </Authors>
+        <Description>{newlinesToBr(content.rawJSON.description)}</Description>
+        <Label>Main file</Label>
+        {content.rawJSON.main ? (
+          <Tabbable
+            component={File}
+            onClick={() => {
+              remote.shell.openPath(`${directory}/${content.rawJSON.main}`)
+            }}
+          >
+            {content.rawJSON.main}
+          </Tabbable>
+        ) : (
+          <NoMain>Required for adding to profile and sharing</NoMain>
+        )}
+        {supportingFiles.length > 0 && (
+          <>
+            <Label>Supporting Files</Label>
+            <div>
+              {supportingFiles.map(path => (
+                <Tabbable
+                  component={File}
+                  key={path}
+                  onClick={() => {
+                    remote.shell.openPath(`${directory}/${path}`)
                   }}
                 >
-                  Add to profile
-                </Button>
+                  {path}
+                </Tabbable>
+              ))}
+            </div>
+          </>
+        )}
+        <Actions>
+          {canRegisterContent ? (
+            <Button
+              color={green}
+              isLoading={isUpdatingRegistration}
+              disabled={!content.rawJSON.main}
+              onClick={async () => {
+                setIsUpdatingRegistration(true)
+                try {
+                  await p2p.refreshDrive(encode(content.rawJSON.url))
+                  const {
+                    metadata: { version }
+                  } = await p2p.get(encode(content.rawJSON.url))
+                  await p2p.register(
+                    [encode(content.rawJSON.url), version].join('+'),
+                    profileUrl
+                  )
+                  if (await ipcRenderer.invoke('getStoreValue', 'vault')) {
+                    await archiveModule(`${content.rawJSON.url}+${version}`)
+                  }
+                  history.replace(
+                    `/profiles/${encode(profileUrl)}/${key}/${version}`
+                  )
+                } finally {
+                  setIsUpdatingRegistration(false)
+                }
+              }}
+            >
+              Add to profile
+            </Button>
+          ) : canDeregisterContent ? (
+            <Button
+              color={yellow}
+              isLoading={isUpdatingRegistration}
+              onClick={async () => {
+                setIsUpdatingRegistration(true)
+                try {
+                  await p2p.deregister(
+                    [
+                      encode(content.rawJSON.url),
+                      content.metadata.version
+                    ].join('+'),
+                    profileUrl
+                  )
+                  history.replace(`/drafts/${key}`)
+                } finally {
+                  setIsUpdatingRegistration(false)
+                }
+              }}
+            >
+              Remove from profile
+            </Button>
+          ) : null}
+          {content.metadata.isWritable && (
+            <Button
+              color={red}
+              isLoading={isDeleting}
+              onClick={async () => {
+                const { response } = await remote.dialog.showMessageBox(
+                  remote.getCurrentWindow(),
+                  {
+                    type: 'warning',
+                    buttons: ['Delete files', 'Cancel'],
+                    message:
+                      'This will also delete these files from your Hypergraph folder. Are you sure you want to delete this content?'
+                  }
                 )
-              : canDeregisterContent
-                ? (
-                  <Button
-                    color={yellow}
-                    isLoading={isUpdatingRegistration}
-                    onClick={async () => {
-                      setIsUpdatingRegistration(true)
-                      try {
-                        await p2p.deregister(
-                          [
-                            encode(content.rawJSON.url),
-                            content.metadata.version
-                          ].join('+'),
-                          profileUrl
-                        )
-                        history.replace(`/drafts/${key}`)
-                      } finally {
-                        setIsUpdatingRegistration(false)
-                      }
-                    }}
-                  >
-                    Remove from profile
-                  </Button>
-                  )
-                : null}
-            {content.metadata.isWritable && (
-              <Button
-                color={red}
-                isLoading={isDeleting}
-                onClick={async () => {
-                  const { response } = await remote.dialog.showMessageBox(
-                    remote.getCurrentWindow(),
-                    {
-                      type: 'warning',
-                      buttons: ['Delete files', 'Cancel'],
-                      message:
-                        'This will also delete these files from your Hypergraph folder. Are you sure you want to delete this content?'
-                    }
-                  )
-                  if (response === 1) return
+                if (response === 1) return
 
-                  setIsDeleting(true)
-                  const deleteFiles = true
-                  await p2p.delete(content.rawJSON.url, deleteFiles)
-                  history.push('/')
-                }}
-              >
-                Delete
-              </Button>
-            )}
-          </Actions>
-        </Container>
-      </>
-      )
-    : null
+                setIsDeleting(true)
+                const deleteFiles = true
+                await p2p.delete(content.rawJSON.url, deleteFiles)
+                history.push('/')
+              }}
+            >
+              Delete
+            </Button>
+          )}
+        </Actions>
+      </Container>
+    </>
+  ) : null
 }
 
 export default Content
