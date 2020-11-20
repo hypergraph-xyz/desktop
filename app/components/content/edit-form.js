@@ -109,7 +109,8 @@ const EditForm = ({
   const [isValidDraft, setIsValidDraft] = useState()
   const [files, setFiles] = useState({})
   const [main, setMain] = useState(defaultMain)
-  const [potentialParents, setPotentialParents] = useState()
+  const [potentialParents, setPotentialParents] = useState([])
+  const [parents, setParents] = useState([])
   const [profiles, setProfiles] = useState()
   const { url: profileUrl } = useContext(ProfileContext)
   const [authors, setAuthors] = useState(defaultAuthors || [encode(profileUrl)])
@@ -127,6 +128,14 @@ const EditForm = ({
       const contentUrls = [
         ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
       ]
+
+      if (parentUrl) {
+        const label = await p2p.clone(encode(parentUrl.split('+')[0]), parentUrl.split('+')[1]).then(res => res.rawJSON.title)
+        setParents(parents.push({ value: parentUrl, label }))
+      }
+
+      // CHJH: This currently seems to finish *after* the form is loaded
+      // As a result: the parent selector doesn't display
       setPotentialParents(
         await Promise.all(
           contentUrls
@@ -134,12 +143,22 @@ const EditForm = ({
             .filter(
               ([key]) => !url || encode(key) !== encode(url.split('+')[0])
             )
-            .map(([key, version]) => p2p.clone(encode(key), version))
-        )
-      )
+            .map(([key, version]) => p2p.clone(encode(key), version)))
+            .then(rawParent => {
+              rawParent.map(parent => {
+                const value = [
+                  encode(parent.rawJSON.url),
+                  parent.metadata.version
+                ].join('+')
+                const label = parent.rawJSON.title
+                potentialParents.push({ value, label })
+              })
+            })
+          )
     })()
   }, [])
 
+  // CHJH: This violates rules of hooks TODO
   if (url) {
     useEffect(() => {
       ;(async () => {
@@ -201,28 +220,14 @@ const EditForm = ({
         {potentialParents && potentialParents.length > 0 && (
           <>
             <Label htmlFor='parent'>Follows from</Label>
-            <Select name='parent' defaultValue={parentUrl}>
-              <option value=''>None</option>
-              {potentialParents.map(parent => {
-                const value = [
-                  encode(parent.rawJSON.url),
-                  parent.metadata.version
-                ].join('+')
-                return (
-                  <option value={value} key={value}>
-                    {
-                      profiles.find(
-                        profile =>
-                          encode(profile.rawJSON.url) ===
-                          parent.rawJSON.authors[0]
-                      ).rawJSON.title
-                    }
-                    {parent.rawJSON.authors.length > 1 ? ' et. al' : null}.{' '}
-                    {parent.rawJSON.title}
-                  </option>
-                )
-              })}
-            </Select>
+            <NewSelect
+              defaultValue={parents}
+              isMulti
+              name="parent"
+              options={potentialParents}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              onChange={console.log} />
           </>
         )}
         <Label htmlFor='subtype'>Content type</Label>
@@ -233,13 +238,6 @@ const EditForm = ({
           name="subtype"
           options={options}
         />
-        {/* <Select name='subtype' defaultValue={subtype}>
-          {Object.entries(subtypes).map(([id, text]) => (
-            <option value={id} key={id}>
-              {text}
-            </option>
-          ))}
-        </Select> */}
         <Label htmlFor='files'>Add files</Label>
         <Info>
           These files are copied to Hypergraph. If you want to work on them
