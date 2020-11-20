@@ -131,13 +131,12 @@ const EditForm = ({
 
       if (parentUrl) {
         const label = await p2p.clone(encode(parentUrl.split('+')[0]), parentUrl.split('+')[1]).then(res => res.rawJSON.title)
-        setParents(parents.push({ value: parentUrl, label }))
+        setParents(parents.concat({ value: parentUrl, label }))
       }
 
       // CHJH: This currently seems to finish *after* the form is loaded
       // As a result: the parent selector doesn't display
-      setPotentialParents(
-        await Promise.all(
+      await Promise.all(
           contentUrls
             .map(url => url.split('+'))
             .filter(
@@ -145,16 +144,16 @@ const EditForm = ({
             )
             .map(([key, version]) => p2p.clone(encode(key), version)))
             .then(rawParent => {
+              let x = []
               rawParent.map(parent => {
                 const value = [
                   encode(parent.rawJSON.url),
                   parent.metadata.version
                 ].join('+')
-                const label = parent.rawJSON.title
-                potentialParents.push({ value, label })
+                x.push({ value, label: parent.rawJSON.title })
               })
+              setPotentialParents(x)
             })
-          )
     })()
   }, [])
 
