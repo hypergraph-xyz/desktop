@@ -49,51 +49,45 @@ export default ({ p2p }) => {
       <TopRow>
         <Title>Feed</Title>
       </TopRow>
-      {contents
-        ? (
-          <>
-            {contents.map(content => {
-              return content.rawJSON.title
-                ? (
-                  <ContentRow
-                    key={`${content.rawJSON.url}+${content.metadata.version}`}
-                    p2p={p2p}
-                    content={content}
-                    to={`/contents/${encode(content.rawJSON.url)}/${
+      {contents ? (
+        <>
+          {contents.map(content => {
+            return content.rawJSON.title ? (
+              <ContentRow
+                key={`${content.rawJSON.url}+${content.metadata.version}`}
+                p2p={p2p}
+                content={content}
+                to={`/contents/${encode(content.rawJSON.url)}/${
                   content.metadata.version
-                    }`}
-                    isRegistered
-                  />
-                  )
-                : (
-                  <ContentRow
-                    key={`${content.rawJSON.url}+${content.metadata.version}`}
-                  />
-                  )
-            })}
-            <Footer
-              title={
-                <>
-                  {contents.length
-                    ? (
-                        'You’ve reached the end! ✌️'
-                      )
-                    : (
-                      <>
-                        Add content <FooterAddContent /> or <FooterSearch /> Find
-                        someone to follow
-                      </>
-                      )}
-                </>
-              }
-            />
-          </>
-          )
-        : (
-          <LoadingFlex>
-            <Loading />
-          </LoadingFlex>
-          )}
+                }`}
+                isRegistered
+              />
+            ) : (
+              <ContentRow
+                key={`${content.rawJSON.url}+${content.metadata.version}`}
+              />
+            )
+          })}
+          <Footer
+            title={
+              <>
+                {contents.length ? (
+                  'You’ve reached the end! ✌️'
+                ) : (
+                  <>
+                    Add content <FooterAddContent /> or <FooterSearch /> Find
+                    someone to follow
+                  </>
+                )}
+              </>
+            }
+          />
+        </>
+      ) : (
+        <LoadingFlex>
+          <Loading />
+        </LoadingFlex>
+      )}
       {isTourOpen && (
         <Tour
           isOpen={isTourOpen}

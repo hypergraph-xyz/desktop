@@ -62,55 +62,51 @@ const Following = ({ p2p }) => {
                   <StyledAvatar name={profile.rawJSON.title} size='40px' />
                   <Heading3>{profile.rawJSON.title}</Heading3>
                 </Tabbable>
-                {unfollowed[profile.rawJSON.url]
-                  ? (
-                    <StyledButton
-                      onClick={async () => {
-                        setUnfollowed({
-                          ...unfollowed,
-                          [profile.rawJSON.url]: false
-                        })
-                        await p2p.follow(
-                          encode(profileUrl),
-                          encode(profile.rawJSON.url)
-                        )
-                      }}
-                    >
-                      Follow
-                    </StyledButton>
-                    )
-                  : (
-                    <StyledButton
-                      onClick={async () => {
-                        setUnfollowed({
-                          ...unfollowed,
-                          [profile.rawJSON.url]: true
-                        })
-                        await p2p.unfollow(
-                          encode(profileUrl),
-                          encode(profile.rawJSON.url)
-                        )
-                      }}
-                    >
-                      Unfollow
-                    </StyledButton>
-                    )}
+                {unfollowed[profile.rawJSON.url] ? (
+                  <StyledButton
+                    onClick={async () => {
+                      setUnfollowed({
+                        ...unfollowed,
+                        [profile.rawJSON.url]: false
+                      })
+                      await p2p.follow(
+                        encode(profileUrl),
+                        encode(profile.rawJSON.url)
+                      )
+                    }}
+                  >
+                    Follow
+                  </StyledButton>
+                ) : (
+                  <StyledButton
+                    onClick={async () => {
+                      setUnfollowed({
+                        ...unfollowed,
+                        [profile.rawJSON.url]: true
+                      })
+                      await p2p.unfollow(
+                        encode(profileUrl),
+                        encode(profile.rawJSON.url)
+                      )
+                    }}
+                  >
+                    Unfollow
+                  </StyledButton>
+                )}
               </Row>
             )
           })}
           <Footer
             title={
               <>
-                {following.length
-                  ? (
-                      'You’ve reached the end! ✌️'
-                    )
-                  : (
-                    <>
-                      You’re not following anybody yet. Use <FooterSearch /> Find
-                      to look up a profile
-                    </>
-                    )}
+                {following.length ? (
+                  'You’ve reached the end! ✌️'
+                ) : (
+                  <>
+                    You’re not following anybody yet. Use <FooterSearch /> Find
+                    to look up a profile
+                  </>
+                )}
               </>
             }
           />

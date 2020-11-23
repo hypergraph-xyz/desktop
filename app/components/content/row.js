@@ -142,104 +142,102 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
     }, [content])
   }
 
-  return content
-    ? (
-      <>
-        <Tabbable
-          component={Container}
-          onClick={e => {
-            if (!e || e.target.tagName !== 'A') history.push(to)
-          }}
-          isParent={isParent}
-        >
-          <Hover isParent={isParent}>
-            <Attributes pad={pad}>
-              <Attribute>
-                {subtypes[content.rawJSON.subtype] || 'Unknown'}
+  return content ? (
+    <>
+      <Tabbable
+        component={Container}
+        onClick={e => {
+          if (!e || e.target.tagName !== 'A') history.push(to)
+        }}
+        isParent={isParent}
+      >
+        <Hover isParent={isParent}>
+          <Attributes pad={pad}>
+            <Attribute>
+              {subtypes[content.rawJSON.subtype] || 'Unknown'}
+            </Attribute>
+            {parent && (
+              <Attribute title={`Follows from "${parent.rawJSON.title}"`}>
+                <OneParent />
               </Attribute>
-              {parent && (
-                <Attribute title={`Follows from "${parent.rawJSON.title}"`}>
-                  <OneParent />
-                </Attribute>
-              )}
-            </Attributes>
-            <Content pad={pad}>
-              <Title>{content.rawJSON.title}</Title>
-              <Authors>
-                {content.rawJSON.authors.map((authorUrl, i) => {
-                  const to = `/profiles/${encode(authorUrl)}`
-                  const shouldScroll = to === location.pathname
-                  return (
-                    <Fragment key={authorUrl}>
-                      {i > 0 && ', '}
-                      <Author
-                        p2p={p2p}
-                        url={authorUrl}
-                        content={content}
-                        onClick={() => shouldScroll && window.scrollTo(0, 0)}
-                        Loading={ContentBlockSpinner}
-                      />
-                    </Fragment>
-                  )
-                })}
-              </Authors>
-              {!isParent && (
-                <Description>
-                  {newlinesToBr(content.rawJSON.description)}
-                </Description>
-              )}
-              {!isParent && content.rawJSON.parents[0] && (
-                <ToggleParent
-                  onClick={e => {
-                    e.stopPropagation()
-                    setShowParent(!showParent)
-                  }}
-                >
-                  <ToggleParentArrow>{showParent ? '▾' : '▸'}</ToggleParentArrow>
-                  Follows from
-                </ToggleParent>
-              )}
-            </Content>
-          </Hover>
-          {isRegistered && (
-            <AddContentWithParent
-              onClick={e => {
-                e.stopPropagation()
-                history.push(
+            )}
+          </Attributes>
+          <Content pad={pad}>
+            <Title>{content.rawJSON.title}</Title>
+            <Authors>
+              {content.rawJSON.authors.map((authorUrl, i) => {
+                const to = `/profiles/${encode(authorUrl)}`
+                const shouldScroll = to === location.pathname
+                return (
+                  <Fragment key={authorUrl}>
+                    {i > 0 && ', '}
+                    <Author
+                      p2p={p2p}
+                      url={authorUrl}
+                      content={content}
+                      onClick={() => shouldScroll && window.scrollTo(0, 0)}
+                      Loading={ContentBlockSpinner}
+                    />
+                  </Fragment>
+                )
+              })}
+            </Authors>
+            {!isParent && (
+              <Description>
+                {newlinesToBr(content.rawJSON.description)}
+              </Description>
+            )}
+            {!isParent && content.rawJSON.parents[0] && (
+              <ToggleParent
+                onClick={e => {
+                  e.stopPropagation()
+                  setShowParent(!showParent)
+                }}
+              >
+                <ToggleParentArrow>{showParent ? '▾' : '▸'}</ToggleParentArrow>
+                Follows from
+              </ToggleParent>
+            )}
+          </Content>
+        </Hover>
+        {isRegistered && (
+          <AddContentWithParent
+            onClick={e => {
+              e.stopPropagation()
+              history.push(
                 `/create/${encode(content.rawJSON.url)}+${
                   content.metadata.version
                 }`
-                )
-              }}
-            />
-          )}
-        </Tabbable>
-        {(showParent || isParent) && parent && (
-          <Row
-            p2p={p2p}
-            content={parent}
-            to={`/profiles/${encode(parent.rawJSON.authors[0])}/${encode(
-            parent.rawJSON.url
-          )}/${parent.metadata.version}`}
-            pad={isParent ? pad : 4}
-            isParent
+              )
+            }}
           />
         )}
-      </>
-      )
-    : (
-      <>
-        <Container isUnavailable>
-          <Attributes pad={pad}>
-            <Attribute>Unknown</Attribute>
-          </Attributes>
-          <Content pad={pad}>
-            <Title>Content temporarily unavailable</Title>
-            <Authors>Author(s) unavailable</Authors>
-          </Content>
-        </Container>
-      </>
-      )
+      </Tabbable>
+      {(showParent || isParent) && parent && (
+        <Row
+          p2p={p2p}
+          content={parent}
+          to={`/profiles/${encode(parent.rawJSON.authors[0])}/${encode(
+            parent.rawJSON.url
+          )}/${parent.metadata.version}`}
+          pad={isParent ? pad : 4}
+          isParent
+        />
+      )}
+    </>
+  ) : (
+    <>
+      <Container isUnavailable>
+        <Attributes pad={pad}>
+          <Attribute>Unknown</Attribute>
+        </Attributes>
+        <Content pad={pad}>
+          <Title>Content temporarily unavailable</Title>
+          <Authors>Author(s) unavailable</Authors>
+        </Content>
+      </Container>
+    </>
+  )
 }
 
 export default Row

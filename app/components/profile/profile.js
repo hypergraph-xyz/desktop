@@ -210,57 +210,53 @@ const Profile = ({ p2p }) => {
               isSaved={isSaved}
               isInvalid={isTitleInvalid}
             />
-            {isEditing
-              ? (
-                <StyledInput
-                  ref={titleRef}
-                  defaultValue={profile.rawJSON.title}
-                  onChange={e => {
-                    setIsTitleInvalid(
-                      e.target.value.length === 0 || e.target.value.length > 300
-                    )
-                    setNameForAvatar(e.target.value)
-                  }}
-                />
-                )
-              : (
-                  profile.rawJSON.title
-                )}
+            {isEditing ? (
+              <StyledInput
+                ref={titleRef}
+                defaultValue={profile.rawJSON.title}
+                onChange={e => {
+                  setIsTitleInvalid(
+                    e.target.value.length === 0 || e.target.value.length > 300
+                  )
+                  setNameForAvatar(e.target.value)
+                }}
+              />
+            ) : (
+              profile.rawJSON.title
+            )}
           </Title>
           {(() => {
             if (profile.metadata.isWritable || !ownProfile) return
             const follows = ownProfile.rawJSON.follows.find(
               url => encode(url) === encode(profile.rawJSON.url)
             )
-            return follows
-              ? (
-                <Button
-                  type='button'
-                  onClick={async () => {
-                    await p2p.unfollow(
-                      encode(ownProfile.rawJSON.url),
-                      encode(profile.rawJSON.url)
-                    )
-                    await fetchOwnProfile()
-                  }}
-                >
-                  Unfollow
-                </Button>
-                )
-              : (
-                <Button
-                  type='button'
-                  onClick={async () => {
-                    await p2p.follow(
-                      encode(ownProfile.rawJSON.url),
-                      encode(profile.rawJSON.url)
-                    )
-                    await fetchOwnProfile()
-                  }}
-                >
-                  Follow
-                </Button>
-                )
+            return follows ? (
+              <Button
+                type='button'
+                onClick={async () => {
+                  await p2p.unfollow(
+                    encode(ownProfile.rawJSON.url),
+                    encode(profile.rawJSON.url)
+                  )
+                  await fetchOwnProfile()
+                }}
+              >
+                Unfollow
+              </Button>
+            ) : (
+              <Button
+                type='button'
+                onClick={async () => {
+                  await p2p.follow(
+                    encode(ownProfile.rawJSON.url),
+                    encode(profile.rawJSON.url)
+                  )
+                  await fetchOwnProfile()
+                }}
+              >
+                Follow
+              </Button>
+            )
           })()}
           <Button
             content='icon'
@@ -269,36 +265,32 @@ const Profile = ({ p2p }) => {
           >
             <Share />
           </Button>
-          {isEditing
-            ? (
-              <>
-                <Button color={green} disabled={isTitleInvalid}>
-                  Save
-                </Button>
-                <Button
-                  color={red}
-                  onClick={() => {
-                    setNameForAvatar(profile.rawJSON.title)
-                    setIsTitleInvalid(false)
-                    setIsEditing(false)
-                    setIsTitleInvalid(false)
-                  }}
-                >
-                  Cancel
-                </Button>
-              </>
-              )
-            : profile.metadata.isWritable
-              ? (
-                <Button
-                  type='button'
-                  color={green}
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit profile
-                </Button>
-                )
-              : null}
+          {isEditing ? (
+            <>
+              <Button color={green} disabled={isTitleInvalid}>
+                Save
+              </Button>
+              <Button
+                color={red}
+                onClick={() => {
+                  setNameForAvatar(profile.rawJSON.title)
+                  setIsTitleInvalid(false)
+                  setIsEditing(false)
+                  setIsTitleInvalid(false)
+                }}
+              >
+                Cancel
+              </Button>
+            </>
+          ) : profile.metadata.isWritable ? (
+            <Button
+              type='button'
+              color={green}
+              onClick={() => setIsEditing(true)}
+            >
+              Edit profile
+            </Button>
+          ) : null}
         </Form>
       </TopRow>
       <Header>
@@ -319,72 +311,64 @@ const Profile = ({ p2p }) => {
             }
           }}
         >
-          {isEditing
-            ? (
-              <StyledTextarea
-                ref={descriptionRef}
-                defaultValue={profile.rawJSON.description}
-              />
-              )
-            : profile.rawJSON.description
-              ? (
-                  profile.rawJSON.description.split('\n').map((line, index) => (
-                    <Fragment key={index}>
-                      {line}
-                      <br />
-                    </Fragment>
-                  ))
-                )
-              : profile.metadata.isWritable
-                ? 'Add a description…'
-                : null}
+          {isEditing ? (
+            <StyledTextarea
+              ref={descriptionRef}
+              defaultValue={profile.rawJSON.description}
+            />
+          ) : profile.rawJSON.description ? (
+            profile.rawJSON.description.split('\n').map((line, index) => (
+              <Fragment key={index}>
+                {line}
+                <br />
+              </Fragment>
+            ))
+          ) : profile.metadata.isWritable ? (
+            'Add a description…'
+          ) : null}
         </Description>
       </Header>
       <StickyRow top='114px'>
         <Title>Content</Title>
       </StickyRow>
-      {contents
-        ? (
-          <>
-            {contents.map(content => {
-              return content.rawJSON.title
-                ? (
-                  <ContentRow
-                    key={`${content.rawJSON.url}+${content.metadata.version}`}
-                    p2p={p2p}
-                    content={content}
-                    to={`/profiles/${encode(profile.rawJSON.url)}/${encode(
+      {contents ? (
+        <>
+          {contents.map(content => {
+            return content.rawJSON.title ? (
+              <ContentRow
+                key={`${content.rawJSON.url}+${content.metadata.version}`}
+                p2p={p2p}
+                content={content}
+                to={`/profiles/${encode(profile.rawJSON.url)}/${encode(
                   content.rawJSON.url
                 )}/${content.metadata.version}`}
-                    isRegistered
-                  />
-                  )
-                : (
-                  <ContentRow
-                    key={`${content.rawJSON.url}+${content.metadata.version}`}
-                  />
-                  )
-            })}
-            <Footer
-              title={
-                <>
-                  {contents.length
-                    ? 'You’ve reached the end! ✌️'
-                    : (
-                      <>
-                        No content yet, use <FooterAddContent /> to add something!
-                      </>
-                      )}
-                </>
-              }
-            />
-          </>
-          )
-        : (
-          <LoadingFlex>
-            <Loading />
-          </LoadingFlex>
-          )}
+                isRegistered
+              />
+            ) : (
+              <ContentRow
+                key={`${content.rawJSON.url}+${content.metadata.version}`}
+              />
+            )
+          })}
+          <Footer
+            title={
+              <>
+                {contents.length ? (
+                  'You’ve reached the end! ✌️'
+                ) : (
+                  <>
+                    No content yet, use <FooterAddContent /> to add something!
+                  </>
+                )}
+              </>
+            }
+          />
+        </>
+      ) : (
+        <LoadingFlex>
+          <Loading />
+        </LoadingFlex>
+      )}
     </>
   )
 }

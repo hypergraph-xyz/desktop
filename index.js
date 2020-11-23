@@ -160,13 +160,11 @@ const updateMenu = () => {
           },
           {
             label: 'Learn More',
-            click: () =>
-              shell.openExternal('https://hypegraph.xyz')
+            click: () => shell.openExternal('https://hypegraph.xyz')
           },
           {
             label: 'Community chat',
-            click: () =>
-              shell.openExternal('https://chat.libscie.org')
+            click: () => shell.openExternal('https://chat.libscie.org')
           }
         ]
       }

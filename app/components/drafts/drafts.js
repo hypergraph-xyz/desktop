@@ -47,19 +47,15 @@ export default ({ p2p }) => {
           <Footer
             title={
               <>
-                {drafts.length
-                  ? (
-                      'You’ve reached the end! ✌️'
-                    )
-                  : hasRegisteredContent
-                    ? (
-                      <>No drafts! All your work is now on your profile 😎</>
-                      )
-                    : (
-                      <>
-                        Nothing here yet! Click <FooterAddContent /> to get started
-                      </>
-                      )}
+                {drafts.length ? (
+                  'You’ve reached the end! ✌️'
+                ) : hasRegisteredContent ? (
+                  <>No drafts! All your work is now on your profile 😎</>
+                ) : (
+                  <>
+                    Nothing here yet! Click <FooterAddContent /> to get started
+                  </>
+                )}
               </>
             }
           />

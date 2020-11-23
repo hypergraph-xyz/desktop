@@ -10,6 +10,7 @@ const Container = styled.div`
   font-weight: 300;
   position: relative;
   height: 100%;
+  -webkit-user-select: none;
 `
 const Title = styled.div`
   font-size: 2em;
