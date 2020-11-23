@@ -130,30 +130,28 @@ const EditForm = ({
       ]
 
       if (parentUrl) {
-        const label = await p2p.clone(encode(parentUrl.split('+')[0]), parentUrl.split('+')[1]).then(res => res.rawJSON.title)
+        const label = await p2p
+          .clone(encode(parentUrl.split('+')[0]), parentUrl.split('+')[1])
+          .then(res => res.rawJSON.title)
         setParents(parents.concat({ value: parentUrl, label }))
       }
 
-      // CHJH: This currently seems to finish *after* the form is loaded
-      // As a result: the parent selector doesn't display
       await Promise.all(
-          contentUrls
-            .map(url => url.split('+'))
-            .filter(
-              ([key]) => !url || encode(key) !== encode(url.split('+')[0])
-            )
-            .map(([key, version]) => p2p.clone(encode(key), version)))
-            .then(rawParent => {
-              let x = []
-              rawParent.map(parent => {
-                const value = [
-                  encode(parent.rawJSON.url),
-                  parent.metadata.version
-                ].join('+')
-                x.push({ value, label: parent.rawJSON.title })
-              })
-              setPotentialParents(x)
-            })
+        contentUrls
+          .map(url => url.split('+'))
+          .filter(([key]) => !url || encode(key) !== encode(url.split('+')[0]))
+          .map(([key, version]) => p2p.clone(encode(key), version))
+      ).then(rawParent => {
+        const x = []
+        rawParent.map(parent => {
+          const value = [
+            encode(parent.rawJSON.url),
+            parent.metadata.version
+          ].join('+')
+          x.push({ value, label: parent.rawJSON.title })
+        })
+        setPotentialParents(x)
+      })
     })()
   }, [])
 
@@ -206,6 +204,14 @@ const EditForm = ({
     })
   }
 
+  const handleParents = x => {
+    x = x.map(obj => {
+      return obj.value
+    })
+
+    setParents(x)
+  }
+
   return (
     <Container>
       <Tabbable component={BackArrow} onClick={() => history.go(-1)} />
@@ -222,19 +228,20 @@ const EditForm = ({
             <NewSelect
               defaultValue={parents}
               isMulti
-              name="parent"
+              name='parent'
               options={potentialParents}
-              className="basic-multi-select"
-              classNamePrefix="select"
-              onChange={console.log} />
+              className='basic-multi-select'
+              classNamePrefix='select'
+              onChange={handleParents}
+            />
           </>
         )}
         <Label htmlFor='subtype'>Content type</Label>
         <NewSelect
-          className="basic-single"
-          classNamePrefix="select"
+          className='basic-single'
+          classNamePrefix='select'
           defaultValue={options[0]}
-          name="subtype"
+          name='subtype'
           options={options}
         />
         <Label htmlFor='files'>Add files</Label>
