@@ -196,7 +196,7 @@ const EditForm = ({
       title: data.get('title'),
       description: data.get('description'),
       subtype: data.get('subtype'),
-      parent: data.get('parent'),
+      parent: parents,
       main,
       files,
       isRegister,
