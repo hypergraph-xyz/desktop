@@ -205,7 +205,7 @@ const EditForm = ({
   }
 
   const handleParents = x => {
-    x = x.map(obj => {
+    x === null ? [] : x = x.map(obj => {
       return obj.value
     })
 
