@@ -130,10 +130,25 @@ const EditForm = ({
       ]
 
       if (parentUrl) {
-        const label = await p2p
-          .clone(encode(parentUrl.split('+')[0]), parentUrl.split('+')[1])
-          .then(res => res.rawJSON.title)
-        setParents(parents.concat({ value: parentUrl, label }))
+        await Promise.all(
+          [parentUrl]
+            .flat()
+            .map(url => url.split('+'))
+            .filter(
+              ([key]) => !url || encode(key) !== encode(url.split('+')[0])
+            )
+            .map(([key, version]) => p2p.clone(encode(key), version))
+        ).then(oldParents => {
+          const x = []
+          oldParents.map(parent => {
+            const value = [
+              encode(parent.rawJSON.url),
+              parent.metadata.version
+            ].join('+')
+            x.push({ value, label: parent.rawJSON.title })
+          })
+          setParents(parents.concat(x))
+        })
       }
 
       await Promise.all(
@@ -196,7 +211,9 @@ const EditForm = ({
       title: data.get('title'),
       description: data.get('description'),
       subtype: data.get('subtype'),
-      parent: parents,
+      parent: parents.map(obj => {
+        return obj.value
+      }),
       main,
       files,
       isRegister,
@@ -205,11 +222,7 @@ const EditForm = ({
   }
 
   const handleParents = x => {
-    x === null ? [] : x = x.map(obj => {
-      return obj.value
-    })
-
-    setParents(x)
+    setParents(x === null ? [] : x)
   }
 
   return (
