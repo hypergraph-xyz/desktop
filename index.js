@@ -160,7 +160,7 @@ const updateMenu = () => {
           },
           {
             label: 'Learn More',
-            click: () => shell.openExternal('https://hypegraph.xyz')
+            click: () => shell.openExternal('https://hypergraph.xyz')
           },
           {
             label: 'Community chat',
