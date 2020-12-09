@@ -6,6 +6,9 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+![](https://img.shields.io/github/downloads/hypergraph-xyz/desktop/total?color=01A38A&style=flat-square)
+![](https://img.shields.io/github/downloads/hypergraph-xyz/desktop/latest/total?color=%23574cfa&style=flat-square)
+
 Hypergraph is a tool for publishing research step by step, built upon the [p2pcommons](https://p2pcommons.com), a distributed information layer.
 
 <img src="/docs/screenshots/screenshot-content.png" align="right" height="300" />
