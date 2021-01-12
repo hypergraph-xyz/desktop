@@ -182,7 +182,8 @@ const createMainWindow = async () => {
     minWidth: 820,
     minHeight: 764,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true
     },
     titleBarStyle: 'hiddenInset'
   })
