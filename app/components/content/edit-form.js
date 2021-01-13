@@ -19,6 +19,7 @@ import { ProfileContext } from '../../lib/context'
 import ArrowDown1Rem from '../icons/arrow-down-1rem.svg'
 import { validations } from '@p2pcommons/sdk-js'
 import NewSelect from 'react-select'
+import { profile } from 'console'
 
 const { FormData } = window
 const options = Object.keys(subtypes).map(key => {
@@ -63,26 +64,6 @@ const ButtonGroup = styled.div`
   display: flex;
   align-items: baseline;
 `
-const ReorderArrow = styled(({ isEnabled, ...rest }) => (
-  <ArrowDown1Rem {...rest} />
-))`
-  ${props =>
-    props.direction === 'up' &&
-    css`
-      transform: rotate(180deg);
-    `}
-  path {
-    fill: ${props => props => (props.isEnabled ? white : gray)};
-  }
-  margin-right: 0.5rem;
-`
-const ReorderAuthor = ({ direction, isEnabled, onClick }) => (
-  <ReorderArrow
-    direction={direction}
-    isEnabled={isEnabled}
-    onClick={() => isEnabled && onClick()}
-  />
-)
 
 const allIndexesOf = (arr, el) => {
   const indexes = []
@@ -110,16 +91,18 @@ const EditForm = ({
   const [files, setFiles] = useState({})
   const [main, setMain] = useState(defaultMain)
   const [potentialParents, setPotentialParents] = useState([])
+  const [potentialAuthors, setPotentialAuthors] = useState([])
   const [parents, setParents] = useState([])
+  const [authors, setAuthors] = useState([])
   const [profiles, setProfiles] = useState()
   const { url: profileUrl } = useContext(ProfileContext)
-  const [authors, setAuthors] = useState(defaultAuthors || [encode(profileUrl)])
   const formRef = useRef()
 
   useEffect(() => {
     setIsValid(isValidDraft && Boolean(main))
   }, [isValidDraft, main])
 
+  
   useEffect(() => {
     ;(async () => {
       const profiles = await p2p.listProfiles()
@@ -128,6 +111,34 @@ const EditForm = ({
       const contentUrls = [
         ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
       ]
+
+      // CHJH: setAuthors seems not to be working
+      if (defaultAuthors) {
+        await Promise.all(
+          defaultAuthors
+            .map(profile => p2p.clone(encode(profile)))
+        ).then(oldAuthors => {
+          const x = []
+          oldAuthors.map(author => {
+            x.push({ value: author.rawJSON.url.split('hyper://')[1],
+              label: author.rawJSON.title })
+          })
+          console.log(x)
+          setAuthors((authors) => authors.concat(x))
+        })
+      } else {
+        await Promise.all(
+          [profileUrl]
+            .map(profile => p2p.clone(encode(profile)))
+        ).then(oldAuthors => {
+          const x = []
+          oldAuthors.map(auth => {
+            x.push({ value: auth.rawJSON.url.split('hyper://')[1],
+              label: auth.rawJSON.title })
+          })
+          setAuthors((authors) => authors.concat(x))
+        })
+      }
 
       if (parentUrl) {
         await Promise.all(
@@ -147,7 +158,7 @@ const EditForm = ({
             ].join('+')
             x.push({ value, label: parent.rawJSON.title })
           })
-          setParents(parents.concat(x))
+          setParents((parents) => parents.concat(x))
         })
       }
 
@@ -167,6 +178,16 @@ const EditForm = ({
         })
         setPotentialParents(x)
       })
+
+      await Promise.all(
+        profiles.map(profile => {
+          return { value: profile.rawJSON.url.split('hyper://')[1],
+            label: profile.rawJSON.title
+          }
+        })).then(x => {
+            setPotentialAuthors(x)
+          }
+        )
     })()
   }, [])
 
@@ -217,12 +238,18 @@ const EditForm = ({
       main,
       files,
       isRegister,
-      authors
+      authors: authors.map(obj => {
+        return obj.value
+      })
     })
   }
 
   const handleParents = x => {
     setParents(x === null ? [] : x)
+  }
+
+  const handleAuthors = x => {
+    setAuthors(x === null ? [] : x)
   }
 
   return (
@@ -375,65 +402,15 @@ const EditForm = ({
           defaultValue={title}
         />
         <Label htmlFor='authors'>Authors</Label>
-        <Select
-          onChange={ev => {
-            if (!ev.target.value) return
-            setAuthors([...authors, ev.target.value])
-            ev.target.value = ''
-          }}
-        >
-          <option value=''>Add author</option>
-          {profiles &&
-            profiles
-              .filter(profile => profile.rawJSON.url !== profileUrl)
-              .filter(profile => !authors.includes(encode(profile.rawJSON.url)))
-              .map(profile => (
-                <option
-                  key={profile.rawJSON.url}
-                  value={encode(profile.rawJSON.url)}
-                >
-                  {profile.rawJSON.title}
-                </option>
-              ))}
-        </Select>
-        <FileAuthorBlocks>
-          {authors.map((author, i) => (
-            <FileAuthorBlock key={author}>
-              <ReorderAuthor
-                direction='up'
-                isEnabled={i !== 0 || undefined}
-                onClick={ev => {
-                  const newAuthors = [...authors]
-                  newAuthors.splice(i, 1)
-                  newAuthors.splice(i - 1, 0, author)
-                  setAuthors(newAuthors)
-                }}
-              />
-              <ReorderAuthor
-                direction='down'
-                isEnabled={i !== authors.length - 1 || undefined}
-                onClick={ev => {
-                  const newAuthors = [...authors]
-                  newAuthors.splice(i, 1)
-                  newAuthors.splice(i + 1, 0, author)
-                  setAuthors(newAuthors)
-                }}
-              />
-              {profiles &&
-                profiles.find(profile => encode(profile.rawJSON.url) === author)
-                  .rawJSON.title}
-              {author !== encode(profileUrl) && (
-                <RemoveFileAuthor
-                  onClick={() => {
-                    const newAuthors = [...authors]
-                    newAuthors.splice(newAuthors.indexOf(author), 1)
-                    setAuthors(newAuthors)
-                  }}
-                />
-              )}
-            </FileAuthorBlock>
-          ))}
-        </FileAuthorBlocks>
+        <NewSelect
+              defaultValue={authors}
+              isMulti
+              name='authors'
+              options={potentialAuthors}
+              className='basic-multi-select'
+              classNamePrefix='select'
+              onChange={handleAuthors}
+            />
         <Label htmlFor='description'>Description</Label>
         <Textarea name='description' defaultValue={description} />
         <ButtonGroup>
