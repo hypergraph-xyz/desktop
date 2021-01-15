@@ -165,6 +165,10 @@ const updateMenu = () => {
           {
             label: 'Community chat',
             click: () => shell.openExternal('https://chat.libscie.org')
+          },
+          {
+            label: 'Membership Area',
+            click: () => shell.openExternal('https://gov.libscie.org')
           }
         ]
       }
