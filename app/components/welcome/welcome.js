@@ -204,7 +204,7 @@ const dialogs = [
         <Illustration>
           <IllustrationVault />
         </Illustration>
-        <Heading>Introducing the Vault</Heading>
+        <Heading>Introducing Hypergraph Vault</Heading>
         <p>
           We do not want to be gatekeepers. We chose peer-to-peer technology so
           you can be in control of your work. You help to power the network by
@@ -216,7 +216,7 @@ const dialogs = [
           to archive it for future generations! 👵🏾👨🏻👶
         </p>
         <p>
-          Until January 1st, 2021, Hypergraph Vault is free, while we figure out
+          Until January 1st, 2022, Hypergraph Vault is free, while we figure out
           the costs.
         </p>
         <Form
