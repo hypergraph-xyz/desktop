@@ -7,7 +7,15 @@ import TitleInput from '../forms/title-input'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import AddFile from './add-file.svg'
 import { remote, ipcRenderer } from 'electron'
-import { purple, red, green, yellow, gray, white } from '../../lib/colors'
+import {
+  purple,
+  red,
+  green,
+  yellow,
+  gray,
+  white,
+  black
+} from '../../lib/colors'
 import { basename, dirname, extname, join } from 'path'
 import X from '../icons/x-1rem.svg'
 import { useHistory } from 'react-router-dom'
@@ -18,8 +26,12 @@ import Tabbable from '../accessibility/tabbable'
 import { ProfileContext } from '../../lib/context'
 import ArrowDown1Rem from '../icons/arrow-down-1rem.svg'
 import { validations } from '@p2pcommons/sdk-js'
+import NewSelect from 'react-select'
 
 const { FormData } = window
+const options = Object.keys(subtypes).map(key => {
+  return { value: key, label: subtypes[key] }
+})
 
 const Container = styled.div`
   margin: 2rem;
@@ -72,6 +84,71 @@ const ReorderArrow = styled(({ isEnabled, ...rest }) => (
   }
   margin-right: 0.5rem;
 `
+// specific react-select style
+// does not use styled-components
+const customSelectStyle = {
+  container: provided => ({
+    ...provided,
+    marginBottom: '1rem'
+  }),
+  control: provided => ({
+    ...provided,
+    borderRadius: 0,
+    borderColor: purple,
+    borderWidth: 2,
+    backgroundColor: black,
+    hoverBorderColor: white,
+    '&:hover': {
+      borderColor: purple
+    },
+    boxShadow: 'none'
+  }),
+  dropdownIndicator: () => ({
+    marginRight: '1rem',
+    alignSelf: 'flex-end'
+  }),
+  indicatorSeparator: () => ({}),
+  input: () => ({
+    fontFamily: 'Roboto'
+  }),
+  menu: provided => ({
+    ...provided,
+    margin: '0 0 0 0',
+    borderRadius: 0,
+    borderBottom: `2px solid ${purple}`,
+    borderLeft: `2px solid ${purple}`,
+    borderRight: `2px solid ${purple}`
+  }),
+  menuList: provided => ({
+    ...provided,
+    marginTop: 0,
+    height: '14rem',
+    fontFamily: 'Roboto',
+    backgroundColor: black
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? purple : null,
+    margin: 0,
+    paddingLeft: '1rem',
+    border: purple
+  }),
+  noOptionsMessage: () => ({
+    margin: '1rem',
+    color: gray,
+    height: '1rem'
+  }),
+  singleValue: provided => ({
+    ...provided,
+    color: white,
+    fontFamily: 'Roboto',
+    margin: 0
+  }),
+  valueContainer: () => ({
+    marginLeft: '1rem'
+  })
+}
+
 const ReorderAuthor = ({ direction, isEnabled, onClick }) => (
   <ReorderArrow
     direction={direction}
@@ -222,13 +299,14 @@ const EditForm = ({
           </>
         )}
         <Label htmlFor='subtype'>Content type</Label>
-        <Select name='subtype' defaultValue={subtype}>
-          {Object.entries(subtypes).map(([id, text]) => (
-            <option value={id} key={id}>
-              {text}
-            </option>
-          ))}
-        </Select>
+        <NewSelect
+          className='basic-single'
+          classNamePrefix='select'
+          defaultValue={options[0]}
+          name='subtype'
+          options={options}
+          styles={customSelectStyle}
+        />
         <Label htmlFor='files'>Add files</Label>
         <Info>
           These files are copied to Hypergraph. If you want to work on them
