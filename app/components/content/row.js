@@ -7,6 +7,9 @@ import Plus from './plus.svg'
 import { encode } from 'dat-encoding'
 import newlinesToBr from '../../lib/newlines-to-br'
 import OneParent from './1-parent.svg'
+import TwoParent from './2-parent.svg'
+import ThreeParent from './3-parent.svg'
+import MoreParent from './more-parent.svg'
 import Tabbable from '../accessibility/tabbable'
 import Author from '../author/author'
 import ContentBlockSpinner from './content-block-spinner.svg'
@@ -109,29 +112,18 @@ const Description = styled.div`
     }
   }
 `
-const ToggleParent = styled.p`
-  position: absolute;
-  bottom: 0;
-  margin: 0;
-  padding-bottom: 2px;
-  -webkit-app-region: no-drag;
-  z-index: 1;
-
-  :hover {
-    padding-bottom: 0;
-    border-bottom: 2px solid ${purple};
-  }
-`
-const ToggleParentArrow = styled.span`
-  width: 16px;
-  display: inline-block;
-`
 
 const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
   const history = useHistory()
   const location = useLocation()
-  const [showParent, setShowParent] = useState(false)
+  const [parentCount, setParentCount] = useState(0)
   const [parent, setParent] = useState()
+
+  useEffect(() => {
+    if (content) {
+      setParentCount(content.rawJSON.parents.length)
+    }
+  })
 
   if (content && content.rawJSON.parents[0]) {
     useEffect(() => {
@@ -156,9 +148,24 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
             <Attribute>
               {subtypes[content.rawJSON.subtype] || 'Unknown'}
             </Attribute>
-            {parent && (
+            {parent && parentCount === 1 && (
               <Attribute title={`Follows from "${parent.rawJSON.title}"`}>
                 <OneParent />
+              </Attribute>
+            )}
+            {parent && parentCount === 2 && (
+              <Attribute title={`Follows from "${parent.rawJSON.title}"`}>
+                <TwoParent />
+              </Attribute>
+            )}
+            {parent && parentCount === 3 && (
+              <Attribute title={`Follows from "${parent.rawJSON.title}"`}>
+                <ThreeParent />
+              </Attribute>
+            )}
+            {parent && parentCount > 3 && (
+              <Attribute title={`Follows from "${parent.rawJSON.title}"`}>
+                <MoreParent />
               </Attribute>
             )}
           </Attributes>
@@ -187,17 +194,6 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
                 {newlinesToBr(content.rawJSON.description)}
               </Description>
             )}
-            {!isParent && content.rawJSON.parents[0] && (
-              <ToggleParent
-                onClick={e => {
-                  e.stopPropagation()
-                  setShowParent(!showParent)
-                }}
-              >
-                <ToggleParentArrow>{showParent ? '▾' : '▸'}</ToggleParentArrow>
-                Follows from
-              </ToggleParent>
-            )}
           </Content>
         </Hover>
         {isRegistered && (
@@ -213,7 +209,7 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
           />
         )}
       </Tabbable>
-      {(showParent || isParent) && parent && (
+      {isParent && parent && (
         <Row
           p2p={p2p}
           content={parent}

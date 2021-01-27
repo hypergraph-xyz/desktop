@@ -38,7 +38,7 @@ const Edit = ({ p2p }) => {
       <EditForm
         p2p={p2p}
         url={content.rawJSON.url}
-        parentUrl={content.rawJSON.parents[0]}
+        parentUrl={content.rawJSON.parents}
         title={content.rawJSON.title}
         description={content.rawJSON.description}
         subtype={content.rawJSON.subtype}
@@ -77,6 +77,7 @@ const Edit = ({ p2p }) => {
             parents: undefined,
             authors: undefined
           })
+
           const {
             metadata: { version: newVersion }
           } = await p2p.set({
@@ -85,7 +86,7 @@ const Edit = ({ p2p }) => {
             title,
             description,
             main,
-            parents: [parent].filter(Boolean),
+            parents: parent,
             authors
           })
 

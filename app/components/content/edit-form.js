@@ -87,6 +87,13 @@ const ReorderArrow = styled(({ isEnabled, ...rest }) => (
 // specific react-select style
 // does not use styled-components
 const customSelectStyle = {
+  clearIndicator: (provided, state) => ({
+    // display: 'none'
+    marginRight: '2.5rem',
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    right: 0
+  }),
   container: provided => ({
     ...provided,
     marginBottom: '1rem'
@@ -94,6 +101,7 @@ const customSelectStyle = {
   control: provided => ({
     ...provided,
     borderRadius: 0,
+    margin: 0,
     borderColor: purple,
     borderWidth: 2,
     backgroundColor: black,
@@ -101,19 +109,28 @@ const customSelectStyle = {
     '&:hover': {
       borderColor: purple
     },
-    boxShadow: 'none'
+    boxShadow: 'none',
+    position: 'relative'
   }),
   dropdownIndicator: () => ({
     marginRight: '1rem',
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    right: 0
+    // display: "inline",
   }),
   indicatorSeparator: () => ({}),
-  input: () => ({
-    fontFamily: 'Roboto'
+  input: provided => ({
+    position: 'absolute',
+    top: '5px',
+    fontFamily: 'Roboto',
+    display: 'inline-block',
+    marginLeft: '1rem',
+    opacity: 0
   }),
   menu: provided => ({
     ...provided,
-    margin: '0 0 0 0',
+    margin: 0,
     borderRadius: 0,
     borderBottom: `2px solid ${purple}`,
     borderLeft: `2px solid ${purple}`,
@@ -122,9 +139,48 @@ const customSelectStyle = {
   menuList: provided => ({
     ...provided,
     marginTop: 0,
-    height: '14rem',
+    maxHeight: '14rem',
     fontFamily: 'Roboto',
     backgroundColor: black
+  }),
+  multiValue: (provided, state) => ({
+    margin: '5px 2px 3px 2px',
+    backgroundColor: purple,
+    borderRadius: 100,
+    display: 'inline-block',
+    width: 'auto',
+    maxHeight: '24px',
+    position: 'relative'
+  }),
+  multiValueLabel: (provided, state) => ({
+    // use this to adjust the text
+    ...provided,
+    color: white,
+    marginLeft: '8px',
+    marginRight: '8px',
+    minWidth: '60px',
+    maxWidth: '180px',
+    position: 'relative',
+    padding: 0,
+    paddingLeft: 0,
+    fontSize: '100%'
+    // alignSelf: 'center'
+  }),
+  multiValueRemove: (provided, state) => ({
+    margin: 0,
+    color: purple,
+    width: '16px',
+    height: '20px',
+    opacity: 0,
+    position: 'absolute',
+    top: '4px',
+    right: '1px',
+    borderRadius: 100,
+    '&:hover': {
+      color: white,
+      backgroundColor: purple,
+      opacity: 100
+    }
   }),
   option: (provided, state) => ({
     ...provided,
@@ -138,14 +194,20 @@ const customSelectStyle = {
     color: gray,
     height: '1rem'
   }),
+  placeholder: provided => ({
+    ...provided,
+    marginLeft: '1rem'
+  }),
   singleValue: provided => ({
     ...provided,
     color: white,
     fontFamily: 'Roboto',
-    margin: 0
+    marginLeft: '1rem'
   }),
   valueContainer: () => ({
-    marginLeft: '1rem'
+    // marginLeft: '1rem',
+    // marginTop: 5,
+    display: 'inline-block'
   })
 }
 
@@ -182,7 +244,8 @@ const EditForm = ({
   const [isValidDraft, setIsValidDraft] = useState()
   const [files, setFiles] = useState({})
   const [main, setMain] = useState(defaultMain)
-  const [potentialParents, setPotentialParents] = useState()
+  const [potentialParents, setPotentialParents] = useState([])
+  const [parents, setParents] = useState([])
   const [profiles, setProfiles] = useState()
   const { url: profileUrl } = useContext(ProfileContext)
   const [authors, setAuthors] = useState(defaultAuthors || [encode(profileUrl)])
@@ -200,19 +263,49 @@ const EditForm = ({
       const contentUrls = [
         ...new Set(profiles.map(profile => profile.rawJSON.contents).flat())
       ]
-      setPotentialParents(
+
+      if (parentUrl) {
         await Promise.all(
-          contentUrls
+          [parentUrl]
+            .flat()
             .map(url => url.split('+'))
             .filter(
               ([key]) => !url || encode(key) !== encode(url.split('+')[0])
             )
             .map(([key, version]) => p2p.clone(encode(key), version))
-        )
-      )
+        ).then(oldParents => {
+          const x = []
+          oldParents.map(parent => {
+            const value = [
+              encode(parent.rawJSON.url),
+              parent.metadata.version
+            ].join('+')
+            x.push({ value, label: parent.rawJSON.title })
+          })
+          setParents(parents.concat(x))
+        })
+      }
+
+      await Promise.all(
+        contentUrls
+          .map(url => url.split('+'))
+          .filter(([key]) => !url || encode(key) !== encode(url.split('+')[0]))
+          .map(([key, version]) => p2p.clone(encode(key), version))
+      ).then(rawParent => {
+        const x = []
+        rawParent.map(parent => {
+          const value = [
+            encode(parent.rawJSON.url),
+            parent.metadata.version
+          ].join('+')
+          x.push({ value, label: parent.rawJSON.title })
+        })
+        setPotentialParents(x)
+      })
     })()
   }, [])
 
+  // CHJH: This violates rules of hooks TODO
   if (url) {
     useEffect(() => {
       ;(async () => {
@@ -253,12 +346,18 @@ const EditForm = ({
       title: data.get('title'),
       description: data.get('description'),
       subtype: data.get('subtype'),
-      parent: data.get('parent'),
+      parent: parents.map(obj => {
+        return obj.value
+      }),
       main,
       files,
       isRegister,
       authors
     })
+  }
+
+  const handleParents = x => {
+    setParents(x === null ? [] : x)
   }
 
   return (
@@ -274,28 +373,16 @@ const EditForm = ({
         {potentialParents && potentialParents.length > 0 && (
           <>
             <Label htmlFor='parent'>Follows from</Label>
-            <Select name='parent' defaultValue={parentUrl}>
-              <option value=''>None</option>
-              {potentialParents.map(parent => {
-                const value = [
-                  encode(parent.rawJSON.url),
-                  parent.metadata.version
-                ].join('+')
-                return (
-                  <option value={value} key={value}>
-                    {
-                      profiles.find(
-                        profile =>
-                          encode(profile.rawJSON.url) ===
-                          parent.rawJSON.authors[0]
-                      ).rawJSON.title
-                    }
-                    {parent.rawJSON.authors.length > 1 ? ' et. al' : null}.{' '}
-                    {parent.rawJSON.title}
-                  </option>
-                )
-              })}
-            </Select>
+            <NewSelect
+              defaultValue={parents}
+              isMulti
+              name='parent'
+              options={potentialParents}
+              className='basic-multi-select'
+              classNamePrefix='select'
+              onChange={handleParents}
+              styles={customSelectStyle}
+            />
           </>
         )}
         <Label htmlFor='subtype'>Content type</Label>

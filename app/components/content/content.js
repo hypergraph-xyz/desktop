@@ -230,6 +230,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
             )}/${parent.metadata.version}`}
           >
             {parent.rawJSON.title}
+            <br />
           </Link>
         ))}
         <StyledHeading1>{content.rawJSON.title}</StyledHeading1>

@@ -44,7 +44,7 @@ const Create = ({ p2p }) => {
             title,
             description,
             authors,
-            parents: [parent].filter(Boolean)
+            parents: parent
           })
 
           const dir = `${p2p.baseDir}/${encode(url)}`
