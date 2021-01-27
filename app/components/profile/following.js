@@ -37,13 +37,13 @@ const Following = ({ p2p }) => {
 
   useEffect(() => {
     ;(async () => {
-      const x = await Promise.all(
+      const profiles = await Promise.all(
         (await p2p.get(profileUrl)).rawJSON.follows.map(key =>
           p2p.clone(encode(key))
         )
       )
       setFollowing(
-        x.sort((a, b) => (a.rawJSON.title > b.rawJSON.title ? 1 : -1))
+        profiles.sort((a, b) => a.rawJSON.title.localeCompare(b.rawJSON.title))
       )
     })()
   }, [])
