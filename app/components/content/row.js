@@ -138,7 +138,7 @@ const Row = ({ p2p, content, pad, to, isParent, isRegistered }) => {
     <>
       <Tabbable
         component={Container}
-        onClick={e => {
+        onDoubleClick={e => {
           if (!e || e.target.tagName !== 'A') history.push(to)
         }}
         isParent={isParent}
