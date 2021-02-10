@@ -70,6 +70,7 @@ const Info = styled.p`
 const ButtonGroup = styled.div`
   display: flex;
   align-items: baseline;
+  padding-bottom: 2rem;
 `
 const ReorderArrow = styled(({ isEnabled, ...rest }) => (
   <ArrowDown1Rem {...rest} />
