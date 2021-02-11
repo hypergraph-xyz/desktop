@@ -191,16 +191,13 @@ const App = () => {
     })
   }, [])
 
-  if (loading) return <Container />
-  if (!profileUrl || showWelcome) {
-    return (
-      <Container profileUrl={profileUrl}>
-        <Welcome p2p={p2p} setProfileUrl={setProfileUrl} />
-      </Container>
-    )
-  }
-
-  return (
+  return loading ? (
+    <Container />
+  ) : !profileUrl || showWelcome ? (
+    <Container profileUrl={profileUrl}>
+      <Welcome p2p={p2p} setProfileUrl={setProfileUrl} />
+    </Container>
+  ) : (
     <Container profileUrl={profileUrl} onFind={() => setIsFinding(true)}>
       {isFinding && (
         <FindModal

@@ -1,6 +1,14 @@
 'use strict'
 
-const { app, BrowserWindow, Menu, shell, dialog, ipcMain } = require('electron')
+const {
+  app,
+  BrowserWindow,
+  Menu,
+  shell,
+  dialog,
+  ipcMain,
+  Notification
+} = require('electron')
 const debug = require('electron-debug')
 const del = require('del')
 const { once } = require('events')
@@ -31,12 +39,14 @@ ipcMain.handle('getStoreValue', (_, key, defaultValue) =>
   store.get(key, defaultValue)
 )
 ipcMain.handle('setStoreValue', (_, key, value) => store.set(key, value))
-;['vault', 'welcome', 'tour', 'analytics', 'chatra'].forEach(key => {
-  store.onDidChange(
-    key,
-    value => mainWindow && mainWindow.webContents.send(key, value)
-  )
-})
+;['vault', 'welcome', 'tour', 'analytics', 'chatra', 'keyBackedUp'].forEach(
+  key => {
+    store.onDidChange(
+      key,
+      value => mainWindow && mainWindow.webContents.send(key, value)
+    )
+  }
+)
 
 const withRestart = async cb => {
   restarting = true
@@ -92,7 +102,7 @@ const updateMenu = () => {
             label: 'Back up database',
             click: async () => {
               const { filePath } = await dialog.showSaveDialog(mainWindow, {
-                defaultPath: 'p2pcommons.zip'
+                defaultPath: 'hypergraph-key.zip'
               })
               if (!filePath) return
 
@@ -100,6 +110,8 @@ const updateMenu = () => {
                 const zip = new AdmZip()
                 zip.addLocalFolder(p2pcommonsDir)
                 zip.writeZip(filePath)
+
+                store.set('keyBackedUp', true)
               })
             }
           },
@@ -235,6 +247,28 @@ const main = async () => {
   mainWindow = await createMainWindow()
   app.setAsDefaultProtocolClient('hypergraph')
   if (app.isPackaged) autoUpdater.checkForUpdatesAndNotify()
+  if (!store.get('keyBackedUp')) {
+    const backUpKey = new Notification({
+      title: 'Back up your key',
+      body:
+        'To ensure you keep access to your account, back up your key by clicking here.'
+    })
+    backUpKey.show()
+    backUpKey.on('click', async () => {
+      const { filePath } = await dialog.showSaveDialog(mainWindow, {
+        defaultPath: 'hypergraph-key.zip'
+      })
+      if (!filePath) return
+
+      await withRestart(async () => {
+        const zip = new AdmZip()
+        zip.addLocalFolder(p2pcommonsDir)
+        zip.writeZip(filePath)
+
+        store.set('keyBackedUp', true)
+      })
+    })
+  }
 }
 
 main()

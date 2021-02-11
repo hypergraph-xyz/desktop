@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
+import AdmZip from 'adm-zip'
 import { purple, green } from '../../lib/colors'
 import { rgba } from 'polished'
 import { Button } from '../layout/grid'
@@ -7,6 +8,7 @@ import Arrow from '../icons/arrow-up-2rem.svg'
 import { Label, Checkbox } from '../forms/forms'
 import TitleInput from '../forms/title-input'
 import IllustrationWelcome from './illustrations/welcome.svg'
+import IllustrationKeyBackup from './illustrations/key-backup.svg'
 import IllustrationAsYouGo from './illustrations/as-you-go.svg'
 import IllustrationAsYouGo2 from './illustrations/as-you-go-2.svg'
 import IllustrationProfileCreation from './illustrations/profile-creation.svg'
@@ -17,7 +19,7 @@ import Avatar from '../avatar/avatar'
 import { archiveModule } from '../../lib/vault'
 import Anchor from '../anchor'
 import { ProfileContext } from '../../lib/context'
-import { ipcRenderer } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import TermsOfUse from './terms-of-use'
 import { productName } from '../../../package'
 
@@ -58,6 +60,10 @@ const ButtonGroup = styled.div`
   display: flex;
   align-items: baseline;
 `
+
+const p2pcommonsDir = `${remote.app.getPath('home')}/.p2pcommons${
+  !remote.app.isPackaged ? '-dev' : ''
+}`
 
 const dialogs = [
   ({ next }) => (
@@ -110,6 +116,54 @@ const dialogs = [
       </Form>
     </>
   ),
+  ({ page, next, p2p, name, profileUrl, setProfileUrl, previous }) => {
+    const [isLoading, setIsLoading] = useState(false)
+
+    return (
+      <>
+        <Back />
+        <Illustration>
+          <IllustrationKeyBackup />
+        </Illustration>
+        <Heading>Here's your key</Heading>
+        <p>
+          Just like your house has a key, Hypergraph has a key. You need to keep
+          your Hypergraph key secure.
+        </p>
+        <p>
+          Create a copy, store it safely, so that if you lose your device you
+          can recover your account. We cannot recover your keys for you ---
+          they're that private.
+        </p>
+        <p>Bonus? No need to remember yet another password.</p>
+        <Form
+          onSubmit={async e => {
+            e.preventDefault()
+            setIsLoading(true)
+
+            const { filePath } = await remote.dialog.showSaveDialog({
+              defaultPath: 'hypergraph-key.zip'
+            })
+            if (!filePath) {
+              setIsLoading(false)
+              return
+            }
+
+            const zip = new AdmZip()
+            zip.addLocalFolder(p2pcommonsDir)
+            zip.writeZip(filePath)
+            await ipcRenderer.invoke('setStoreValue', 'keyBackedUp', true)
+
+            next()
+          }}
+        >
+          <Button emphasis='top' autoFocus isLoading={isLoading}>
+            Copy your key
+          </Button>
+        </Form>
+      </>
+    )
+  },
   ({ page, next, previous }) => (
     <>
       <Back onClick={previous} />
@@ -243,7 +297,7 @@ const dialogs = [
       </>
     )
   },
-  ({ page, p2p, name, profileUrl, setProfileUrl, previous }) => {
+  ({ page, next, p2p, name, profileUrl, setProfileUrl, previous }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     return (
@@ -313,7 +367,7 @@ const dialogs = [
   }
 ]
 
-const Welcome = ({ p2p, setProfileUrl }) => {
+const Welcome = ({ p2p, start, setProfileUrl }) => {
   const { url: profileUrl } = useContext(ProfileContext)
   const [page, setPage] = useState(profileUrl ? 1 : 0)
   const [name, setName] = useState()
