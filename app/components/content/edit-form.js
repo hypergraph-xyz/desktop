@@ -126,8 +126,7 @@ const customSelectStyle = {
     top: '5px',
     fontFamily: 'Roboto',
     display: 'inline-block',
-    marginLeft: '1rem',
-    opacity: 0
+    marginLeft: '1rem'
   }),
   menu: provided => ({
     ...provided,
