@@ -139,6 +139,8 @@ const customSelectStyle = {
   menuList: provided => ({
     ...provided,
     marginTop: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
     maxHeight: '14rem',
     fontFamily: 'Roboto',
     backgroundColor: black
