@@ -141,7 +141,7 @@ const App = () => {
 
   useEffect(() => {
     ;(async () => {
-      setShowWelcome(await ipcRenderer.invoke('getStoreValue', 'welcome'))
+      setShowWelcome(await ipcRenderer.invoke('getStoreValue', 'showWelcome'))
     })()
   }, [])
 
@@ -186,7 +186,7 @@ const App = () => {
   }, [profileUrl])
 
   useEffect(() => {
-    ipcRenderer.on('welcome', (_, showWelcome) => {
+    ipcRenderer.on('showWelcome', (_, showWelcome) => {
       setShowWelcome(showWelcome)
     })
   }, [])

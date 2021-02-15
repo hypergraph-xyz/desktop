@@ -79,6 +79,13 @@ const dialogs = [
             Boolean(data.get('analytics'))
           )
           await ipcRenderer.invoke('setStoreValue', 'chatra', true)
+          await ipcRenderer.invoke('setStoreValue', 'showTerms', false)
+          await ipcRenderer.invoke(
+            'setStoreValue',
+            'lastInstalledAppVersion',
+            remote.app.getVersion()
+          )
+
           next()
         }}
       >
@@ -215,6 +222,7 @@ const dialogs = [
   ({ page, next, previous, name, setName }) => {
     const [isValid, setIsValid] = useState(Boolean(name))
     const [nameForAvatar, setNameForAvatar] = useState(name)
+
     return (
       <>
         <Back onClick={previous} />
@@ -251,53 +259,51 @@ const dialogs = [
       </>
     )
   },
-  ({ page, next, previous }) => {
-    return (
-      <>
-        <Back onClick={previous} />
-        <Illustration>
-          <IllustrationVault />
-        </Illustration>
-        <Heading>Introducing Hypergraph Vault</Heading>
-        <p>
-          We do not want to be gatekeepers. We chose peer-to-peer technology so
-          you can be in control of your work. You help to power the network by
-          providing the content you have to other users.
-        </p>
-        <p>
-          Hypergraph Vault is our storage service that makes your work available
-          even when your computer is offline. Plus, we're working with libraries
-          to archive it for future generations! 👵🏾👨🏻👶
-        </p>
-        <p>
-          Until January 1st, 2022, Hypergraph Vault is free, while we figure out
-          the costs.
-        </p>
-        <Form
-          onSubmit={async ev => {
-            ev.preventDefault()
-            await ipcRenderer.invoke('setStoreValue', 'vault', true)
-            next()
-          }}
-        >
-          <ButtonGroup>
-            <Button emphasis='top' autoFocus>
-              Enable Hypergraph Vault
-            </Button>
-            <Anchor
-              onClick={async () => {
-                await ipcRenderer.invoke('setStoreValue', 'vault', false)
-                next()
-              }}
-            >
-              Skip for now...
-            </Anchor>
-          </ButtonGroup>
-        </Form>
-      </>
-    )
-  },
-  ({ page, next, p2p, name, profileUrl, setProfileUrl, previous }) => {
+  ({ page, next, previous }) => (
+    <>
+      <Back onClick={previous} />
+      <Illustration>
+        <IllustrationVault />
+      </Illustration>
+      <Heading>Introducing Hypergraph Vault</Heading>
+      <p>
+        We do not want to be gatekeepers. We chose peer-to-peer technology so
+        you can be in control of your work. You help to power the network by
+        providing the content you have to other users.
+      </p>
+      <p>
+        Hypergraph Vault is our storage service that makes your work available
+        even when your computer is offline. Plus, we're working with libraries
+        to archive it for future generations! 👵🏾👨🏻👶
+      </p>
+      <p>
+        Until January 1st, 2022, Hypergraph Vault is free, while we figure out
+        the costs.
+      </p>
+      <Form
+        onSubmit={async ev => {
+          ev.preventDefault()
+          await ipcRenderer.invoke('setStoreValue', 'vault', true)
+          next()
+        }}
+      >
+        <ButtonGroup>
+          <Button emphasis='top' autoFocus>
+            Enable Hypergraph Vault
+          </Button>
+          <Anchor
+            onClick={async () => {
+              await ipcRenderer.invoke('setStoreValue', 'vault', false)
+              next()
+            }}
+          >
+            Skip for now...
+          </Anchor>
+        </ButtonGroup>
+      </Form>
+    </>
+  ),
+  ({ page, p2p, name, profileUrl, setProfileUrl, previous }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     return (
@@ -355,7 +361,7 @@ const dialogs = [
               setProfileUrl(profile.rawJSON.url)
             }
 
-            await ipcRenderer.invoke('setStoreValue', 'welcome', false)
+            await ipcRenderer.invoke('setStoreValue', 'showWelcome', false)
           }}
         >
           <Button emphasis='top' autoFocus isLoading={isLoading}>
@@ -371,6 +377,7 @@ const Welcome = ({ p2p, start, setProfileUrl }) => {
   const { url: profileUrl } = useContext(ProfileContext)
   const [page, setPage] = useState(profileUrl ? 1 : 0)
   const [name, setName] = useState()
+  const [skip, setSkip] = useState(false)
 
   useEffect(() => {
     ;(async () => {
@@ -378,12 +385,20 @@ const Welcome = ({ p2p, start, setProfileUrl }) => {
         const profile = await p2p.get(profileUrl)
         setName(profile.rawJSON.title)
       }
+      if (await ipcRenderer.invoke('getStoreValue', 'showTerms')) {
+        setPage(0)
+        setSkip(true)
+      }
     })()
   }, [])
 
   const next = async e => {
     if (e) e.preventDefault()
-    setPage(page + 1)
+    if (skip) {
+      setPage(page + dialogs.length - 1)
+    } else {
+      setPage(page + 1)
+    }
   }
   const previous = () => setPage(page - 1)
 
@@ -396,6 +411,7 @@ const Welcome = ({ p2p, start, setProfileUrl }) => {
         previous,
         page,
         name,
+        skip,
         setName,
         p2p,
         profileUrl,

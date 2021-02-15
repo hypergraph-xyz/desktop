@@ -39,14 +39,26 @@ ipcMain.handle('getStoreValue', (_, key, defaultValue) =>
   store.get(key, defaultValue)
 )
 ipcMain.handle('setStoreValue', (_, key, value) => store.set(key, value))
-;['vault', 'welcome', 'tour', 'analytics', 'chatra', 'keyBackedUp'].forEach(
-  key => {
-    store.onDidChange(
-      key,
-      value => mainWindow && mainWindow.webContents.send(key, value)
-    )
-  }
-)
+;[
+  'vault',
+  'showWelcome',
+  'tour',
+  'analytics',
+  'chatra',
+  'keyBackedUp',
+  'lastInstalledAppVersion',
+  'showTerms'
+].forEach(key => {
+  store.onDidChange(
+    key,
+    value => mainWindow && mainWindow.webContents.send(key, value)
+  )
+})
+
+if (!(app.getVersion() === store.get('lastInstalledAppVersion'))) {
+  store.set('showWelcome', false)
+  store.set('showTerms', false)
+}
 
 const withRestart = async cb => {
   restarting = true
@@ -157,7 +169,7 @@ const updateMenu = () => {
         submenu: [
           {
             label: 'Reopen welcome screens',
-            click: () => store.set('welcome', true)
+            click: () => store.set('showWelcome', true)
           },
           {
             label: 'Reopen tour',
