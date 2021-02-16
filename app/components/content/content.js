@@ -255,6 +255,14 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
             onClick={() => {
               remote.shell.openPath(`${directory}/${content.rawJSON.main}`)
             }}
+            draggable
+            onDragStart={event => {
+              event.preventDefault()
+              ipcRenderer.invoke(
+                'dragOut',
+                `${directory}/${content.rawJSON.main}`
+              )
+            }}
           >
             {content.rawJSON.main}
           </Tabbable>
@@ -271,6 +279,11 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
                   key={path}
                   onClick={() => {
                     remote.shell.openPath(`${directory}/${path}`)
+                  }}
+                  draggable
+                  onDragStart={event => {
+                    event.preventDefault()
+                    ipcRenderer.invoke('dragOut', `${directory}/${path}`)
                   }}
                 >
                   {path}

@@ -55,6 +55,13 @@ ipcMain.handle('setStoreValue', (_, key, value) => store.set(key, value))
   )
 })
 
+ipcMain.handle('dragOut', (_, value) => {
+  _.sender.startDrag({
+    file: value,
+    icon: './build/noun_Hand_43997.png'
+  })
+})
+
 if (!(app.getVersion() === store.get('lastInstalledAppVersion'))) {
   store.set('showWelcome', false)
   store.set('showTerms', false)
