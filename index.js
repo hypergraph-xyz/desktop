@@ -19,6 +19,7 @@ const chmodr = require('chmodr')
 const Store = require('electron-store')
 const { autoUpdater } = require('electron-updater')
 const log = require('electron-log')
+const express = require('express')
 
 debug({ isEnabled: true, showDevTools: false })
 app.allowRendererProcessReuse = false
@@ -30,6 +31,10 @@ const store = new Store()
 const p2pcommonsDir = `${app.getPath('home')}/.p2pcommons${
   !app.isPackaged ? '-dev' : ''
 }`
+
+const p2pcommonsLocal = express()
+p2pcommonsLocal.use(express.static(p2pcommonsDir))
+p2pcommonsLocal.listen(5152)
 
 log.transports.file.level = 'debug'
 log.transports.ipc.level = 'debug'

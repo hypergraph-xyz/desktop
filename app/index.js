@@ -14,7 +14,7 @@ import Feed from './components/feed/feed'
 import Discover from './components/discover/discover'
 import P2P from '@p2pcommons/sdk-js'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
-import { remote, ipcRenderer } from 'electron'
+import { shell, remote, ipcRenderer } from 'electron'
 import { ProfileContext } from './lib/context'
 import FindModal from './components/modal/find-modal'
 import { archiveModule } from './lib/vault'
@@ -249,3 +249,11 @@ const App = () => {
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
+
+document.body.addEventListener('click', event => {
+  const externalOpen = new RegExp(/^https?:\/\/(?!localhost:1212)/)
+  if (event.target.href && externalOpen.test(event.target.href)) {
+    event.preventDefault()
+    shell.openExternal(event.target.href)
+  }
+})

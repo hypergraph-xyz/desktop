@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useContext, Fragment } from 'react'
 import styled from 'styled-components'
+import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm'
+import behead from 'remark-behead'
+import math from 'remark-math'
+import TeX from '@matejmazur/react-katex'
 import { green, yellow, red, gray } from '../../lib/colors'
 import { encode } from 'dat-encoding'
 import { Button, Title } from '../layout/grid'
@@ -21,6 +26,7 @@ import { archiveModule } from '../../lib/vault'
 import { Heading1 } from '../typography'
 import Author from '../author/author'
 import ContentPageSpinner from './content-page-spinner.svg'
+import remark from 'remark'
 
 const Container = styled.div`
   margin: 2rem;
@@ -37,6 +43,8 @@ const Authors = styled.div`
 const Description = styled.div`
   margin-top: 2rem;
   margin-bottom: 1.5rem;
+  max-width: 820px;
+  text-align: justify;
 `
 const NoMain = styled.div`
   margin-bottom: 1rem;
@@ -70,6 +78,35 @@ const StyledHeading1 = styled(Heading1)`
   font-size: 2rem;
   margin-top: 2rem;
 `
+const MainContent = styled.div`
+  max-width: 820px;
+  text-align: justify;
+  img {
+    max-width: 100%;
+    max-height: 700px;
+    display: block;
+    margin: 1rem auto;
+  }
+  a {
+    border-bottom: 2px solid #574cfa;
+    color: #ffffff;
+    text-decoration: none;
+  }
+  a:hover {
+    background: #574cfa;
+  }
+  table {
+    border-bottom: 2px solid #574cfa;
+    border-spacing: 0;
+  }
+  th {
+    border-bottom: 2px solid #574cfa;
+  }
+  td {
+    padding: 0.5rem;
+    text-align: left;
+  }
+`
 
 const ExportZip = ({ directory }) => (
   <Button
@@ -92,6 +129,11 @@ const ExportZip = ({ directory }) => (
   </Button>
 )
 
+const renderers = {
+  inlineMath: ({ value }) => <TeX math={value} />,
+  math: ({ value }) => <TeX block math={value} />
+}
+
 const getContentDirectory = async ({ p2p, key, version }) => {
   const directory = `${p2p.baseDir}/${key}`
   return version ? `${directory}+${version}` : directory
@@ -108,6 +150,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
   const [canRegisterContent, setCanRegisterContent] = useState()
   const [canDeregisterContent, setCanDeregisterContent] = useState()
   const [isSharing, setIsSharing] = useState()
+  const [mainMarkdown, setMainMarkdown] = useState()
   const history = useHistory()
   const { url: profileUrl } = useContext(ProfileContext)
 
@@ -164,6 +207,18 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
     if (!content) return
     fetchAuthors()
     fetchParents()
+    ;(async () => {
+      if (content.rawJSON.main.endsWith('.md')) {
+        const md = await (
+          await fs.readFile(`${directory}/${content.rawJSON.main}`)
+        ).toString()
+        remark()
+          .use(behead, { depth: +1 })
+          .process(md)
+          .then(vfile => vfile.toString())
+          .then(markdown => setMainMarkdown(markdown))
+      }
+    })()
   }, [content])
 
   useEffect(() => {
@@ -171,6 +226,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
     fetchCanRegisterOrDeregisterContent()
   }, [authors])
 
+  const mdExtMain = new RegExp('(.md)$')
   const supportingFiles =
     files && content ? files.filter(file => file !== content.rawJSON.main) : []
 
@@ -249,7 +305,36 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
         </Authors>
         <Description>{newlinesToBr(content.rawJSON.description)}</Description>
         <Label>Main file</Label>
-        {content.rawJSON.main ? (
+        {mdExtMain.test(content.rawJSON.main) ? (
+          <MainContent>
+            <ReactMarkdown
+              plugins={[gfm, math]}
+              children={mainMarkdown}
+              renderers={renderers}
+              linkTarget='noopener noreferrer'
+              transformImageUri={uri => {
+                if (!uri.startsWith('http')) {
+                  if (canRegisterContent) {
+                    return `http://localhost:5152/${key}/${uri}`
+                  } else {
+                    return `http://localhost:5152/${key}+${version}/${uri}`
+                  }
+                }
+                return uri
+              }}
+              transformLinkUri={uri => {
+                if (!uri.startsWith('http')) {
+                  if (canRegisterContent) {
+                    return `http://localhost:5152/${key}/${uri}`
+                  } else {
+                    return `http://localhost:5152/${key}+${version}/${uri}`
+                  }
+                }
+                return uri
+              }}
+            />
+          </MainContent>
+        ) : content.rawJSON.main ? (
           <Tabbable
             component={File}
             onClick={() => {
