@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { purple, black, white } from '../../lib/colors'
+import { colors } from '@libscie/design-library'
 import CaretDown from '../icons/caret-down-1rem.svg'
 import { Title } from '../layout/grid'
 
@@ -9,12 +9,12 @@ export const Label = styled.label`
   display: block;
 `
 export const Input = styled.input`
-  border: 2px solid ${purple};
-  background-color: ${black};
+  border: 2px solid ${colors.purple500};
+  background-color: ${colors.mono900};
   font-size: 2rem;
   padding: 11px 17px;
   margin-bottom: 1rem;
-  color: ${white};
+  color: ${colors.white};
   display: block;
   width: 100%;
   box-sizing: border-box;
@@ -34,9 +34,9 @@ const SelectContainer = styled.div`
 `
 const SelectElement = styled.select`
   display: block;
-  background-color: ${black};
-  color: ${white};
-  border: 2px solid ${purple};
+  background-color: ${colors.mono900};
+  color: ${colors.white};
+  border: 2px solid ${colors.purple500};
   font-size: 1rem;
   width: 100%;
   max-width: 661px;
@@ -62,12 +62,12 @@ export const Select = ({ ...props }) => (
 )
 
 export const Textarea = styled.textarea`
-  border: 2px solid ${purple};
-  background-color: ${black};
+  border: 2px solid ${colors.purple500};
+  background-color: ${colors.mono900};
   font-size: 1rem;
   padding: 7px 17px;
   margin-bottom: 2rem;
-  color: ${white};
+  color: ${colors.white};
   display: block;
   width: 100%;
   box-sizing: border-box;

@@ -1,12 +1,13 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { black, purple, white, gray } from '../../lib/colors'
+import { colors } from '@libscie/design-library'
 import Loading from '../loading/loading'
 import { Heading3 } from '../typography'
 
 export const Row = styled.div`
-  border-top: ${props => (props.noBorderTop ? 0 : 2)}px solid ${purple};
-  border-bottom: 2px solid ${purple};
+  border-top: ${props => (props.noBorderTop ? 0 : 2)}px solid
+    ${colors.purple500};
+  border-bottom: 2px solid ${colors.purple500};
   height: 4rem;
   line-height: 4rem;
   white-space: nowrap;
@@ -18,7 +19,7 @@ export const Row = styled.div`
   }
 `
 export const Cell = styled.div`
-  border-right: 2px solid ${purple};
+  border-right: 2px solid ${colors.purple500};
   padding: 0 ${props => (props.content === 'icon' ? '1rem' : '2rem')};
   display: inline-block;
   overflow: hidden;
@@ -35,25 +36,27 @@ const StyledButton = styled(Cell).attrs({
 })`
   background-color: ${props =>
     props.emphasis === 'top' && props.disabled
-      ? gray
+      ? colors.mono500
       : props.emphasis === 'top'
-      ? props.color || purple
-      : black};
+      ? props.color || colors.purple500
+      : colors.mono900};
   vertical-align: top;
   font-family: Roboto;
   letter-spacing: 0.05em;
 
   font-size: 1rem;
   height: 4rem;
-  border: 2px solid ${purple};
+  border: 2px solid ${colors.purple500};
   border-color: ${props =>
-    props.content !== 'icon' && props.disabled ? gray : props.color || purple};
+    props.content !== 'icon' && props.disabled
+      ? colors.mono500
+      : props.color || colors.purple500};
   color: ${props =>
     props.isLoading && props.emphasis === 'top'
-      ? gray
+      ? colors.mono500
       : props.isLoading
-      ? black
-      : white};
+      ? colors.mono900
+      : colors.white};
   margin-right: 2rem;
   min-width: ${props => (props.content === 'icon' ? 0 : '8rem')};
   position: relative;
@@ -66,21 +69,26 @@ const StyledButton = styled(Cell).attrs({
         `
       : css`
           :hover {
-            color: ${props => (props.isLoading ? gray : white)};
+            color: ${props =>
+              props.isLoading ? colors.mono500 : colors.white};
             background-color: ${props =>
-              props.emphasis === 'top' ? black : props.color || purple};
+              props.emphasis === 'top'
+                ? colors.mono900
+                : props.color || colors.purple500};
             ${props =>
               props.content !== 'icon' &&
               css`
                 path {
-                  fill: ${white};
+                  fill: ${colors.white};
                 }
               `}
           }
 
           :active {
             background-color: ${props =>
-              props.emphasis === 'top' ? props.color || purple : black};
+              props.emphasis === 'top'
+                ? props.color || colors.purple500
+                : colors.mono900};
             outline: none;
           }
         `}
@@ -89,8 +97,9 @@ const StyledButton = styled(Cell).attrs({
     border-right-width: 0px;
     border-top-width: 0px;
     border-bottom-width: 0px;
-    border-color: ${purple};
-    color: ${props => (props.disabled ? gray : props.color || white)};
+    border-color: ${colors.purple500};
+    color: ${props =>
+      props.disabled ? colors.mono500 : props.color || colors.white};
     margin-right: 0;
     ${props =>
       props.disabled
@@ -99,10 +108,10 @@ const StyledButton = styled(Cell).attrs({
           `
         : css`
             :hover {
-              color: ${white};
+              color: ${colors.white};
             }
             :active {
-              color: ${props => props.color || white};
+              color: ${props => props.color || colors.white};
             }
           `}
   }
@@ -113,7 +122,7 @@ const StyledButton = styled(Cell).attrs({
       ${props =>
         props.disabled &&
         css`
-          fill: ${gray};
+          fill: ${colors.mono500};
         `}
     }
   }
@@ -131,7 +140,7 @@ export const Button = ({ isLoading, children, ...props }) => (
 export const StickyRow = styled(Row)`
   position: sticky;
   top: ${props => props.top};
-  background-color: ${black};
+  background-color: ${colors.mono900};
   z-index: 2;
 `
 export const TopRow = styled(StickyRow).attrs({
@@ -143,7 +152,7 @@ export const TopRow = styled(StickyRow).attrs({
     top: -50px;
     width: 100%;
     height: 3rem;
-    background-color: ${black};
+    background-color: ${colors.mono900};
   }
 `
 export const Title = styled(Cell)`

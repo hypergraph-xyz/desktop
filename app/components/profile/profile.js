@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, Fragment, useContext } from 'react'
 import styled, { css, keyframes } from 'styled-components'
+import { colors } from '@libscie/design-library'
 import Avatar from '../avatar/avatar'
 import ContentRow from '../content/row'
 import Footer, { FooterAddContent } from '../footer/footer'
 import { encode } from 'dat-encoding'
 import { Title, StickyRow, TopRow, Button } from '../layout/grid'
-import { green, red, yellow, gray } from '../../lib/colors'
 import { Textarea, Input } from '../forms/forms'
 import Share from '../icons/share.svg'
 import { useParams } from 'react-router-dom'
@@ -28,7 +28,7 @@ const saved = keyframes`
     border-left-color: transparent;
   }
   50% {
-    border-left-color: ${green};
+    border-left-color: ${colors.green500};
   }
   100% {
     border-left-color: transparent;
@@ -47,12 +47,12 @@ const Indicator = styled.div`
   ${props =>
     props.isEditing &&
     css`
-      border-left-color: ${yellow};
+      border-left-color: ${colors.yellow500};
     `}
   ${props =>
     props.isInvalid &&
     css`
-      border-left-color: ${red};
+      border-left-color: ${colors.red500};
     `}
   ${props =>
     props.isSaving &&
@@ -82,7 +82,7 @@ const Description = styled.div`
   ${props =>
     props.isEmpty &&
     css`
-      color: ${gray};
+      color: ${colors.mono500};
       :hover {
         cursor: text;
       }
@@ -90,7 +90,7 @@ const Description = styled.div`
   ${props =>
     props.isEditing &&
     css`
-      border-left-color: ${yellow};
+      border-left-color: ${colors.yellow500};
     `}
   ${props =>
     props.isSaving &&
@@ -267,11 +267,11 @@ const Profile = ({ p2p }) => {
           </Button>
           {isEditing ? (
             <>
-              <Button color={green} disabled={isTitleInvalid}>
+              <Button color={colors.green500} disabled={isTitleInvalid}>
                 Save
               </Button>
               <Button
-                color={red}
+                color={colors.red500}
                 onClick={() => {
                   setNameForAvatar(profile.rawJSON.title)
                   setIsTitleInvalid(false)
@@ -285,7 +285,7 @@ const Profile = ({ p2p }) => {
           ) : profile.metadata.isWritable ? (
             <Button
               type='button'
-              color={green}
+              color={colors.green500}
               onClick={() => setIsEditing(true)}
             >
               Edit profile

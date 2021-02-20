@@ -5,7 +5,7 @@ import gfm from 'remark-gfm'
 import behead from 'remark-behead'
 import math from 'remark-math'
 import TeX from '@matejmazur/react-katex'
-import { green, yellow, red, gray } from '../../lib/colors'
+import { colors } from '@libscie/design-library'
 import { encode } from 'dat-encoding'
 import { Button, Title } from '../layout/grid'
 import { useHistory, Link } from 'react-router-dom'
@@ -38,7 +38,7 @@ const BackArrow = styled(Arrow)`
 `
 const Authors = styled.div`
   font-size: 1.5rem;
-  color: ${gray};
+  color: ${colors.mono500};
 `
 const Description = styled.div`
   margin-top: 2rem;
@@ -51,7 +51,7 @@ const NoMain = styled.div`
 `
 const File = styled.div`
   width: 100%;
-  border: 2px solid ${green};
+  border: 2px solid ${colors.green500};
   line-height: 2;
   padding-left: 0.5rem;
   padding-right: 1rem;
@@ -65,7 +65,7 @@ const File = styled.div`
   }
 
   :hover {
-    background-color: ${green};
+    background-color: ${colors.green500};
   }
   :active {
     background-color: inherit;
@@ -262,7 +262,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
           {canRegisterContent && content.metadata.isWritable && (
             <Button
               type='button'
-              color={green}
+              color={colors.green500}
               onClick={() => {
                 history.push(
                   `/edit/${encode(content.rawJSON.url)}/${
@@ -381,7 +381,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
         <Actions>
           {canRegisterContent ? (
             <Button
-              color={green}
+              color={colors.green500}
               isLoading={isUpdatingRegistration}
               disabled={!content.rawJSON.main}
               onClick={async () => {
@@ -410,7 +410,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
             </Button>
           ) : canDeregisterContent ? (
             <Button
-              color={yellow}
+              color={colors.yellow500}
               isLoading={isUpdatingRegistration}
               onClick={async () => {
                 setIsUpdatingRegistration(true)
@@ -433,7 +433,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
           ) : null}
           {content.metadata.isWritable && (
             <Button
-              color={red}
+              color={colors.red500}
               isLoading={isDeleting}
               onClick={async () => {
                 const { response } = await remote.dialog.showMessageBox(

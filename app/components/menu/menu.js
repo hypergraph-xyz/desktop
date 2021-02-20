@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { colors } from '@libscie/design-library'
 import Logo from './logo.svg'
-import { white, purple, black } from '../../lib/colors'
 import { Row, Button } from '../layout/grid'
 import { NavLink, useHistory, Link } from 'react-router-dom'
 import AddContent from '../icons/add-content.svg'
@@ -15,7 +15,7 @@ import { remote } from 'electron'
 
 const Container = styled.div`
   width: 8rem;
-  border-right: 2px solid ${purple};
+  border-right: 2px solid ${colors.purple500};
   padding-top: 3rem;
   position: fixed;
   height: 100%;
@@ -38,30 +38,30 @@ const StyledRow = styled(Row)`
   display: block;
 `
 const StyledButton = styled(Button)`
-  color: ${white};
-  background-color: ${black};
+  color: ${colors.white};
+  background-color: ${colors.mono900};
   text-align: left;
   width: 100%;
   padding-left: 12.5%;
   border-left-width: 0;
   border-top-width: 0;
   :hover {
-    background-color: ${purple};
+    background-color: ${colors.purple500};
   }
   display: block;
   border-right-width: 2px !important;
   border-bottom-width: 2px !important;
 
   &.active {
-    background-color: ${purple};
+    background-color: ${colors.purple500};
     :active {
-      background-color: ${purple};
-      color: ${white};
+      background-color: ${colors.purple500};
+      color: ${colors.white};
     }
   }
   :active {
-    background-color: ${black};
-    color: ${white} !important;
+    background-color: ${colors.mono900};
+    color: ${colors.white} !important;
   }
 `
 const AddContentLink = styled(Link)`
@@ -75,7 +75,7 @@ const AddContentLink = styled(Link)`
   justify-content: center;
 
   :hover {
-    background-color: ${purple};
+    background-color: ${colors.purple500};
     cursor: default;
   }
   :active {

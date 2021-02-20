@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import styled, { css } from 'styled-components'
+import { colors } from '@libscie/design-library'
 import Modal, { Close } from './modal'
 import { Heading2, Paragraph } from '../typography'
 import { Label, Input } from '../forms/forms'
@@ -7,7 +8,6 @@ import { Button } from '../layout/grid'
 import ArrowRight from '../icons/arrow-right-2rem.svg'
 import X from '../icons/x-2rem.svg'
 import Loading from '../loading/loading'
-import { gray, red, yellow } from '../../lib/colors'
 import { useHistory } from 'react-router-dom'
 import { encode } from 'dat-encoding'
 import { decode } from '../../lib/hypergraph-url'
@@ -26,17 +26,17 @@ const StyledInput = styled(Input)`
   ${props =>
     !props.isValid &&
     css`
-      color: ${red};
+      color: ${colors.red500};
     `}
 `
 const LoadingContainer = styled.div`
   ${input}
-  background-color: ${gray};
+  background-color: ${colors.mono500};
   height: 4rem;
   position: relative;
 `
 const Warning = styled.span`
-  color: ${yellow};
+  color: ${colors.yellow500};
   font-style: italic;
   font-weight: normal;
   margin-left: 1rem;

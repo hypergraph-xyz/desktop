@@ -1,7 +1,7 @@
 import React from 'react'
 import Reactour from 'reactour'
 import styled from 'styled-components'
-import { purple } from '../../lib/colors'
+import { colors } from '@libscie/design-library'
 
 const StyledTour = styled(Reactour)`
   color: #ffffff;
@@ -40,7 +40,7 @@ const Tour = ({ onClose, ...props }) => {
   return (
     <StyledTour
       {...props}
-      accentColor={purple}
+      accentColor={colors.purple500}
       closeWithMask={false}
       maskSpace={2}
       onRequestClose={onClose}

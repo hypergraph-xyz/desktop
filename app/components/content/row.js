@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import styled, { css } from 'styled-components'
-import { purple, black, white, gray } from '../../lib/colors'
+import { colors } from '@libscie/design-library'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import { useHistory, useLocation } from 'react-router-dom'
 import Plus from './plus.svg'
@@ -19,30 +19,30 @@ const AddContentWithParent = styled(Plus)`
   right: 0;
   top: 0;
   display: none;
-  border-left: 2px solid ${purple};
+  border-left: 2px solid ${colors.purple500};
   padding: 123px 41px;
   z-index: 1;
-  background-color: ${black};
+  background-color: ${colors.mono900};
 
   :hover {
-    background-color: ${purple};
+    background-color: ${colors.purple500};
   }
 
   :active {
     background-color: inherit;
     path {
-      fill: ${white};
+      fill: ${colors.white};
     }
   }
 `
 const Container = styled.div`
   padding: ${props => props.pad || 0}rem;
-  border-bottom: 2px solid ${purple};
+  border-bottom: 2px solid ${colors.purple500};
   position: relative;
   height: ${props =>
     props.isParent ? 8.5 : props.isUnavailable ? 8 : 18.5}rem;
   box-sizing: border-box;
-  ${props => props.isUnavailable && `color: ${gray};`}
+  ${props => props.isUnavailable && `color: ${colors.mono500};`}
   flex-shrink: 0;
 
   ${props =>
@@ -65,7 +65,7 @@ const Hover = styled.div`
       position: absolute;
       left: 0;
       bottom: 0;
-      background: linear-gradient(transparent, ${purple});
+      background: linear-gradient(transparent, ${colors.purple500});
       z-index: 1;
     }
   }
@@ -94,7 +94,7 @@ const Title = styled.div`
   margin-bottom: 1rem;
 `
 const Authors = styled.div`
-  color: ${gray};
+  color: ${colors.mono500};
 `
 const Description = styled.div`
   overflow: hidden;
@@ -108,7 +108,7 @@ const Description = styled.div`
       position: absolute;
       left: 0;
       bottom: 0;
-      background: linear-gradient(transparent, ${black});
+      background: linear-gradient(transparent, ${colors.mono900});
     }
   }
 `

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
-import { black, white } from '../../lib/colors'
+import { colors } from '@libscie/design-library'
 import Menu from '../menu/menu'
 import 'focus-visible'
 import { Helmet } from 'react-helmet'
@@ -35,8 +35,8 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
   body {
-    background-color: ${black};
-    color: ${white};
+    background-color: ${colors.mono900};
+    color: ${colors.white};
     margin: 0;
     font-family: Roboto;
     line-height: 1.5;

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { purple, black } from '../../lib/colors'
+import { colors } from '@libscie/design-library'
 import { rgba } from 'polished'
 import X from '../icons/x-1rem.svg'
 import Tabbable from '../accessibility/tabbable'
@@ -22,10 +22,10 @@ const StyledModal = styled.div`
   margin-left: -${props => props.width / 2}px;
   width: ${props => props.width}px;
   height: ${props => props.height}px;
-  background-color: ${black};
+  background-color: ${colors.mono900};
   padding: 2rem;
   box-sizing: border-box;
-  border: ${props => props.border && `2px solid ${purple}`};
+  border: ${props => props.border && `2px solid ${colors.purple500}`};
   z-index: 4;
 `
 const Modal = ({ height, width, overlay, border, onClose, children }) => (
@@ -39,7 +39,7 @@ const Modal = ({ height, width, overlay, border, onClose, children }) => (
 Modal.defaultProps = {
   height: 700,
   width: 700,
-  overlay: rgba(black, 0.7),
+  overlay: rgba(colors.mono900, 0.7),
   border: true
 }
 const StyledClose = styled(X)`

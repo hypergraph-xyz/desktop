@@ -1,13 +1,14 @@
 import { shell } from 'electron'
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { white, purple, gray } from '../lib/colors'
+import { colors } from '@libscie/design-library'
 
 const StyledAnchor = styled.a`
   text-decoration: none;
-  color: ${props => (props.disabled ? gray : white)};
+  color: ${props => (props.disabled ? colors.mono500 : colors.white)};
   border-bottom: 2px solid
-    ${props => (props.disabled ? gray : props.color || purple)};
+    ${props =>
+      props.disabled ? colors.mono500 : props.color || colors.purple500};
   -webkit-app-region: no-drag;
 
   ${props =>
@@ -17,7 +18,7 @@ const StyledAnchor = styled.a`
         `
       : css`
           :hover {
-            background-color: ${props => props.color || purple};
+            background-color: ${props => props.color || colors.purple500};
             cursor: pointer;
           }
         `}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { black, red, yellow, white } from '../../lib/colors'
+import { colors } from '@libscie/design-library'
 import { Input } from './forms'
 
 const Container = styled.div`
@@ -25,13 +25,13 @@ export default ({ onIsValid = () => {}, defaultValue, ...props }) => {
 
   let color
   if (charCount === 0) {
-    color = black
+    color = colors.mono900
   } else if (charCount > 300) {
-    color = red
+    color = colors.red500
   } else if (charCount >= 250) {
-    color = yellow
+    color = colors.yellow500
   } else {
-    color = white
+    color = colors.white
   }
 
   if (defaultValue) {

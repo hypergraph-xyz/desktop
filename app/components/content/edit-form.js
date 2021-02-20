@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import styled, { css } from 'styled-components'
+import { colors } from '@libscie/design-library'
 import { Button } from '../layout/grid'
 import ArrowUp2Rem from '../icons/arrow-up-2rem.svg'
 import { Label, Select, Textarea } from '../forms/forms'
@@ -7,15 +8,6 @@ import TitleInput from '../forms/title-input'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import AddFile from './add-file.svg'
 import { remote, ipcRenderer } from 'electron'
-import {
-  purple,
-  red,
-  green,
-  yellow,
-  gray,
-  white,
-  black
-} from '../../lib/colors'
 import { basename, dirname, extname, join } from 'path'
 import X from '../icons/x-1rem.svg'
 import { useHistory } from 'react-router-dom'
@@ -48,7 +40,7 @@ const FileAuthorBlocks = styled.div`
 `
 const FileAuthorBlock = styled.div`
   width: 100%;
-  border: 2px solid ${purple};
+  border: 2px solid ${colors.purple500};
   line-height: 2;
   padding-left: 1rem;
   margin-top: 1em;
@@ -81,7 +73,8 @@ const ReorderArrow = styled(({ isEnabled, ...rest }) => (
       transform: rotate(180deg);
     `}
   path {
-    fill: ${props => props => (props.isEnabled ? white : gray)};
+    fill: ${props => props =>
+      props.isEnabled ? colors.white : colors.mono500};
   }
   margin-right: 0.5rem;
 `
@@ -103,12 +96,12 @@ const customSelectStyle = {
     ...provided,
     borderRadius: 0,
     margin: 0,
-    borderColor: purple,
+    borderColor: colors.purple500,
     borderWidth: 2,
-    backgroundColor: black,
-    hoverBorderColor: white,
+    backgroundColor: colors.mono900,
+    hoverBorderColor: colors.white,
     '&:hover': {
-      borderColor: purple
+      borderColor: colors.purple500
     },
     boxShadow: 'none',
     position: 'relative'
@@ -132,9 +125,9 @@ const customSelectStyle = {
     ...provided,
     margin: 0,
     borderRadius: 0,
-    borderBottom: `2px solid ${purple}`,
-    borderLeft: `2px solid ${purple}`,
-    borderRight: `2px solid ${purple}`
+    borderBottom: `2px solid ${colors.purple500}`,
+    borderLeft: `2px solid ${colors.purple500}`,
+    borderRight: `2px solid ${colors.purple500}`
   }),
   menuList: provided => ({
     ...provided,
@@ -143,11 +136,11 @@ const customSelectStyle = {
     paddingBottom: 0,
     maxHeight: '14rem',
     fontFamily: 'Roboto',
-    backgroundColor: black
+    backgroundColor: colors.mono900
   }),
   multiValue: (provided, state) => ({
     margin: '5px 2px 3px 2px',
-    backgroundColor: purple,
+    backgroundColor: colors.purple500,
     borderRadius: 100,
     display: 'inline-block',
     width: 'auto',
@@ -157,7 +150,7 @@ const customSelectStyle = {
   multiValueLabel: (provided, state) => ({
     // use this to adjust the text
     ...provided,
-    color: white,
+    color: colors.white,
     marginLeft: '8px',
     marginRight: '8px',
     minWidth: '60px',
@@ -170,7 +163,7 @@ const customSelectStyle = {
   }),
   multiValueRemove: (provided, state) => ({
     margin: 0,
-    color: purple,
+    color: colors.purple500,
     width: '16px',
     height: '20px',
     opacity: 0,
@@ -179,21 +172,21 @@ const customSelectStyle = {
     right: '1px',
     borderRadius: 100,
     '&:hover': {
-      color: white,
-      backgroundColor: purple,
+      color: colors.white,
+      backgroundColor: colors.purple500,
       opacity: 100
     }
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isFocused ? purple : null,
+    backgroundColor: state.isFocused ? colors.purple500 : null,
     margin: 0,
     paddingLeft: '1rem',
-    border: purple
+    border: colors.purple500
   }),
   noOptionsMessage: () => ({
     margin: '1rem',
-    color: gray,
+    color: colors.mono500,
     height: '1rem'
   }),
   placeholder: provided => ({
@@ -202,7 +195,7 @@ const customSelectStyle = {
   }),
   singleValue: provided => ({
     ...provided,
-    color: white,
+    color: colors.white,
     fontFamily: 'Roboto',
     marginLeft: '1rem'
   }),
@@ -580,7 +573,7 @@ const EditForm = ({
             type='button'
             isLoading={isSaving && isSaving.register}
             disabled={!isValid || isSaving}
-            color={green}
+            color={colors.green500}
             onClick={() => save({ isRegister: true })}
           >
             Add to profile
@@ -588,13 +581,13 @@ const EditForm = ({
           <Button
             isLoading={isSaving && !isSaving.register}
             disabled={!isValidDraft || isSaving}
-            color={yellow}
+            color={colors.yellow500}
           >
             Save as draft
           </Button>
           <Anchor
             onClick={() => history.go(-1)}
-            color={red}
+            color={colors.red500}
             disabled={isSaving}
           >
             Cancel

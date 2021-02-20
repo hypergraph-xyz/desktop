@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { white, purple } from '../../lib/colors'
 import { shell } from 'electron'
+import { colors } from '@libscie/design-library'
 
 const Container = styled.div`
   overflow: auto;
@@ -21,11 +21,11 @@ const Container = styled.div`
     margin-top: 0;
   }
   a {
-    color: ${white};
+    color: ${colors.white};
     text-decoration: none;
-    border-bottom: 2px solid ${purple};
+    border-bottom: 2px solid ${colors.purple500};
     :hover {
-      background-color: ${purple};
+      background-color: ${colors.purple500};
       cursor: pointer;
     }
   }

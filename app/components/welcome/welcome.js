@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import AdmZip from 'adm-zip'
-import { purple, green } from '../../lib/colors'
 import { rgba } from 'polished'
+import { colors } from '@libscie/design-library'
 import { Button } from '../layout/grid'
 import Arrow from '../icons/arrow-up-2rem.svg'
 import { Label, Checkbox } from '../forms/forms'
@@ -213,7 +213,7 @@ const dialogs = [
         just link your content to the existing content and there you go! 🌈
       </p>
       <Form onSubmit={next}>
-        <Button emphasis='top' autoFocus color={green}>
+        <Button emphasis='top' autoFocus color={colors.green500}>
           Create Profile
         </Button>
       </Form>
@@ -405,7 +405,7 @@ const Welcome = ({ p2p, start, setProfileUrl }) => {
   if (!dialogs[page]) return null
 
   return (
-    <Modal overlay={rgba(purple, 0.8)} border={false}>
+    <Modal overlay={rgba(colors.purple500, 0.8)} border={false}>
       {React.createElement(dialogs[page], {
         next,
         previous,

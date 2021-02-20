@@ -1,8 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import { purple, blue, green, yellow, red } from '../../lib/colors'
+import { colors } from '@libscie/design-library'
 
-const colors = [purple, blue, green, yellow, red]
+const colorArray = [
+  colors.purple500,
+  colors.blue500,
+  colors.green500,
+  colors.yellow500,
+  colors.red500
+]
 
 const Container = styled.div`
   position: relative;
@@ -41,16 +47,16 @@ const getInitials = name => {
 const Avatar = ({ name, ...props }) => {
   const initials = getInitials(name)
   const colorIndexes = [
-    initials[0].charCodeAt(0) % colors.length,
-    initials[initials.length - 1].charCodeAt(0) % colors.length
+    initials[0].charCodeAt(0) % colorArray.length,
+    initials[initials.length - 1].charCodeAt(0) % colorArray.length
   ]
   if (colorIndexes[1] === colorIndexes[0]) {
-    colorIndexes[1] = (colorIndexes[1] + 1) % colors.length
+    colorIndexes[1] = (colorIndexes[1] + 1) % colorArray.length
   }
 
   return (
     <Container
-      colors={[colors[colorIndexes[0]], colors[colorIndexes[1]]]}
+      colors={[colorArray[colorIndexes[0]], colorArray[colorIndexes[1]]]}
       {...props}
     >
       <StyledInitials>{initials}</StyledInitials>
