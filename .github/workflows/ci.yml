@@ -21,6 +21,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
+      - name: upgrade npm
+        run: |
+          npm install -g npm; npm -v
       - name: get npm cache directory
         id: npm-cache
         run: |
