@@ -384,7 +384,11 @@ const EditForm = ({
         <NewSelect
           className='basic-single'
           classNamePrefix='select'
-          defaultValue={options[0]}
+          defaultValue={
+            !subtype
+              ? options[0]
+              : options.find(x => x.value === subtype)
+          }
           name='subtype'
           options={options}
           styles={customSelectStyle}
