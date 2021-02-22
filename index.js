@@ -67,6 +67,21 @@ ipcMain.handle('dragOut', (_, value) => {
   })
 })
 
+ipcMain.handle('copyPrivateKey', async (_, value) => {
+  const { filePath } = await dialog.showSaveDialog(mainWindow, {
+    defaultPath: 'hypergraph-key.zip'
+  })
+  if (!filePath) return
+
+  await withRestart(async () => {
+    const zip = new AdmZip()
+    zip.addLocalFolder(p2pcommonsDir)
+    zip.writeZip(filePath)
+
+    store.set('keyBackedUp', true)
+  })
+})
+
 if (!(app.getVersion() === store.get('lastInstalledAppVersion'))) {
   store.set('showWelcome', false)
   store.set('showTerms', false)

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import AdmZip from 'adm-zip'
 import { rgba } from 'polished'
 import { colors } from '@libscie/design-library'
 import { Button } from '../layout/grid'
@@ -60,10 +59,6 @@ const ButtonGroup = styled.div`
   display: flex;
   align-items: baseline;
 `
-
-const p2pcommonsDir = `${remote.app.getPath('home')}/.p2pcommons${
-  !remote.app.isPackaged ? '-dev' : ''
-}`
 
 const dialogs = [
   ({ next }) => (
@@ -148,18 +143,11 @@ const dialogs = [
             e.preventDefault()
             setIsLoading(true)
 
-            const { filePath } = await remote.dialog.showSaveDialog({
-              defaultPath: 'hypergraph-key.zip'
-            })
-            if (!filePath) {
+            const copied = await ipcRenderer.invoke('copyPrivateKey')
+            if (!copied) {
               setIsLoading(false)
               return
             }
-
-            const zip = new AdmZip()
-            zip.addLocalFolder(p2pcommonsDir)
-            zip.writeZip(filePath)
-            await ipcRenderer.invoke('setStoreValue', 'keyBackedUp', true)
 
             next()
           }}
@@ -388,6 +376,13 @@ const Welcome = ({ p2p, start, setProfileUrl }) => {
       if (await ipcRenderer.invoke('getStoreValue', 'showTerms')) {
         setPage(0)
         setSkip(true)
+      }
+
+      if (
+        !(await ipcRenderer.invoke('getStoreValue', 'showTerms')) &&
+        (await ipcRenderer.invoke('getStoreValue', 'keyBackedUp'))
+      ) {
+        setPage(3)
       }
     })()
   }, [])
