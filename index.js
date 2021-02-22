@@ -82,7 +82,12 @@ ipcMain.handle('copyPrivateKey', async (_, value) => {
   })
 })
 
-if (!(app.getVersion() === store.get('lastInstalledAppVersion'))) {
+if (
+  app.getVersion() !== store.get('lastInstalledAppVersion') &&
+  // Only undefined if welcome screens haven't been completed once
+  // Proxy for whether it is the first time launching the application
+  !store.get('showWelcome') === undefined
+) {
   store.set('showWelcome', false)
   store.set('showTerms', false)
 }
@@ -286,7 +291,7 @@ const main = async () => {
   mainWindow = await createMainWindow()
   app.setAsDefaultProtocolClient('hypergraph')
   if (app.isPackaged) autoUpdater.checkForUpdatesAndNotify()
-  if (!store.get('keyBackedUp')) {
+  if (!store.get('keyBackedUp') && store.get('showWelcome') === false) {
     const backUpKey = new Notification({
       title: 'Back up your key',
       body:
