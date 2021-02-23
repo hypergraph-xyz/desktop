@@ -26,6 +26,8 @@ export const Cell = styled.div`
   height: 100%;
   text-align: center;
   text-align: left;
+  -webkit-app-region: drag;
+  user-select: none;
 
   ${Row} & {
     border-right-width: 0;
@@ -153,6 +155,7 @@ export const TopRow = styled(StickyRow).attrs({
     width: 100%;
     height: 3rem;
     background-color: ${colors.mono900};
+    -webkit-app-region: drag;
   }
 `
 export const Title = styled(Cell)`

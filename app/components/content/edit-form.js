@@ -385,9 +385,7 @@ const EditForm = ({
           className='basic-single'
           classNamePrefix='select'
           defaultValue={
-            !subtype
-              ? options[0]
-              : options.find(x => x.value === subtype)
+            !subtype ? options[0] : options.find(x => x.value === subtype)
           }
           name='subtype'
           options={options}
