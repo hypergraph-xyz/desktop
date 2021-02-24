@@ -227,7 +227,6 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
     fetchCanRegisterOrDeregisterContent()
   }, [authors])
 
-  const mdExtMain = new RegExp('(.md)$')
   const supportingFiles =
     files && content ? files.filter(file => file !== content.rawJSON.main) : []
 
@@ -306,7 +305,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
         </Authors>
         <Description>{newlinesToBr(content.rawJSON.description)}</Description>
         <Label>Main file</Label>
-        {mdExtMain.test(content.rawJSON.main) ? (
+        {content.rawJSON.main.endsWith('.md') ? (
           <MainContent>
             <ReactMarkdown
               plugins={[gfm, math]}
