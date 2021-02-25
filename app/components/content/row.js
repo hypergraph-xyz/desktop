@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import { colors } from '@libscie/design-library'
 import subtypes from '@hypergraph-xyz/wikidata-identifiers'
 import { useHistory, useLocation } from 'react-router-dom'
-import Plus from './plus.svg'
+import ChildContentButton from './child-content-button.svg'
 import { encode } from 'dat-encoding'
 import newlinesToBr from '../../lib/newlines-to-br'
 import OneParent from './1-parent.svg'
@@ -14,13 +14,16 @@ import Tabbable from '../accessibility/tabbable'
 import Author from '../author/author'
 import ContentBlockSpinner from './content-block-spinner.svg'
 
-const AddContentWithParent = styled(Plus)`
+const AddContentWithParent = styled(ChildContentButton)`
   position: absolute;
+  width: 56px;
+  height: 56px;
   right: 0;
   top: 0;
   display: none;
   border-left: 2px solid ${colors.purple500};
-  padding: 123px 41px;
+  border-bottom: 2px solid ${colors.purple500};
+  padding: 119px 41px;
   z-index: 1;
   background-color: ${colors.mono900};
 
