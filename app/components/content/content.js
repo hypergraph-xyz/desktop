@@ -7,11 +7,13 @@ import math from 'remark-math'
 import TeX from '@matejmazur/react-katex'
 import { colors } from '@libscie/design-library'
 import { encode } from 'dat-encoding'
+import path from 'path'
+
 import { Button, Title } from '../layout/grid'
 import { useHistory, Link } from 'react-router-dom'
 import Anchor from '../anchor'
 import Arrow from '../icons/arrow-up-2rem.svg'
-import { remote, ipcRenderer } from 'electron'
+import { remote, ipcRenderer, shell } from 'electron'
 import { promises as fs } from 'fs'
 import AdmZip from 'adm-zip'
 import { Label } from '../forms/forms'
@@ -138,6 +140,29 @@ const renderers = {
 const getContentDirectory = async ({ p2p, key, version }) => {
   const directory = `${p2p.baseDir}/${key}`
   return version ? `${directory}+${version}` : directory
+}
+
+const secureFileOpen = (dir, file) => {
+  const fileExtension = path.extname(file)
+  if (
+    !fileExtension ||
+    fileExtension === '.ps1' ||
+    fileExtension === '.sh' ||
+    fileExtension === '.bat'
+  ) {
+    const choice = remote.dialog.showMessageBoxSync({
+      type: 'question',
+      title: 'Security',
+      message:
+        'For your security, Hypergraph will not open this file. Please inspect file manually.',
+      buttons: ['Open folder', 'Cancel']
+    })
+    if (choice === 0) {
+      shell.openPath(`${dir}`)
+    }
+    return
+  }
+  remote.shell.openPath(`${dir}/${file}`)
 }
 
 const Content = ({ p2p, contentKey: key, version, renderRow }) => {
@@ -338,7 +363,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
           <Tabbable
             component={File}
             onClick={() => {
-              remote.shell.openPath(`${directory}/${content.rawJSON.main}`)
+              secureFileOpen(directory, content.rawJSON.main)
             }}
             draggable
             onDragStart={event => {
@@ -363,7 +388,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
                   component={File}
                   key={path}
                   onClick={() => {
-                    remote.shell.openPath(`${directory}/${path}`)
+                    secureFileOpen(directory, path)
                   }}
                   draggable
                   onDragStart={event => {
