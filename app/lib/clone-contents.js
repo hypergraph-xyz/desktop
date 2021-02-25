@@ -18,19 +18,20 @@ export const cloneMany = ({ p2p, urls }) =>
 export const cloneOne = async ({ p2p, url, key, version }) => {
   if (!key) [key, version] = url.split('+')
   const content = await p2p.clone(encode(key), Number(version))
-  if (content.dlInfo.dlInfo.complete) {
+  console.log({ content })
+  if (content.dlInfo.complete) {
     console.log('download complete')
     return content
   } else {
-    content.dlInfo.dlInfo.resume()
+    content.dlInfo.resume()
     await new Promise(resolve => {
       const onComplete = ({ key: _key }) => {
         if (encode(key) === _key) {
-          p2p.removeListener('download-complete', onComplete)
+          p2p.removeListener('download-drive-completed', onComplete)
           resolve()
         }
       }
-      p2p.on('download-complete', onComplete)
+      p2p.on('download-drive-completed', onComplete)
     })
     return content
   }

@@ -11,6 +11,7 @@ const {
 } = require('electron')
 const debug = require('electron-debug')
 const del = require('del')
+const { ensureDirSync } = require('fs-extra')
 const { once } = require('events')
 const AdmZip = require('adm-zip')
 const { promises: fs } = require('fs')
@@ -287,6 +288,9 @@ app.on('activate', async () => {
 })
 
 const main = async () => {
+  ensureDirSync(p2pcommonsDir)
+  // ensure chmod +rw for p2pcommonsdir
+  await promisify(chmodr)(p2pcommonsDir, 0o666)
   await app.whenReady()
   mainWindow = await createMainWindow()
   app.setAsDefaultProtocolClient('hypergraph')

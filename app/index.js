@@ -41,10 +41,10 @@ const p2p = new P2P({
     : undefined
 })
 window.addEventListener('beforeunload', () => p2p.destroy())
-p2p.on('download-resume', () => console.log('download-resume'))
+p2p.on('download-resume', key => console.log('download-resume', key))
 p2p.on('download-started', () => console.log('download-started'))
-p2p.on('download-progress', () => console.log('download-progress'))
-p2p.on('download-complete', () => console.log('download-complete'))
+p2p.on('download-progress', ({ key }) => console.log('download-progress', key))
+p2p.on('download-drive-completed', key => console.log('download-complete', key))
 
 ipcRenderer.on('export graph', async () => {
   const [profiles, contents] = await Promise.all([
