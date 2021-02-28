@@ -89,8 +89,9 @@ if (
   // Proxy for whether it is the first time launching the application
   !store.get('showWelcome') === undefined
 ) {
-  store.set('showWelcome', false)
-  store.set('showTerms', false)
+  // Set both to true if you want just terms to show
+  store.set('showWelcome', true)
+  store.set('showTerms', true)
 }
 
 const withRestart = async cb => {
