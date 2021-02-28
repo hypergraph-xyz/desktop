@@ -188,9 +188,30 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
 
   useEffect(() => {
     ;(async () => {
-      const directory = await getContentDirectory({ p2p, key, version })
-      setDirectory(directory)
-      await fetchFiles(directory)
+      try {
+        const directory = await getContentDirectory({ p2p, key, version })
+        setDirectory(directory)
+        await fetchFiles(directory)
+      } catch (error) {
+        if (error.code === 'ENOENT') {
+          const choice = remote.dialog.showMessageBoxSync({
+            type: 'question',
+            title: 'Module unavailable',
+            message:
+              'You have not downloaded this research module. Would you like to download or delete it?',
+            buttons: ['Redownload', 'Delete']
+          })
+          if (choice === 1) {
+            const deleteFiles = false
+            await p2p.delete(key, deleteFiles)
+            history.go(-1)
+          } else {
+            await p2p.clone(key)
+          }
+        } else {
+          throw error
+        }
+      }
     })()
   }, [key, version])
 
