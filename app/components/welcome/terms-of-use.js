@@ -58,7 +58,7 @@ export default () => (
         <p id='995c3bb2-23a5-4ab0-929b-9d17a054ffba' className=''>
           The Hypergraph application (i.e., &quot;Hypergraph&quot;) is provided
           by Liberate Science GmbH (i.e., &quot;we&quot;, &quot;us&quot;,
-          &quot;our&quot;).
+          &quot;our&quot;, &quot;Liberate Science&quot;).
         </p>
         <p id='751f2fa7-e08d-4bf5-b9c3-9b94ed861ebb' className=''>
           We do our best to make these Terms reasonable, short, and
@@ -303,7 +303,7 @@ export default () => (
           your copyrights.{' '}
         </p>
         <p id='e5f466a0-6bcd-44db-aec9-590e87a46534' className=''>
-          Formal takedown notices can be sent to{' '}
+          Formal takedown notices must be sent to{' '}
           <a href='mailto:copyright@libscie.org'>copyright@libscie.org</a> and
           must enumerate all claims as exactly as possible. By sending a
           takedown notice, you agree to public disclosure of the takedown notice
@@ -315,22 +315,21 @@ export default () => (
           .{' '}
         </p>
         <p id='39d67529-a8e3-4bd6-8422-131d9882ad8f' className=''>
-          For takedown notices per mail, please send these to
+          For takedown notices also sent per mail, please send these to
         </p>
         <p id='45479ee2-ed71-4589-82b9-1e7ddaf8d684' className=''>
           Liberate Science GmbH
         </p>
         <p id='460db56a-cb1e-4c69-a3d3-56f59a8ffd01' className=''>
-          Wartenbergstr 22
+          Ebertystraße 44
         </p>
         <p id='92084482-4665-429c-97fc-c0f885a099a7' className=''>
-          10365 Berlin (DEU)
+          10249 Berlin (DEU)
         </p>
         <p id='40cb04cf-561d-4b56-9af8-67f7996dde81' className=''>
-          If we assess a takedown claim as valid (or are court ordered to take
-          down information), we will check our servers for copies of the
-          relevant content, remove those copies, and add it to our block-list
-          for any services related to Hypergraph.
+          If we assess a takedown claim as valid (or are court ordered), we will
+          check our servers for copies of the relevant content and add it to our
+          block-list for any services related to Hypergraph.
         </p>
         <h1 id='c638a5ae-e935-41b9-be94-d8d0793ccf34' className=''>
           Data policy
@@ -387,8 +386,8 @@ export default () => (
         </ul>
         <p id='16163bd7-8e3c-422b-8f29-6dc958e9ffb5' className=''>
           Please see their respective privacy policies to understand what
-          information they may store and how. We do not actively share any of
-          the collected information outside Liberate Science GmbH.
+          information they store and how. We do not actively share any of the
+          collected information outside Liberate Science GmbH.
         </p>
         <h2 id='427cd77a-a43c-4c69-bfff-d0bda1c55b75' className=''>
           Information collected
@@ -434,8 +433,8 @@ export default () => (
           </li>
         </ul>
         <p id='1912e12a-d359-44c2-b412-54cc3626082a' className=''>
-          Note that the services we use may have passive data collection in
-          place that we might have access to as well. Most notably is our Chatra
+          Note that the services we use have passive data collection in place
+          that we might have access to as well. Most notably is our Chatra
           integration, which provides us with real-time access on:
         </p>
         <ul id='84f5676e-064f-4fde-a72d-8d37240637b9' className='bulleted-list'>
@@ -458,8 +457,8 @@ export default () => (
         </h2>
         <p id='654f61ff-f038-4dd5-ac1f-1f84eced0447' className=''>
           To protect your data and give you full control over the information we
-          collect from you, we explicitly do not integrate the following in
-          Hypergraph:
+          collect from you, we explicitly do not integrate the following on our
+          Pages:
         </p>
         <ul id='e045ef65-9a9b-4e23-a747-701e613eb172' className='bulleted-list'>
           <li>...analytics cookies</li>
@@ -519,6 +518,12 @@ export default () => (
           while the Hypergraph Vault was enabled, will remain part of the
           Hypergraph Vault indefinitely.
         </p>
+        <p id='111af43a-846c-4489-92eb-a79f607acc78' className=''>
+          In case we receive a takedown notice (see &quot;Copyright
+          violations&quot; section), we may remove public access to the
+          respective content from the Hypergraph Vault, in case this takedown is
+          considered viable.
+        </p>
         <h1 id='98a15e55-d801-4820-adde-d7bdc4a47da3' className=''>
           Jurisdiction
         </h1>
@@ -528,8 +533,8 @@ export default () => (
         </p>
         <p id='b23d969a-3d81-4ef7-b0f3-c43b4b9f70cf' className=''>
           You agree that legal proceedings against Liberate Science GmbH
-          surrounding your use of Hypergraph will be arbitrated in German court,
-          in accordance with German law.{' '}
+          surrounding your use of Hypergraph will be brought and arbitrated in
+          German court, in accordance with German law.{' '}
         </p>
       </div>
     </article>
