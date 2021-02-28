@@ -218,7 +218,7 @@ const updateMenu = () => {
           },
           {
             label: 'Learn More',
-            click: () => shell.openExternal('https://hypergraph.xyz')
+            click: () => shell.openExternal('http://hypergraph.xyz')
           },
           {
             label: 'Community chat',
