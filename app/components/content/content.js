@@ -472,7 +472,8 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
                 if (response === 1) return
 
                 setIsDeleting(true)
-                const deleteFiles = true
+                // iff deleteFiles = true local files get deleted
+                const deleteFiles = false
                 await p2p.delete(content.rawJSON.url, deleteFiles)
                 history.push('/')
               }}
