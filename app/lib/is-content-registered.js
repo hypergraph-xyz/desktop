@@ -3,10 +3,10 @@ import { encode } from 'dat-encoding'
 export default function isContentRegistered (content, profile) {
   return Boolean(
     profile.rawJSON.contents.find(contentUrl => {
-      const [key, version] = contentUrl.split('+')
+      const [key] = contentUrl.split('+')
       return (
-        encode(content.rawJSON.url) === encode(key) &&
-        content.metadata.version === Number(version)
+        encode(content.rawJSON.url) === encode(key)
+        // && content.metadata.version === Number(version)
       )
     })
   )
