@@ -319,7 +319,7 @@ const dialogs = [
           . Sign up for our{' '}
           <Anchor href='https://www.libscie.org/#newsletter'>newsletter</Anchor>{' '}
           or{' '}
-          <Anchor href='https://chrishartgerink.typeform.com/to/VNfDMq'>
+          <Anchor href='https://forms.gle/YrQpmWYdQ7KdMoH18'>
             testing
           </Anchor>
           . Want to financially support us? Become a{' '}
