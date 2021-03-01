@@ -142,10 +142,11 @@ const getContentDirectory = async ({ p2p, key, version }) => {
   return version ? `${directory}+${version}` : directory
 }
 
-const secureFileOpen = (dir, file) => {
+const secureFileOpen = async (dir, file) => {
+  const isFile = (await fs.stat(`${dir}/${file}`)).isFile()
   const fileExtension = path.extname(file)
   if (
-    !fileExtension ||
+    (!fileExtension && isFile) ||
     fileExtension === '.ps1' ||
     fileExtension === '.sh' ||
     fileExtension === '.bat'
