@@ -92,6 +92,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "wolass",
+      "name": "Wojciech Francuzik",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2356167?v=4",
+      "profile": "https://github.com/wolass",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
