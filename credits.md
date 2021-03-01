@@ -14,6 +14,7 @@ This project is made possible by the community surrounding it and especially the
   - [Lisa Hehnke](https://github.com/lhehnke)
   - [Diego](https://github.com/dpaez)
   - [Nami Sunami](https://github.com/nsunami)
+  - [Wojciech Francuzik](https://github.com/wolass)
 
 ## Testers
 
