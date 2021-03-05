@@ -19,6 +19,7 @@ import { ProfileContext } from './lib/context'
 import FindModal from './components/modal/find-modal'
 import { archiveModule } from './lib/vault'
 import analytics from './lib/analytics'
+import Map from './components/map/map'
 
 const handleError = err => {
   analytics.trackEvent('Error', err.message, err.stack)
@@ -242,6 +243,9 @@ const App = () => {
         </Route>
         <Route path='/discover'>
           <Discover p2p={p2p} />
+        </Route>
+        <Route path='/map'>
+          <Map p2p={p2p} />
         </Route>
       </Switch>
     </Container>
