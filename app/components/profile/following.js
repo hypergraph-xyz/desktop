@@ -20,6 +20,7 @@ const Profile = styled.span`
   align-items: center;
   flex-grow: 1;
   height: 100%;
+  cursor: pointer;
 `
 const StyledAvatar = styled(Avatar)`
   margin-left: 2rem;
