@@ -19,6 +19,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@hypergraph-xyz/editor": "^1.1.0",
     "@hypergraph-xyz/wikidata-identifiers": "^1.2.0",
     "@libscie/design-library": "^1.0.1",
     "@matejmazur/react-katex": "^3.1.3",
