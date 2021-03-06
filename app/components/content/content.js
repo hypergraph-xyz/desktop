@@ -8,7 +8,7 @@ import TeX from '@matejmazur/react-katex'
 import { colors } from '@libscie/design-library'
 import { encode } from 'dat-encoding'
 import path from 'path'
-
+import Editor from '@hypergraph-xyz/editor'
 import { Button, Title } from '../layout/grid'
 import { useHistory, Link } from 'react-router-dom'
 import Anchor from '../anchor'
@@ -142,7 +142,7 @@ const getContentDirectory = async ({ p2p, key, version }) => {
   return version ? `${directory}+${version}` : directory
 }
 
-const secureFileOpen = (dir, file) => {
+const secureFileOpen = (dir, file, writable) => {
   const fileExtension = path.extname(file)
   if (
     !fileExtension ||
@@ -160,6 +160,10 @@ const secureFileOpen = (dir, file) => {
     if (choice === 0) {
       shell.openPath(`${dir}`)
     }
+    return
+  } else if (fileExtension === '.html' && writable) {
+    const editor = new Editor(`${dir}/${file}`)
+    editor.open()
     return
   }
   remote.shell.openPath(`${dir}/${file}`)
