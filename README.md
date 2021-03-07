@@ -4,6 +4,8 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+![commits since latest release](https://img.shields.io/github/commits-since/hypergraph-xyz/desktop/latest?style=flat-square)
+
 ![](https://img.shields.io/github/downloads/hypergraph-xyz/desktop/total?color=01A38A&style=flat-square)
 ![](https://img.shields.io/github/downloads/hypergraph-xyz/desktop/latest/total?color=%23574cfa&style=flat-square)
 
