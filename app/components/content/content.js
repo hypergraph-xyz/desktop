@@ -388,7 +388,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
           <Tabbable
             component={File}
             onClick={() => {
-              secureFileOpen(directory, content.rawJSON.main)
+              secureFileOpen(directory, content.rawJSON.main, content.metadata.isWritable)
             }}
             draggable
             onDragStart={event => {
@@ -413,7 +413,7 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
                   component={File}
                   key={path}
                   onClick={() => {
-                    secureFileOpen(directory, path)
+                    secureFileOpen(directory, path, content.metadata.isWritable)
                   }}
                   draggable
                   onDragStart={event => {
