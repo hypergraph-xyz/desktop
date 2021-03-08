@@ -164,7 +164,9 @@ const secureFileOpen = async (dir, file, writable) => {
     return
   } else if (fileExtension === '.html' && writable) {
     const editor = new Editor(`${dir}/${file}`)
-    editor.open()
+    editor.open(true)
+    const win = new remote.BrowserWindow()
+    win.loadURL(`http://localhost:${editor.server.address().port}`)
     return
   }
   remote.shell.openPath(`${dir}/${file}`)
@@ -389,7 +391,11 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
           <Tabbable
             component={File}
             onClick={() => {
-              secureFileOpen(directory, content.rawJSON.main, content.metadata.isWritable)
+              secureFileOpen(
+                directory,
+                content.rawJSON.main,
+                content.metadata.isWritable
+              )
             }}
             draggable
             onDragStart={event => {
