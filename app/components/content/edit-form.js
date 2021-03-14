@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import styled, { css } from 'styled-components'
 import { colors } from '@libscie/design-library'
+import Editor from '@hypergraph-xyz/editor'
+import os from 'os'
 import { Button } from '../layout/grid'
 import ArrowUp2Rem from '../icons/arrow-up-2rem.svg'
 import { Label, Select, Textarea } from '../forms/forms'
@@ -334,6 +336,16 @@ const EditForm = ({
     setFiles(files)
   }
 
+  const openEditor = async () => {
+    const dir = await fs.mkdtemp(join(os.tmpdir(), 'hypergraph-editor-'))
+    await fs.open(`${dir}/writing.html`, 'a')
+    const editor = new Editor(`${dir}/writing.html`)
+    editor.open({ silent: true })
+    const win = new remote.BrowserWindow()
+    win.loadURL(`http://localhost:${editor.server.address().port}`)
+    return `${dir}/writing.html`
+  }
+
   const save = async ({ isRegister } = {}) => {
     setIsSaving(true)
     const data = new FormData(formRef.current)
@@ -473,6 +485,13 @@ const EditForm = ({
           }}
         >
           <AddFile />
+        </Button>
+        <Button
+          onClick={async () => {
+            await openEditor()
+          }}
+        >
+          Open Editor
         </Button>
         <FileAuthorBlocks>
           {Object.entries(files).map(([source, destination]) => (
