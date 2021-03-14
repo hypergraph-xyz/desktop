@@ -142,7 +142,7 @@ const getContentDirectory = async ({ p2p, key, version }) => {
   return version ? `${directory}+${version}` : directory
 }
 
-const secureFileOpen = async (dir, file, writable) => {
+const secureFileOpen = async (dir, file, writable, registered) => {
   const isFile = (await fs.stat(`${dir}/${file}`)).isFile()
   const fileExtension = path.extname(file)
   if (
@@ -162,9 +162,9 @@ const secureFileOpen = async (dir, file, writable) => {
       shell.openPath(`${dir}`)
     }
     return
-  } else if (fileExtension === '.html' && writable) {
+  } else if (fileExtension === '.html' && writable && !registered) {
     const editor = new Editor(`${dir}/${file}`)
-    editor.open(true)
+    editor.open({ silent: true })
     const win = new remote.BrowserWindow()
     win.loadURL(`http://localhost:${editor.server.address().port}`)
     return
@@ -394,7 +394,8 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
               secureFileOpen(
                 directory,
                 content.rawJSON.main,
-                content.metadata.isWritable
+                content.metadata.isWritable,
+                canDeregisterContent
               )
             }}
             draggable
@@ -420,7 +421,12 @@ const Content = ({ p2p, contentKey: key, version, renderRow }) => {
                   component={File}
                   key={path}
                   onClick={() => {
-                    secureFileOpen(directory, path, content.metadata.isWritable)
+                    secureFileOpen(
+                      directory,
+                      path,
+                      content.metadata.isWritable,
+                      canDeregisterContent
+                    )
                   }}
                   draggable
                   onDragStart={event => {
