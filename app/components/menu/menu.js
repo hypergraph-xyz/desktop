@@ -73,6 +73,7 @@ const AddContentLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-user-drag: none;
 
   :hover {
     background-color: ${colors.purple500};
